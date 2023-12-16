@@ -15,5 +15,17 @@ module.exports = (app) => {
     // Find and change status of project_posts by some criteria
     router.put("/findAndChangeStatus/:userId&:status", projectPostController.findAndChangeStatus);
 
+    // Retrieve all Project_posts from the database
+    router.get("/findAll", projectPostController.findAllProjectPosts);
+
+    // get owner project `/project_post/owner/${id}`
+    router.get("/owner/:id", projectPostController.findOwnerProject);
+
+    // `/project_post/${id}`
+    router.get("/:id", projectPostController.findOne);
+
+    // /project_post/update
+    router.post("/update", projectPostController.update);
+
     app.use("/api/project_post", router);
 }

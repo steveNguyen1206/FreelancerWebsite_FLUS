@@ -11,8 +11,6 @@ module.exports = app => {
     // Retrieve all projects
     router.get("/", project.findAll);
   
-
-  
     // Retrieve a single Tutorial with id
     // router.get("/:id", project.findOne);
   
@@ -27,4 +25,3 @@ module.exports = app => {
   
     app.use('/api/project',  router);
   };
-  

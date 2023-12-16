@@ -57,6 +57,7 @@
     justify-content: space-between;
     overflow-y: scroll;
     height: 640px;
+    min-width: 976.8px;
 }
 
 .post-container{

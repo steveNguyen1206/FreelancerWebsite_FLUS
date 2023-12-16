@@ -8,6 +8,8 @@ import FindFreelancer from '@/pages/FindFreelancer/findFreelancer';
 import Job from '@/pages/Job/job';
 import { ProjectManagement } from '@/pages/ProjectManagement';
 import { UpdateProject, NewProject } from '@/pages';
+import BidPopup from '@/pages/Bid';
+import { Bid } from '@/components';
 const Routers = () => {
   return (
     <GoogleOAuthProvider clientId="138372560551-k6qucf4eebnppht116rieqoa6bfm801b.apps.googleusercontent.com">
@@ -21,7 +23,7 @@ const Routers = () => {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="/paypal-demo" element={<PayPalDemo />} />
-          <Route path="/project" element={<Project />} />
+          <Route path="/project/:id" element={<Project />} />
           <Route path="/findfreelancer" element={<FindFreelancer/>} />
           <Route path="/job" element={<Job/>} />
           <Route path="/project-manage" element={<ProjectManagement/>} />

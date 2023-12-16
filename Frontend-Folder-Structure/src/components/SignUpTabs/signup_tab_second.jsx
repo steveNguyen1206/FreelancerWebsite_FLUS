@@ -25,6 +25,10 @@ const isValidNationaity = (nationality) => {
   return nationalityRegex.test(nationality);
 }
 
+const convertPhone = (phone) => {
+  return '+84' + phone.substring(1);
+}
+
 
 const SignUpTabSecond = ({ setTab, signUpPayload, setSignUpPayload }) => {
   const handleChange = (event) => {
@@ -56,7 +60,7 @@ const SignUpTabSecond = ({ setTab, signUpPayload, setSignUpPayload }) => {
     if (isValidForm()) {
       console.log(signUpPayload.phone);
       var phoneNum = {
-        phone_number: signUpPayload.phone,
+        phone_number: convertPhone(signUpPayload.phone),
       };
       setTab(3);
       // smsAuthenService

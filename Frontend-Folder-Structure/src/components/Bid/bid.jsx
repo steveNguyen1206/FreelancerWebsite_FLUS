@@ -1,10 +1,23 @@
 import { useState } from 'react';
 import './bid.css';
 import profileImage from '../../assets/profile_image.png';
+//name, skill, message, price, duration, accept, reject
 
-function Bid() {
-  const Name = 'Nguyen Thi Truc';
-  const userName = 'Cogai20';
+const Bid = ({}) => {
+  const uname = 'Nguyen Thi Truc';
+  const userName = 'cogai20';
+  const price = '100$';
+  const skill = 'React, NodeJS';
+  const message = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit iyrey ifhiu ewuyriu odfiuh o.';
+  const duration = '5 days';
+
+  const accept = () => {
+    console.log('accept');
+  };
+
+  const reject = () => {
+    console.log('reject');
+  };
 
   return (
     <div className="bid">
@@ -13,22 +26,32 @@ function Bid() {
           <img src={profileImage} alt="profile" />
         </div>
         <div className="bid-username">
-          <h5>{Name}</h5>
-          <p>({userName})</p>
+          <h5>{uname}</h5>
+          <p style={{ color: 'green' }}>{skill}</p>
         </div>
         <div className="bid-rating">
           <p>4.5</p>
         </div>
       </div>
-      <div className="bid-price">
-        <p>Price</p>
+      <div className="bid-body-detail">
+        <div className="bid-message">
+          <p>{message}</p>
+        </div>
+        <div className="bid-price">
+          <p>{price}</p>
+        </div>
       </div>
+
       <div className="bid-button">
-      <button className="reject">Reject</button>
-        <button className="accept">Accept</button>
+        <button className="reject" onClick={reject}>
+          Reject
+        </button>
+        <button className="accept" onClick={accept}>
+          Accept
+        </button>
       </div>
     </div>
   );
-}
+};
 
 export default Bid;

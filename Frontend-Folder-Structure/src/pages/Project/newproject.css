@@ -6,6 +6,16 @@
   box-sizing: border-box;
 }
 
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
 .new-project-form {
   width: 710px;
   max-height: 900px;
@@ -18,11 +28,12 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 1000;
 }
 
 .new-project-header {
   width: 710px;
-  height: 60px;
+  height: 50px;
   background-color: var(--primary);
   box-shadow: 0px 3.72px 3.72px 0px rgba(0, 0, 0, 0.25);
   border-radius: 20px 20px 0px 0px;
@@ -33,7 +44,7 @@
   text-align: center;
   color: var(--white);
   margin: 0;
-  line-height: 60px;
+  line-height: 50px;
   font-family: "Inter-Bold", sans-serif;
   font-weight: bold;
 }
@@ -134,7 +145,6 @@
     align-items: center;
     justify-content: center;
     font-size: 14px;
-    padding: 5px;
     font-family: "Inter-Regular", sans-serif;
     color: #666;
     background-color: #fff;
@@ -179,9 +189,20 @@
     font-family: "Inter-Regular", sans-serif;
     color: var(--primary);
     font-size: 16px; 
-    padding: 7px; 
+    padding: 5px; 
     background-color: #f8f8f8;
     border: 1px solid #ddd;
     border-radius: 5px; 
     margin: 0px;
 }
+
+.project-range-budget{
+  display: flex;
+  flex-direction: row!important;
+  gap: 30px!important;
+}
+
+.budget-min-input input, .budget-max-input input{
+  width: 310px!important;
+}
+

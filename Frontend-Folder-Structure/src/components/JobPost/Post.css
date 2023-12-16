@@ -19,7 +19,11 @@
   border: 3px solid #000;
   border-radius: 12px;
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
+
+
 
 
 .pprofile{
@@ -134,11 +138,12 @@
   width: 200px;
 }
 
-.btn-bid button{
+.btn-bid-project button{
   height: 40px;
   width: 80px;
   background-color: var(--primary);
   border: none;
+  border-radius: 8px;
 }
 
 .wish button{
@@ -176,4 +181,5 @@
   justify-content: flex-start;
   gap: 3px;
   margin-left: 110px;
+  margin-top: 4px!important;
 }
