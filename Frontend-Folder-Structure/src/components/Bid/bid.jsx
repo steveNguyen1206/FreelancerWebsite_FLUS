@@ -21,7 +21,6 @@ const Bid = ({
       console.log('response: ', response);
       // send email to freelancer
       const emailJson = {
-        email: email,
       };
 
       gmailService.sendEmail(emailJson).then((response) => {
