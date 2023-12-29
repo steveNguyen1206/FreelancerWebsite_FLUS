@@ -19,8 +19,11 @@ const Bid = ({
     console.log('accept');
     bidServices.changeBidStatus(bidId, 1).then((response) => {
       console.log('response: ', response);
+
+      console.log(email)
       // send email to freelancer
       const emailJson = {
+        email: email,
       };
 
       gmailService.sendEmail(emailJson).then((response) => {
