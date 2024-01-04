@@ -203,6 +203,25 @@ exports.findOne = (req, res) => {
 // };
 
 
+// Create and Save a new Project_post
+async function handleUpload(file) {
+    const res = await cloudinary.uploader.upload(file, {
+        resource_type: "auto",
+    });
+    return res;
+}
+
+async function handleDelete(file) {
+    try {
+        const res = await cloudinary.uploader.destroy(file, {
+            resource_type: "image",
+        });
+        return res;
+    } catch (error) {
+        console.error("Error deleting image:", error);
+        throw error;
+    }
+}
 // /project_post/update
 exports.update = async (req, res) => {
     console.log("body: ", req.body);
@@ -216,7 +235,7 @@ exports.update = async (req, res) => {
     }
 
     const id = req.params.id;
-
+    console.log('freelancer_post id: ', id)
     console.log("req.file: ", req.file);
 
     try {
@@ -245,6 +264,8 @@ exports.update = async (req, res) => {
                 });
             }
         } else {
+            const id = req.params.id;
+
             // If a new image is provided, update with the new image
 
             // Get the old image url
@@ -277,8 +298,8 @@ exports.update = async (req, res) => {
             console.log("updated", updatedData);
 
 
-            const [num] = await project_post.update(updatedData, {
-                where: { id: id }
+            const [num] = await Freelancer_post.update(updatedData, {
+                where: { id: req.params.id }
             });
 
             if (num > 0) {

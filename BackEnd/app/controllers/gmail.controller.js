@@ -2,10 +2,12 @@ const nodemailer = require('nodemailer');
 const db = require("../models");
 const User = db.user;
 
-const sendEmail = (req, res) => {
-  console.log("req.body: ", req.body)
+const sendEmailToFreelancer = (req, res) => {
   const email = req.body.email;
-  console.log("Email from sendEmail",email);
+  const freelancer_post_id = req.body.freelancer_post_id;
+
+  console.log("Email from sendEmail: ",email);
+  console.log("freelancer_post_id from sendEmail: ",freelancer_post_id)
   // return  {
     try {
       // Find the user by id
@@ -207,7 +209,7 @@ const sendEmail = (req, res) => {
           <!--[if mso]><style>.v-button {background: transparent !important;}</style><![endif]-->
         <div align="center">
           <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://www.unlayer.com" style="height:37px; v-text-anchor:middle; width:197px;" arcsize="11%"  stroke="f" fillcolor="#15a919"><w:anchorlock/><center style="color:#FFFFFF;"><![endif]-->
-            <a href="ADD LINK HERE" target="_blank" class="v-button v-size-width v-font-size" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #15a919; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:34%; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
+            <a href="http://localhost:8081/findFreelancer/${freelancer_post_id}" target="_blank" class="v-button v-size-width v-font-size" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #15a919; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:34%; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
               <span style="display:block;padding:10px 20px;line-height:120%;"><strong><span style="font-size: 14px; line-height: 16.8px;">Check Now!</span></strong></span>
             </a>
             <!--[if mso]></center></v:roundrect><![endif]-->
@@ -278,5 +280,5 @@ const sendEmail = (req, res) => {
 }
 
 module.exports = {
-  sendEmail
+  sendEmailToFreelancer
 };

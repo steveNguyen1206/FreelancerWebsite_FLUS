@@ -9,8 +9,15 @@ module.exports = app => {
     // Retrieve all Category
     router.get("/", contact.findAll);
 
+    // Retrieve all bid
     router.get("/allbids/:freelancer_post_id", contact.findAllBids);
     
+    // Retrieve all bid with status = 0
+    router.get("/allzerobids/:freelancer_post_id", contact.findAllStatusZeroBids);
+    
+    // Retrive count of bid
+    router.get("/countbids/:freelancer_post_id", contact.countBids);
+
     // // Retrieve all published Category
     // router.get("/published", category.findAllPublished);
     
@@ -23,6 +30,10 @@ module.exports = app => {
     // Delete a Category with id
     router.delete("/:id", contact.delete);
     
+    // Update status of a contact with id
+    router.put("/changeContactStatus/:contact_id/:status", contact.changeContactStatus);
+
+
     // // Delete all Tutorials
     // router.delete("/", category.deleteAll);
     

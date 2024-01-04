@@ -61,7 +61,8 @@ const HireFreelancer = ({ isOpen, onClose, onUpdate, setShowHirePopup }) => {
         const email = emailData.data;
         console.log("email -----------> ", email);
         const emailJson = {
-            "email": email
+            "email": email,
+            "freelancer_post_id": postId
         }
         console.log("emailJson -----------> ", emailJson);
         if (validateForm()) {

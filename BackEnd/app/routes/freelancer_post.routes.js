@@ -21,7 +21,7 @@ module.exports = app => {
     router.get("/email/:id", freelancer_post.getFreelancerEmail);
   
     // Update a freelancer_post with id
-    router.put("/update", freelancer_post.update);
+    router.put("/:id",upload.single("image_file"), freelancer_post.update);
   
     // Delete a Category with id
     router.delete("/:id", freelancer_post.delete);

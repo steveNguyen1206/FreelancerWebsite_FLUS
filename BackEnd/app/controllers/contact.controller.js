@@ -245,13 +245,6 @@ exports.findAllBids = (req, res) => {
 
   })
     .then(data => {
-      // res.send(data);
-      // const bid = {
-      //   client_account_name: data.user.account_name,
-      //   client_profile_name: data.user.profile_name,
-      //   client_avt_url: data.user.avt_url,
-      //   budget: data.budget,
-      // }
 
       return res.json(data)
     })
@@ -290,3 +283,87 @@ exports.findAllBids = (req, res) => {
 //             });
 //         });
 // };
+
+exports.countBids = (req, res) => {
+  const post_id = req.params.freelancer_post_id;
+  console.log(post_id);
+
+  Contact.findAndCountAll({
+    where: {
+      freelancer_post_id: {
+        [Op.eq]: post_id
+      },
+    },
+    include: [
+      {
+        model: User,
+        attributes: ['id', 'account_name', 'profile_name', 'avt_url', 'email'],
+      },
+    ],
+  })
+    .then(data => {
+      const count = data.count; // Số lượng dữ liệu được tìm thấy
+      // const results = data.rows; // Dữ liệu tìm thấy
+      
+      return res.json(count);
+    })
+    .catch(err => {
+      res.status(500).send({
+          message: err.message || "Some error occurred while retrieving countBids data."
+      });
+    });
+}
+
+exports.changeContactStatus = (req, res) => {
+  const contact_id = req.params.contact_id;
+  const status = req.params.status;
+
+  console.log("contact_id: " + contact_id);
+  console.log("status: " + status);
+  Contact.update({ status: status }, { where: { id: contact_id } })
+      .then(data => {
+          res.status(200).send({
+              message: "Update contact status successfully."
+          });
+      })
+      .catch(err => {
+          res.status(500).send({
+              message:
+              err.message || "Some error occurred while updating contact status."
+          });
+      });
+}
+
+
+exports.findAllStatusZeroBids = (req, res) => {
+  const post_id = req.params.freelancer_post_id;
+  console.log(post_id)
+  // var condition = freelancer_post_id ? { freelancer_post_id: { [Op.like]: `${freelancer_post_id}%` } } : null;
+
+  Contact.findAll({
+    where: {
+      freelancer_post_id: {
+        [Op.eq]: post_id
+      },
+      status: {
+        [Op.eq]: 0
+      }
+    },
+    include: [
+      {
+        model: User,
+        attributes: ['id', 'account_name', 'profile_name', 'avt_url', 'email'],
+      },
+    ],
+
+  })
+    .then(data => {
+
+      return res.json(data)
+    })
+    .catch(err => {
+      res.status(500).send({
+          message: err.message || "Some error occurred while retrieving findAllBids data."
+      });
+    });
+}

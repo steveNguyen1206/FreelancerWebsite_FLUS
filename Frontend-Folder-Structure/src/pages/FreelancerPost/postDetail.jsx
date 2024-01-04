@@ -10,6 +10,7 @@ import delivery from '../../assets/delivery.png';
 import line from '../../assets/line.png';
 // import Comment from '@/components/Comment/Comment';
 import { Bid } from '@/components';
+import { BidOffer } from '@/components';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import freelancer_post_Service from '@/services/freelancer_post_Service';
@@ -101,7 +102,7 @@ const PostDetail = () => {
     setShowOfferPopup(true);
   };
 
-
+  const [numberOffer, setNumberOffer] = useState(0);
   const [bidOnes, setBidOnes] = useState([]);
   useEffect(() => {
     fetchBids();
@@ -109,9 +110,10 @@ const PostDetail = () => {
 
   const fetchBids = async () => {
     try {
-      const bidsData = await contactService.findAllBids(id);
+      const bidsData = await contactService.findZeroStatusBids(id);
       setBidOnes(bidsData.data);
-      console.log('data', bidsData.data);
+      const countBid = await contactService.countBids(id);
+      setNumberOffer(countBid.data);
     } catch (error) {
       console.error('Error fetching Bid:', error);
     }
@@ -199,7 +201,7 @@ const PostDetail = () => {
 
          
 
-          <div className="comments">
+          {/* <div className="comments">
             <div className="comment-title">
               <p>Comments</p>
               <div className="proj-comment-detail">
@@ -209,7 +211,7 @@ const PostDetail = () => {
             <div className="proj-line">
               <img src={line} alt="line" />
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="right-project">
           <button onClick={handleEditProject} className="button-edit">
@@ -241,7 +243,8 @@ const PostDetail = () => {
             <div className="btn-hire">
               <button className="button-hire-project" onClick={handleHireProject}>Hire me</button>
               <div className="budget-wrapper">
-                {`$${100}`}
+                {/* {`$${100}`} */}
+                ${project.lowset_price}
               </div>
             </div>
           </div>
@@ -249,11 +252,11 @@ const PostDetail = () => {
             <div className="view-detail" onClick={handleViewDetail}>
               <p>View details</p>
             </div>
-            <p>4 Offers</p>
+            <p>{numberOffer} Offers</p>
             <div className="proj-bid-list">
 
               {bidOnes.map((bidOne) => (
-                <Bid bidOne = {bidOne}/>
+                <BidOffer bidOne = {bidOne}/>
               ))}
               
               {/* <Bid />

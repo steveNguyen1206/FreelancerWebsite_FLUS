@@ -14,15 +14,16 @@ const findOnebyId = id => {
 //     return http.post("/freelancer_post", data);
 // }
 
-const update = (data) => {
-    return http.put(`/freelancer_post`, data);
-}
+// const update = (data) => {
+//     return http.put(`/freelancer_post`, data);
+// }
 
 
 const sendPost = async (data) => {
     let formData = new FormData();
     // const userId = 1;
-    // console.log(data);
+
+
     formData.append('title', data.title)
     formData.append('image_file', data.image_file); // này để lấy file ảnh
     console.log("data.about_me", data.about_me);
@@ -47,10 +48,10 @@ const sendPost = async (data) => {
 
   const updatePost = async (data) => {
     let formData = new FormData();
-    // formData.append("freelancer_id", data.id);
+    console.log("data.id");
+    console.log("data.id", data.id);
     formData.append('title', data.title)
     formData.append('image_file', data.image_file); // này để lấy file ảnh
-    console.log("data.about_me", data.about_me);
     formData.append('freelancer_id', "1");
     formData.append('about_me', data.about_me);
     formData.append('skill_description', data.skill_description);
@@ -58,22 +59,13 @@ const sendPost = async (data) => {
     formData.append('delivery_due', data.delivery_due);
     formData.append('revision_number', data.revision_number);
     formData.append('delivery_description', data.delivery_desciption);
-    // formData.append('imgage_post_urls', "");
     formData.append('skill_tag', data.skill_tag);
 
-    try {
-      const response = await http.put('/freelancer_post', formData, {
-        headers: {
-          ...http.defaults.headers,
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      console.log(response.data);
-    } catch (error) {
-      console.log('Error submitting project:', error);
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ', ' + pair[1]);
     }
     
-    return http.put("/freelancer_post", formData);
+    return media_upload.put(`/freelancer_post/${data.id}`, formData);
   };
 
 
@@ -83,7 +75,7 @@ const findFreelancerEmail = id => {
 
 const freelancer_post_Service = {
     // create,
-    update,
+    // update,
     allposts,
     sendPost,
     updatePost,

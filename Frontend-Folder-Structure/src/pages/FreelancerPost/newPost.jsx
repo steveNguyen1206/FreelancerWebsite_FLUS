@@ -44,7 +44,7 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
   // });
 
   const [error, setError] = useState({
-  
+
   });
 
   const initState = {
@@ -106,7 +106,7 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
   // const handleFileChange = (event) => {
   //   setSelectedFile(event.target.files[0]);
   // };
-  
+
   const handleDoneClick = () => {
     console.log('Done clicked.');
     newPost.skill_tag = document.getElementById("filter").value;
@@ -170,18 +170,18 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
 
         <div className="new-post-body">
 
-        <div className="project-title-input">
+          <div className="project-title-input">
             <label htmlFor="skillTag">Skill tag *</label>
-            <select className="filter" id="filter" style={{width: '650px'}}>
-                <option value="" disabled defaultValue>
-                  Add skills
+            <select className="filter" id="filter" style={{ width: '650px' }}>
+              <option value="" disabled defaultValue>
+                Add skills
+              </option>
+              {skills.map(skill => (
+                <option key={skill.id} value={skill.id}>
+                  {skill.subcategory_name}
                 </option>
-                {skills.map(skill => (
-                  <option key={skill.id} value={skill.id}>
-                    {skill.subcategory_name}
-                  </option>
-                ))}
-              </select>
+              ))}
+            </select>
             <div className="error-message">{error.title}</div>
           </div>
 
@@ -245,7 +245,7 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
             />
             <div className="error-message">{error.title}</div>
           </div>
-          
+
           <div className="project-detail-input">
             <label htmlFor="projectDetail">About My Skill *</label>
             <textarea
@@ -311,7 +311,7 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
           </div>
           <div className="project-title-input">
             <label htmlFor="projectDeliverDescript">Delivery Description</label>
-            
+
             <textarea
               type="text"
               id="projectDeliverDescript"
