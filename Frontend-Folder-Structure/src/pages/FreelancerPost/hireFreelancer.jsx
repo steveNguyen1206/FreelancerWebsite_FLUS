@@ -17,6 +17,7 @@ const HireFreelancer = ({ isOpen, onClose, onUpdate, setShowHirePopup }) => {
 
     });
     const currentURL = window.location.href;
+    console.log("currentURL -----------> ", currentURL);
     const postId = currentURL.split("/").pop();
     // console.log(lastNumber); // Kết quả: số cuối cùng từ đường dẫn URL hiện tại
     const initState = {
@@ -62,7 +63,7 @@ const HireFreelancer = ({ isOpen, onClose, onUpdate, setShowHirePopup }) => {
         console.log("email -----------> ", email);
         const emailJson = {
             "email": email,
-            "freelancer_post_id": postId
+            "url": currentURL
         }
         console.log("emailJson -----------> ", emailJson);
         if (validateForm()) {
