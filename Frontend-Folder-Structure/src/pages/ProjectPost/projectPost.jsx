@@ -49,13 +49,10 @@ const Project = () => {
 
   useEffect(() => {
     projectPostServices.getProjectbyId(id).then((response) => {
-      // console.log('response: ', response);
+      console.log('response: ', response);
       setProject(response.data);
+      fetchProjectTags(response.data.tag_id);
     });
-  }, []);
-
-  useEffect(() => {
-    fetchProjectTags();
   }, [id]);
 
   useEffect(() => {
@@ -65,15 +62,16 @@ const Project = () => {
   useEffect(() => {
     if (isChange) {
       projectPostServices.getProjectbyId(id).then((response) => {
-        // console.log('response: ', response);
+        console.log('response: ', response.data);
         setProject(response.data);
       });
       setIsChange(false);
     }
   }, [isChange]);
 
-  const fetchProjectTags = async () => {
-    const projectTagsData = await categoryServices.getNamefromId(id);
+  const fetchProjectTags = async (tag_id) => {
+    console.log('tag_id: ', tag_id);
+    const projectTagsData = await categoryServices.getNamefromId(tag_id);
     setProjectTags([projectTagsData.data.subcategory_name]);
   };
 

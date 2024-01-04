@@ -3,6 +3,7 @@ const db = require("../models");
 const User = db.user;
 
 const sendEmailToFreelancer = (req, res) => {
+  // const email = req.body.email;
   const email = req.body.email;
   const freelancer_post_id = req.body.freelancer_post_id;
 
@@ -159,7 +160,6 @@ const sendEmailToFreelancer = (req, res) => {
               </tr>
             </tbody>
           </table>
-        
               </td>
             </tr>
           </tbody>

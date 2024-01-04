@@ -44,7 +44,7 @@ exports.create = async (req, res) => {
         });
         return;
     }
-    
+
 
     console.log("req.file: ", req.file);
 
@@ -111,14 +111,14 @@ exports.findAndChangeStatus = (req, res) => {
 // Retrieve all Project_posts from the database.
 exports.findAllProjectPosts = (req, res) => {
     const {userId} = req.params;
-    const condition = userId ? 
-    { 
-        user_id: { [Op.eq]: `${userId}` },
-        status: { [Op.eq]: 1}
-    } : null;
+    const condition = { 
+        user_id: userId ? { [Op.eq]: `${userId}` } : { [Op.ne]: null },
+        status: { [Op.eq]: 1 }
+    };
 
     project_post.findAll({ where: condition })
         .then(data => {
+            console.log(data)
         res.send(data);
         })
         .catch(err => {

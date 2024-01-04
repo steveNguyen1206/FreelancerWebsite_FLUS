@@ -25,29 +25,19 @@ exports.create = (req, res) => {
         proj_post_id: req.body.proj_post_id,
     }
 
-    Bid.findOne({ where: { user_id: bid.user_id, proj_post_id: bid.proj_post_id } })
-        .then(existingBid => {
-            if (existingBid) {
-                res.status(400).send({
-                    message: "You already bid this project."
-                });
-            }
-            else {
-                Bid.create(bid)
-                    .then(data => {
-                        res.status(200).send({
-                            message: "Create bid sucessfully."
-                        });
-                    })
-                    .catch(err => {
-                        res.status(500).send({
-                            message:
-                            err.message || "Some error occurred while creating the Bid."
-                        });
-                    });
-            }
+    Bid.create(bid)
+        .then(data => {
+            res.status(200).send({
+                 message: "Create bid sucessfully."
+             });
+         })
+         .catch(err => {
+             res.status(500).send({
+                 message:
+                 err.message || "Some error occurred while creating the Bid."
+             });
+         });
         
-        })
 }
 
 exports.findBidByProjectId = (req, res) => {

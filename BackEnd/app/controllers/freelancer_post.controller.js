@@ -344,23 +344,6 @@ exports.delete = (req, res) => {
         });
 };
 
-// // Delete all Tutorials from the database.
-// exports.deleteAll = (req, res) => {
-//     Category.destroy({
-//         where: {},
-//         truncate: false
-//     })
-//         .then(nums => {
-//             res.send({ message: `${nums} Category were deleted successfully!` });
-//         })
-//         .catch(err => {
-//             res.status(500).send({
-//                 message:
-//                     err.message || "Some error occurred while removing all categories."
-//             });
-//         });
-// };
-
 exports.findAllPosts = (req, res) => {
     const freelancer_id = req.query.freelancer_id;
     var condition = freelancer_id ? { freelancer_id: { [Op.like]: `%${freelancer_id}%` } } : null;
