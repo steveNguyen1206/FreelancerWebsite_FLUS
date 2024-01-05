@@ -41,7 +41,9 @@ const changeOtherBidStatus = (bid_id, status) => {
     return http.put("/bid/changeOtherBidStatus/" + bid_id + "/" + status);
 }
 
-
+const getProjectPostfromBid = (bid_id) => {
+    return http.get("/bid/getProjectPostfromBid/" + bid_id);
+}
 
 
 
@@ -55,6 +57,7 @@ const bidService = {
     getNumOfBid,
     changeBidStatus,
     changeOtherBidStatus,
+    getProjectPostfromBid,
 };
 
 export default bidService;

@@ -2,6 +2,7 @@ const db = require("../models");
 const config = require("../config/auth.config");
 const Op = db.Sequelize.Op;
 const Bid = db.bid;
+const projectPost = db.project_post;
 
 exports.create = (req, res) => {
     console.log("req.body: ", req.body);
@@ -87,6 +88,34 @@ exports.changeOtherBidStatus = (req, res) => {
             res.status(500).send({
                 message:
                 err.message || "Some error occurred while updating other bid status."
+            });
+        });
+}
+
+
+exports.getProjectPostfromBid = (req, res) => {
+    const bid_id = req.params.bid_id;
+
+    console.log("bid_id:", bid_id);
+
+    Bid.findOne({ where: { id: bid_id } })
+        .then(data => {
+            console.log("data:\n\n\n", data);
+            projectPost.findOne({ where: { id: data.proj_post_id } })
+                .then(data => {
+                    res.status(200).send(data);
+                })
+                .catch(err => {
+                    res.status(500).send({
+                        message:
+                        err.message || "Some error occurred while retrieving project post."
+                    });
+                });
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                err.message || "Some error occurred while retrieving bid."
             });
         });
 }

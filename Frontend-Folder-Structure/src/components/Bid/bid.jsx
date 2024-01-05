@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import './bid.css';
 import bidServices from '@/services/bidServices';
 import gmailService from '@/services/gmailServices';
 import projectPostServices from '@/services/projectPostServices';
+import projectService from '@/services/projectServices';
 
 const Bid = ({
   bidId,
@@ -14,19 +14,32 @@ const Bid = ({
   email,
   projectId,
   onChangeBid,
+  duration,
+  freelancerId,
 }) => {
+  const [projectDetail, setProjectDetail] = useState({});
+
+  useEffect(() => {
+    bidServices.getProjectPostfromBid(bidId).then((response) => {
+      setProjectDetail(response.data);
+    });
+  }, []);
+
   const handleAccept = () => {
     console.log('accept');
     bidServices.changeBidStatus(bidId, 1).then((response) => {
       console.log('response: ', response);
 
-      console.log(email)
+      console.log(email);
       // send email to freelancer
-      const emailJson = {
+      const emailData = {
         email: email,
+        url: 'http://localhost:3000/project-detail/' + projectId,
       };
 
-      gmailService.sendEmail(emailJson).then((response) => {
+      // TODO: Change url to correct project management page for freelancer
+
+      gmailService.sendEmail(emailData).then((response) => {
         console.log('response: ', response);
       });
 
@@ -40,7 +53,42 @@ const Bid = ({
         console.log('response: ', response);
       });
 
+      const today = new Date();
+      const date =
+        today.getFullYear() +
+        '-' +
+        (today.getMonth() + 1) +
+        '-' +
+        today.getDate();
+
+      // endDate = currentDate + duration
+      const endDate = new Date();
+      endDate.setDate(endDate.getDate() + duration);
+
+      const endDateString =
+        endDate.getFullYear() +
+        '-' +
+        (endDate.getMonth() + 1) +
+        '-' +
+        endDate.getDate();
+
+      const projectData = {
+        name: projectDetail.title,
+        description: projectDetail.detail,
+        startData: date,
+        endDate: endDateString,
+        budget: price,
+        bid_id: bidId,
+        tag_id: projectDetail.tag_id,
+        owner_id: projectDetail.user_id,
+        member_id: freelancerId,
+      };
+
       // TODO: create project
+      projectService.createProject(projectData).then((response) => {
+        console.log('response: ', response);
+      });
+
       // TODO: navigate to project detail page
       onChangeBid();
     });

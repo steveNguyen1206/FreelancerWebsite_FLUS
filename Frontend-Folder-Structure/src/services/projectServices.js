@@ -9,11 +9,15 @@ const findMemberOnebyId = (id, access_token) => {
     }});
   };
 
-const createProject = (access_token) => {
-  return http.post(`/project`,  {headers: {
-    "Content-type": "application/json",
-    "x-access-token": access_token,
-  }});
+// const createProject = (access_token, data) => {
+//   return http.post(`/project`, data, {headers: {
+//     "Content-type": "application/json",
+//     "x-access-token": access_token,
+//   }});
+// }
+
+const createProject = (data) => {
+  return http.post(`/project`, data);
 }
 
 const configureProject = (id, access_token, data) => {
