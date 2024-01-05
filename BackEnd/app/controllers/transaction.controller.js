@@ -4,6 +4,7 @@ const Op = db.Sequelize.Op;
 // const Project = db.projects;
 // const ProjectNoti = db.projects_notis;
 const ProjectController = require('./project.controller')
+const projectReportController = require('./project_report.controller')
 
 
 TRAN_CONFIGURE_PAID = 1
@@ -126,6 +127,7 @@ exports.deleteAll = (req, res) => {
     });
 };
 
+
 exports.createTransactionAndUpdateProject = (req, res) => {
   // Validate request
   if (!req.body.tran_amount 
@@ -170,4 +172,42 @@ exports.createTransactionAndUpdateProject = (req, res) => {
       });
     });
 };
+
+
+exports.createTransactionAndAcceptProject = (req, res) => {
+  // Validate request
+  if (!req.body.cost 
+    || !req.body.receiverId
+    || !req.transactionId) {
+    res.status(400).send({
+      message: "missing information!"
+    });
+    return;
+  }
+
+  const projectId = req.params.projectId;
+
+  const transaction = {
+    amount: req.body.cost,
+    sender_id: 1,
+    receiver_id: req.body.receiverId,
+    project_id: projectId,
+    transactionId: req.transactionId,
+    type: 1,
+  }
+
+    // Save Tutorial in the database
+    Transaction.create(transaction)
+    .then(trans_data => {
+      // res.send(data);
+      projectReportController.accept(req, res);
+
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the transaction in accept project."
+      });
+    });
+}
 

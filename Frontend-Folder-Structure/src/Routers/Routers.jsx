@@ -27,7 +27,7 @@ const Routers = () => {
 
           <Route path="/project" element={<Project />} />
           <Route path="/project-manage/:id" element={<ProjectManagement own={false}/>} />
-          <Route path="/my-project-manage" element={<ProjectManagement own={true}/>} />
+          <Route path="/my-project-manage/:id" element={<ProjectManagement own={true}/>} />
           <Route path="/my-project-manage" element={<ProjectManagement own={true}/>} />
           <Route path="/project-manage" element={<ProjectManagement own={false}/>} />
 

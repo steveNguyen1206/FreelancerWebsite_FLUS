@@ -170,7 +170,7 @@ exports.accept = async (req, res) => {
     })
     .catch(err => {
       res.status(500).send({
-          message: "Error updating project report with project: " + err
+          message: "Error accept project report with project: " + err
         });
     })
     

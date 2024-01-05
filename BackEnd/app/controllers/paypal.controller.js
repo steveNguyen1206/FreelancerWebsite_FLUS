@@ -136,10 +136,11 @@ const captureOrder = async (orderID) => {
 
 const maxRetries = 100;
 const interval = 500;
-function fetchDataWithRetry(url, accessToken) {
+async function fetchDataWithRetry(url, accessToken) {
   return new Promise((resolve, reject) => {
     function waitingForTransactionComplete() {
       let retries = 0;
+      console.log("test promise");
 
       fetch(url, {
         headers: {
@@ -150,15 +151,19 @@ function fetchDataWithRetry(url, accessToken) {
       }).then(
         data => data.json()
       ).then(response => {
+        console.log("test promise response: ", response);
+        console.log("test promise status: ", response.status);
         if (response.batch_header.batch_status == 'SUCCESS') {
           // Request is successful, resolve the promise
           resolve(response);
-        } else if (response.status == 200 && retries < maxRetries) {
+        } else if (retries < maxRetries) {
           // Request is accepted, but not complete yet, retry after the interval
           retries++;
-          setTimeout(fetchData, interval);
+          console.log("reponse retry: ", retries);
+          setTimeout(waitingForTransactionComplete, interval);
         } else {
           // Request failed or exceeded max retries, reject the promise
+          console.log("reponse status fail");
           reject(new Error(`Failed with status: ${response.status}`));
         }
       })
@@ -193,27 +198,46 @@ const createPayoutBatch = async (data) => {
       }
     ]
   };
-  const response = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
-  let jsonResponse;
-  let check;
-  jsonResponse = await response.json();
 
-  const batch_detail_url = url + `/${jsonResponse.batch_header.payout_batch_id}`
-  fetchDataWithRetry(batch_detail_url, accessToken)
-  .then(response => {
-    console.log('Data received:', response);
-    return response;
-  })
-  .catch(error => {
-    console.error('Error fetching data:', error.message);
-  });
+  try
+  {
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+    let jsonResponse;
+    jsonResponse = await response.json();
+    console.log(jsonResponse);
+    const batch_detail_url = url + `/${jsonResponse.batch_header.payout_batch_id}`
+    
+    try {
+      const response = await fetchDataWithRetry(batch_detail_url, accessToken)
+      console.log('Data received:', response);
+      return {
+        jsonResponse: response,
+        httpStatusCode: 201,
+      };
+    }
+    catch (error) {
+      console.error('Error fetching data:', error.message);
+      return {
+        jsonResponse: error,
+        httpStatusCode: 500,
+      };
+    };
+  }
+  catch (error)
+  {
+    console.error('Error creating bayout batch', error.message);
+        return {
+          jsonResponse: error,
+          httpStatusCode: 500,
+        };
+  };
 }
 
 async function handleResponse(response) {
@@ -229,7 +253,6 @@ async function handleResponse(response) {
     throw new Error(errorMessage);
   }
 }
-
 
 exports.apiCreatePayoutBatch = async (req, res) => {
   try {
@@ -326,9 +349,14 @@ exports.apiAcceptProject = async (req, res) => {
                 console.log(receiver)
                 req.body.receiver = receiver.account_address;
                 const data = req.body;
-                const { httpStatusCode, batchData } = await createPayoutBatch(data);
+                const { jsonResponse, httpStatusCode } = await createPayoutBatch(data);
                 if (httpStatusCode == 201)
-                  projectReportController.accept(req, res);
+                {
+                  req.transactionId = jsonResponse.items[0].transaction_id;
+                  // projectReportController.accept(req, res);
+                  transactionController.createTransactionAndAcceptProject(req, res);
+
+                }
                 else res.status(500).json({ error: "Failed to pay prepaid" });
               }
               else {
