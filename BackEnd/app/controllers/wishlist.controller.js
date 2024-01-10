@@ -9,11 +9,11 @@ const user_wishlist = db.user_wishlist;
 // }
 
 exports.create = (req, res) => {
-    // get user_id and project_post_id from req.params
-    const { userId, projectPostId } = req.params;
+    const projectPostId = req.params.projectPostId;
+
     // create wishlist object
     const wishlist = {
-        user_id: userId,
+        user_id: req.userId,
         project_post_id: projectPostId
     }
     // save wishlist to database
@@ -33,14 +33,14 @@ exports.create = (req, res) => {
 
 // delete
 exports.delete = (req, res) => {
-    // get user_id and project_post_id from req.params
-    const { userId, projectPostId } = req.params;
-    // create wishlist object
+    const projectPostId = req.params.projectPostId;
+    const userId = req.userId;
+
     const wishlist = {
         user_id: userId,
         project_post_id: projectPostId
     }
-    // delete wishlist from database
+
     user_wishlist.destroy({ where: wishlist })
         .then(data => {
             res.status(200).send({
@@ -58,7 +58,7 @@ exports.delete = (req, res) => {
 // find all wishlist by user id
 
 exports.findAllWishlistByUserId = (req, res) => {
-    const { userId } = req.params;
+    const userId = req.userId;
     const condition = userId ? { user_id: { [Op.eq]: `${userId}` } } : null;
 
 
@@ -90,7 +90,8 @@ exports.findAllWishlistByUserId = (req, res) => {
 
 // check is exising wishlist
 exports.isExisted = (req, res) => {
-    const { userId, projectPostId } = req.params;
+    const userId = req.userId;
+    const projectPostId = req.params.projectPostId;
     const condition = userId ? { user_id: { [Op.eq]: `${userId}` }, project_post_id: { [Op.eq]: `${projectPostId}` } } : null;
 
     user_wishlist.findAll({ where: condition })

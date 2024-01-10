@@ -1,24 +1,24 @@
 import { media_upload, http } from "./http-common";
 
-const findOnebyId = id => {
-    return http.get(`/project_post/${id}`);
-  };
-const sendProject = async (data) => {
+const create = async (data, access_token) => {
     let formData = new FormData();
     formData.append('title', data.title);
     formData.append('detail', data.detail);
     formData.append('budget_min', data.budgetMin);
     formData.append('budget_max', data.budgetMax);
     formData.append('tag_id', data.tag_id); 
-    formData.append('user_id', 1);
     formData.append('image_file', data.image);
+    formData.append('start_date', data.startDate);
 
     console.log("formData: ", formData);
-    return media_upload.post("/project_post/", formData);
+    return media_upload.post("/project_post/", formData,
+    {headers: {
+      'Content-Type': 'multipart/form-data',
+      "x-access-token": access_token,
+    }});
   };
 
-
-const updateProject = async (data) => {
+const update = async (data, access_token) => {
     let formData = new FormData();
     formData.append('title', data.title);
     formData.append('detail', data.detail);
@@ -26,35 +26,43 @@ const updateProject = async (data) => {
     formData.append('budget_max', data.budgetMax);
     formData.append('image_file', data.image);
     formData.append('tag', data.tag_id);
-    formData.append("user_id", 1);
-
+    formData.append('start_date', data.startDate);
 
     console.log("formData: ", formData);
     
-    return media_upload.put(`/project_post/${data.id}`, formData);
+  return media_upload.put(`/project_post/${data.id}`, formData,{
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      "x-access-token": access_token,
+}});
   };
 
 
-const getAllProjects = () => {
+const getAll = () => {
     return http.get("/project_post/findAll");
 };
 
-const getProjectbyId = id => {
-    return http.get(`/project_post/${id}`);
+const getOnebyId = (id) => {
+    return http.get(`/project_post/findOne/${id}`);
 }
 
-const changeStatus = (id, status) => {
-    return http.put(`/project_post/changeStatus/${id}/${status}`);
+const changeStatus = (id, status, access_token) => {
+    return http.put(`/project_post/changeStatus/${id}/${status}`,
+    {
+      headers:{
+        "Content-Type": "application/json",
+        "x-access-token": access_token,
+      }
+    });
 }
 
 
 
 const projectPostServices= {
-    sendProject,
-    getAllProjects,
-    getProjectbyId,
-    updateProject,
-    findOnebyId,
+    create,
+    update,
+    getAll,
+    getOnebyId,
     changeStatus,
 };
 

@@ -3,68 +3,68 @@ import './style.css';
 import { useProjectManageContext } from './ProjectManageProvider';
 import { TextField } from '@mui/material';
 import { useState } from 'react';
-import projectService from '@/services/projectServices';
+import projectIssuesServices from '@/services/projectIssuesServices';
 import { useEffect } from 'react';
 
-export const ProjectReport = () => {
+export const ProjectComplaint = () => {
+  const { project, isOwn, error, setError} = useProjectManageContext();
   const initialPayload = {
     resources: '',
-    message: '',
-    projectId: '',
+    content: '',
+    projectId: project.id,
+    type: isOwn ? 1 : 2,
+    status: 0,
   };
-  const { project, reportId, error, setError } = useProjectManageContext();
-  const [report, setReport] = useState(initialPayload);
+  const [issue, setIssue] = useState(initialPayload);
   const [sended, setSended] = useState(false);
-  console.log(project);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setReport({
-      ...report,
+    setIssue({
+      ...issue,
       [name]: value,
     });
-    console.log(report);
+    console.log(issue);
   };
 
+  // check message and recources before call issuse api, if message and resources is empty, render error message
   const ValidateIssue = () => {
-    if (report.content == '' || report.resources == '') {
+    if (issue.content == '' || issue.resources == '') {
       return false;
     }
     return true;
   };
 
-  const handleCreateReport = async () => {
+  const handleCreateIssue = async () => {
     if(ValidateIssue())
     {
-      const responce = await projectService.createProjectReport(
+      const responce = await projectIssuesServices.createProjectIssues(
         project.id,
         localStorage.getItem('AUTH_TOKEN'),
-        report
+        issue
       );
       console.log(responce);
       setSended(true);
-      setError(null);
     }
-    else
-    {
+    else {
       setError("Please fill in the message and resources");
+      console.log(error);
     }
   };
 
   useEffect(() => {
-    if(reportId)
-    {
-      projectService
-        .getProjectReport(project.id, reportId, localStorage.getItem('AUTH_TOKEN'))
-        .then((report_data) => {
-          if (report_data.status == 200) {
-            setReport(report_data.data);
-          }
-          console.log(report);
-        });
-    }
+    // if(reportId)
+    // {
+    //   projectService
+    //     .getProjectReport(project.id, reportId, localStorage.getItem('AUTH_TOKEN'))
+    //     .then((report_data) => {
+    //       if (report_data.status == 200) {
+    //         setReport(report_data.data);
+    //       }
+    //       console.log(report);
+    //     });
+    // }
     setError(null);
-  
   }, []);
 
   return (
@@ -74,7 +74,7 @@ export const ProjectReport = () => {
           className="project-requirement-container"
           style={{ padding: '5%', textAlign: 'center' }}
         >
-          <div className="title-text --size-20">Report Sended!</div>
+          <div className="title-text --size-20">Complaint Sended!</div>
         </div>
       ) : (
         <>
@@ -82,7 +82,7 @@ export const ProjectReport = () => {
             className="project-content-title"
             style={{ textAlign: 'center' }}
           >
-            <h4 className="title-text">Report</h4>
+            <h4 className="title-text">Complaint</h4>
           </div>
 
           <div
@@ -92,11 +92,10 @@ export const ProjectReport = () => {
             <div className="title-text --size-16">Message</div>
             <TextField
               multiline
-              name="message"
-              placeholder="Telling your client what you have done for the project."
+              name="content"
+              placeholder="Write down your complaint about this project as well as your parner. We will try our best to help you."
               minRows={5}
               onChange={handleInputChange}
-              value={report.message}
             />
 
             <div className="title-text --size-16" style={{ marginTop: 16 }}>
@@ -105,22 +104,21 @@ export const ProjectReport = () => {
             <TextField
               multiline
               name="resources"
-              placeholder="Place resources that contain your work heres."
+              placeholder="Place resources that make envidence for your complaint so that we can help you as much as we could."
               sx={{ backgroundColor: '#EBE8E8' }}
               minRows={5}
               onChange={handleInputChange}
-              value={report.resources}
             />
+
             <div style={{ height: '30px', width: '100%' }}> 
               <div className="value-text --size-14 --color-error">{error}</div>
             </div>
             <div className="project-content-container --center">
               <button
                 className="my-button --button-green"
-                onClick={handleCreateReport}
-                disabled={project.status == 3 || project.status == 4}
+                onClick={handleCreateIssue}
               >
-                Complete and send for judgment
+                Send Complaint
               </button>
             </div>
           </div>

@@ -3,6 +3,9 @@ import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import Project from './pages/ProjectPost/projectPost';
 import { AuthProvider, useAuth } from './AuthContext';
 
+
+
+
 function App() {
   const initialOptions = {
     clientId:

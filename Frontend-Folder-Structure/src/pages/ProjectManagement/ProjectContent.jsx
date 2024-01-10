@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./style.css";
 import { useProjectManageContext } from "./ProjectManageProvider";
-
+import { ProjectStatus } from ".";
 
 export const ProjectContent = () => {
 
@@ -69,11 +69,11 @@ export const ProjectContent = () => {
 
             <div className="filed-container">
               <div className="label-text">Status</div>
-              <div className="value-text">{project.status == 3 ? "Finished" : "In progress"}</div>
+              <div className="value-text">{project.status == ProjectStatus.COMPLETED ? "Finished" : ( project.status == ProjectStatus.CANCELED ? "Failed" : "In progress")}</div>
             </div>  
             </div>
 
-            {project.status != 3 && 
+            {project.status != ProjectStatus.COMPLETED && project.status != ProjectStatus.CANCELED &&
             (
             <div className="progress-container">
               <h4 className="title-text --size-20" >Progress</h4>

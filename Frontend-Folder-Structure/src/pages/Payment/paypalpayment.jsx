@@ -49,7 +49,7 @@ const PayPalPayment = () => {
       const onApprove = async (data) => {
         try {
           const response = await paymentServices.onAprrove(data)
-          console.log("Payment successful", response.data); // Log the response data
+          console.log("Payment successful", response); // Log the response data
           setPaySuccess(true);
           return response.data;
         } catch (error) {

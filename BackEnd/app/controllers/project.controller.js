@@ -5,22 +5,22 @@ const User = db.Sequelize.user;
 const Transaction = db.transactions;
 const ProjectNoti = db.projects_notis;
 
-const {createTransaction} = require('../controllers/transaction.controller.js')
+const { createTransaction } = require('../controllers/transaction.controller.js')
 
-ADMIN_USER_ID  = 1
+ADMIN_USER_ID = 1
 
 // Create and Save a new Tutorial
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.name ) {
+  if (!req.body.name || !req.body.description) {
     res.status(400).send({
       message: "Missing information!"
     });
     return;
   }
 
-//   const currentDate = new Date();
-//   const currentDateString = currentDate.toISOString().split('T')[0];
+  //   const currentDate = new Date();
+  //   const currentDateString = currentDate.toISOString().split('T')[0];
 
   // Create a Tutorial
   const project = {
@@ -32,6 +32,9 @@ exports.create = (req, res) => {
     status: 0,
     owner_id: req.body.owner,
     member_id: req.body.member,
+    created_bid_id: req.body.bid_id,
+    created_contact_id: req.body.contact_id,
+    tag_id: req.body.tag_id,
   };
 
   console.log(req.body);
@@ -42,12 +45,13 @@ exports.create = (req, res) => {
       const notification = {
         title: "Project was created",
         content: "This is the first begining of your project. Happy freelancing!",
-        creator_id:  req.body.owner,
+        creator_id: req.body.owner,
         project_id: project_data.id
       }
 
       ProjectNoti.create(notification)
-        .then(noti_data=> {
+        .then(noti_data => {
+          console.log("project_data: ", project_data)
           res.send(project_data);
         })
         .catch(err => {
@@ -68,7 +72,7 @@ exports.create = (req, res) => {
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
-  
+
   const title = req.query.title;
   var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
 
@@ -86,25 +90,26 @@ exports.findAll = (req, res) => {
 
 // Find a single Tutorial with an id
 exports.findMemberOne = (req, res) => {
-  const id = req.params.id;
-  console.log("test")
+  const id = req.params.projectId;
 
-  Project.findByPk(id,  {include: [
-    {
-      model: db.user,
-      as: 'member',
-      attributes: ['account_name']
-    },
-    {
-      model: db.user,
-      as: 'owner',
-      attributes: ['account_name']
-    }, 
-    ]})
+  Project.findByPk(id, {
+    include: [
+      {
+        model: db.user,
+        as: 'member',
+        attributes: ['account_name']
+      },
+      {
+        model: db.user,
+        as: 'owner',
+        attributes: ['account_name']
+      },
+    ]
+  })
     .then(data => {
       if (data) {
-          console.log(req.userId)
-          res.send(data);
+        console.log(req.userId)
+        res.send(data);
       } else {
         res.status(404).send({
           message: `Cannot find Project with id=${id}.`
@@ -120,25 +125,26 @@ exports.findMemberOne = (req, res) => {
 
 // Find a single Tutorial with an id
 exports.findOwnerOne = (req, res) => {
-  const id = req.params.id;
-  console.log("test")
+  const id = req.params.projectId;
 
-  Project.findByPk(id,  {include: [
-    {
-      model: db.user,
-      as: 'member',
-      attributes: ['account_name', "email"]
-    },
-    {
-      model: db.user,
-      as: 'owner',
-      attributes: ['account_name', "email", "phone_number"]
-    }, 
-    ]})
+  Project.findByPk(id, {
+    include: [
+      {
+        model: db.user,
+        as: 'member',
+        attributes: ['account_name', "email"]
+      },
+      {
+        model: db.user,
+        as: 'owner',
+        attributes: ['account_name', "email", "phone_number"]
+      },
+    ]
+  })
     .then(data => {
       if (data) {
-          console.log(req.userId)
-          res.send(data);
+        console.log(req.userId)
+        res.send(data);
       } else {
         res.status(404).send({
           message: `Cannot find Project with id=${id}.`
@@ -152,10 +158,53 @@ exports.findOwnerOne = (req, res) => {
     });
 };
 
+
+// Find a all project with given user menber id
+exports.findMemberAll = (req, res) => {
+  console.log("test get all member project")
+  const userId = req.userId;
+  console.log("userid ", userId)
+  Project.findAll({ where: { member_id: userId }, attributes: ['id', 'project_name', 'start_date', 'end_date', 'budget', 'status'] })
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find Project in which user id=${id} is member.`
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).send({
+        message: "Error retrieving Project with error: " + err
+      });
+    });
+};
+
+// Find a single Tutorial with an id
+exports.findOwnerAll = (req, res) => {
+  const userId = req.userId;
+  Project.findAll({ where: { owner_id: userId }, attributes: ['id', 'project_name', 'start_date', 'end_date', 'budget', 'status'] })
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find Project in which user id=${id} is owner.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving Project with error: " + err
+      });
+    });
+};
+
 // Update a project by the id in the request
 exports.update = (req, res) => {
-  const id = req.body.id;
-  console.log("tesst body id", id);
+  const projectId = req.params.projectId;
 
   const update = {
     project_name: req.body.project_name,
@@ -164,75 +213,54 @@ exports.update = (req, res) => {
     end_date: req.body.end_date,
     budget: req.body.budget,
     status: req.body.status
-    };
+  };
 
-  Project.findByPk(id)
-    .then(project_data => {
-        Project.update(update, {
-          where: { id: id }
-        })
-          .then(num => {
-            if (num == 1) {
-              
-              const transaction = {
-                amount: req.body.tran_amount,
-                sender_id: req.body.userId,
-                receiver_id: ADMIN_USER_ID,
-                project_id: project_data.id,
-                transactionId: req.body.orderID,
-                type: req.body.tran_type
-              }
+  Project.update(update, {
+    where: { id: projectId }
+  })
+    .then(num => {
+      if (num == 1) {
+        const notification = {
+          title: req.body.noti_title,
+          content: req.body.noti_content,
+          creator_id: req.userId,
+          project_id: projectId,
+          report_id: req.body.report_id
+        }
 
-              Transaction.create(transaction)
-                .then(trans_data=> {
 
-                  const notification = {
-                    title: req.body.noti_title,
-                    content: req.body.noti_content,
-                    creator_id: req.body.userId,
-                    project_id: project_data.id
-                  }
-            
-                  ProjectNoti.create(notification)
-                    .then(noti_data=> {
-                      // res.send(project_data);
-                      res.send({
-                        message: "Project was updated successfully."
-                      });
-                    })
-                    .catch(err => {
-                      res.status(500).send({
-                        message:
-                          err.message || "Some error occurred while creating project notification."
-                      });
-                    });
-                  
-                })
-                .catch(err => {
-                  res.status(500).send({
-                    message:
-                      err.message || "Some error occurred while creating the Transaction."
-                  });
-                });
-
-            } else {
-              res.send({
-                message: `Cannot update project with id=${id}. Maybe project was not found or req.body is empty!`
-              });
-            }
+        ProjectNoti.create(notification)
+          .then(noti_data => {
+            // res.send(project_data);
+            res.send({
+              message: "Project was updated successfully."
+            });
           })
           .catch(err => {
             res.status(500).send({
-              message: "Error updating project with id=" + id
+              message:
+                err.message || "Some error occurred while creating project notification."
             });
           });
-  })
-  
+
+      } else {
+        res.send({
+          message: `Cannot update project with id=${id}.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: `Error updating project with id =  ${projectId}.`
+      });
+    });
 };
+
+
 
 // Delete a Tutorial with the specified id in the request
 exports.delete = (req, res) => {
-  const id = req.params.id;
+  const id = req.params.projectId;
 
   Project.destroy({
     where: { id: id }

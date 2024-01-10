@@ -3,7 +3,7 @@ import http from "./http-common";
 
 const findMemberOnebyId = (id, access_token) => {
   console.log("api call id", id)
-    return http.get(`/project/${id}`,  {headers: {
+    return http.get(`/project/mem/${id}`,  {headers: {
       "Content-type": "application/json",
       "x-access-token": access_token,
     }});
@@ -29,7 +29,6 @@ const configureProject = (id, access_token, data) => {
 }
 
 const findOwnerOnebyId = (id, access_token) => {
-  console.log("api call id", id)
     return http.get(`project/own/${id}`,  {headers: {
       "Content-type": "application/json",
       "x-access-token": access_token,
@@ -44,8 +43,16 @@ const findOwnerOnebyId = (id, access_token) => {
     }});
   };
   
-  const getProjectReport = (projectId, access_token) => {
-    return http.get(`project-report/${projectId}`, {headers: {
+  const getProjectReport = (projectId, reportId,  access_token) => {
+    return http.get(`project-report/get-one/${projectId}/${reportId}`, {headers: {
+      "Content-type": "application/json",
+      "x-access-token": access_token,
+    }});
+  };
+
+  const getNewestProjectReport = (projectId, access_token) => {
+    console.log("proId", projectId)
+    return http.get(`project-report/newest/${projectId}`, {headers: {
       "Content-type": "application/json",
       "x-access-token": access_token,
     }});
@@ -60,7 +67,7 @@ const findOwnerOnebyId = (id, access_token) => {
     }});
   };
 
-  const updateReport = (projectId, access_token, data) => {
+  const updateReport = (projectId, data, access_token) => {
     return http.put(`project-report/update/${projectId}`, data, {headers: {
       "Content-type": "application/json",
       "x-access-token": access_token,
@@ -75,9 +82,21 @@ const findOwnerOnebyId = (id, access_token) => {
     }});
   }
 
-  const createNull = () => {
-    return http.post("/project/createNull");
-  };
+  const getAllOwnProjects = (access_token) => {
+    return http.get(`project/all-own`, {headers: {
+      "Content-type": "application/json",
+      "x-access-token": access_token,
+    }});
+  }
+
+  const getAllMemberProjects = (access_token) => {
+    return http.get(`project/all-mem`, {headers: {
+      "Content-type": "application/json",
+      "x-access-token": access_token,
+    }});
+  }
+
+
 
   const projectService = {
     findMemberOnebyId,
@@ -89,7 +108,9 @@ const findOwnerOnebyId = (id, access_token) => {
     acceptReport,
     updateReport,
     getALlNotifications,
-    createNull
+    getNewestProjectReport,
+    getAllOwnProjects,
+    getAllMemberProjects
   };
 
   export default projectService;

@@ -2,50 +2,15 @@ import React from 'react';
 import './bidDetailPopup.css';
 import { Bid, StarRating } from '@/components';
 import { useEffect, useState } from 'react';
-import bidServices from '@/services/bidServices';
 import BidDetailTag from '@/components/Bid/bidDetailTag';
-import userDataService from '@/services/userDataServices';
-import reviewServices from '@/services/reviewServices';
 
-const BidDetailPopup = ({ setPopUpAppear, project_post_id, onChange}) => {
+const BidDetailPopup = ({ setPopUpAppear, project_post_id, onChange, bidProject}) => {
   const handleExitClick = () => {
     setPopUpAppear(false);
     onChange();
   };
 
-  const [bidProject, setBidProject] = useState([]);
   const [isChange, setIsChange] = useState(false);
-
-  useEffect(() => {
-    fetchBidProject();
-  }, [isChange]);
-
-  const fetchBidProject = async () => {
-    try {
-      const bidProjectData = await bidServices.findBidByProjectId(
-        project_post_id
-      );
-      const bidProjectWithUser = await Promise.all(
-        bidProjectData.data.map(async (bid) => {
-          const userBidData = await userDataService.findOnebyId(bid.user_id);
-          const userBidRatingData = await reviewServices.getRatingFreelancer(
-            bid.user_id
-          );
-          return {
-            ...bid,
-            user: {
-              ...userBidData.data,
-              averageStar: userBidRatingData.data.averageStar,
-            },
-          };
-        })
-      );
-      setBidProject(bidProjectWithUser);
-      console.log('bid project: ', bidProjectWithUser);
-    } catch (error) {
-      console.error('Error fetching projects:', error);
-    }
-  };
   const bidNum = bidProject.length;
 
   return (

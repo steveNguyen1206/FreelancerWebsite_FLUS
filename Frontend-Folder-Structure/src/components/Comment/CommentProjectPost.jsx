@@ -7,8 +7,7 @@ import Commentator from './Commentator';
 import Responder from './Responder';
 import send from '../../assets/send.png';
 
-const CommentProject = ({ project_post_id, user_id }) => {
-  // fetch comment, display comment
+const CommentProject = ({ project_post_id}) => {
 
   const [commentatorComment, setCommentatorComment] = useState('');
   const [responderComment, setResponderComment] = useState('');
@@ -47,11 +46,10 @@ const CommentProject = ({ project_post_id, user_id }) => {
     const comment = {
       comment: commentatorComment,
       proj_post_id: project_post_id,
-      user_id: user_id,
       parent_id: null,
     };
     try {
-      const commentData = await commentService.create(comment).then((res) => {
+      const commentData = await commentService.create(comment, localStorage.getItem('AUTH_TOKEN')).then((res) => {
         fetchComment();
       });
     } catch (error) {
@@ -63,13 +61,11 @@ const CommentProject = ({ project_post_id, user_id }) => {
   const handleResponderSubmit = async (
     responderComment,
     project_post_id,
-    user_id,
     parent_id
   ) => {
     const commentData = {
       comment: responderComment,
       proj_post_id: project_post_id,
-      user_id: user_id,
       parent_id: parent_id,
     };
 

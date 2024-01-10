@@ -49,7 +49,7 @@ const BidDetailTag = ({
 
   const handleAccept = () => {
     console.log('accept');
-    bidServices.changeBidStatus(bidId, 1).then((response) => {
+    bidServices.changeBidStatus(bidId, 1, localStorage.getItem('AUTH_TOKEN')).then((response) => {
       console.log('response: ', response);
       // send email to freelancer
       const emailJson = {
@@ -61,12 +61,12 @@ const BidDetailTag = ({
       });
 
       // change other bids to rejected
-      bidServices.changeOtherBidStatus(bidId, -1).then((response) => {
+      bidServices.changeOtherBidStatus(bidId, -1, localStorage.getItem('AUTH_TOKEN')).then((response) => {
         console.log('response: ', response);
       });
 
       // change project post status
-      projectPostServices.changeStatus(projectId, 0).then((response) => {
+      projectPostServices.changeStatus(projectId, 0, localStorage.getItem('AUTH_TOKEN')).then((response) => {
         console.log('response: ', response);
       });
 
@@ -79,7 +79,7 @@ const BidDetailTag = ({
   const handleReject = () => {
     console.log('reject');
     // change status of bid to rejected
-    bidServices.changeBidStatus(bidId, -1).then((response) => {
+    bidServices.changeBidStatus(bidId, -1, localStorage.getItem('AUTH_TOKEN')).then((response) => {
       console.log('response: ', response);
       onChangeBid();
     });

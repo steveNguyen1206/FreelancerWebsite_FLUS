@@ -7,12 +7,14 @@ module.exports = app => {
     var router = require("express").Router();
   
     // Create a new Tutorial
-    router.post("/",  project.create);
+    router.post("/", project.create);
   
     // Retrieve project by id
-    router.get("/:id", [verifyToken, isMember], project.findMemberOne);
+    router.get("/mem/:projectId", [verifyToken, isMember], project.findMemberOne);
   
-    router.get("/own/:id", [verifyToken, isOwner], project.findOwnerOne);
+    router.get("/own/:projectId", [verifyToken, isOwner], project.findOwnerOne);
+    router.get("/all-own", [verifyToken], project.findOwnerAll);
+    router.get("/all-mem", [verifyToken], project.findMemberAll);
 
 
     // Retrieve a single Tutorial with id

@@ -32,9 +32,6 @@ db.sequelize.sync()
 // db.sequelize.sync({ force: true }).then(() => {
 //   console.log("Drop and re-sync db.");
 // });
-// db.sequelize.sync({ force: true }).then(() => {
-//   console.log("Drop and re-sync db.");
-// });
 
 // simple route
 app.get("/", (req, res) => {
@@ -62,6 +59,7 @@ require("./app/routes/wishlist.routes")(app);
 require("./app/routes/bid.routes")(app);
 require("./app/routes/comment.routes")(app);
 require("./app/routes/user_subcategory.routes")(app);
+require("./app/routes/project_issues.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

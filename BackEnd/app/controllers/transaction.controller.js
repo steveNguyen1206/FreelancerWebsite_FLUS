@@ -1,6 +1,10 @@
 const db = require("../models");
 const Transaction = db.transactions;
 const Op = db.Sequelize.Op;
+// const Project = db.projects;
+// const ProjectNoti = db.projects_notis;
+const ProjectController = require('./project.controller')
+
 
 TRAN_CONFIGURE_PAID = 1
 
@@ -77,26 +81,6 @@ exports.findOne = (req, res) => {
     });
 };
 
-// Update a Transaction by the id in the request
-// `http://localhost:8080/api/transaction/${id}`
-exports.update = (req, res) => {
-  const id = req.params.id;
-
-  Transaction.update(req.body, {
-    where: { id: id }
-  })
-
-  if (num == 1) {
-    res.send({
-      message: "Tutorial was updated successfully."
-    });
-  }
-  else {
-    res.send({
-      message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found or req.body is empty!`
-    });
-  }
-};
 
 // Delete a Tutorial with the specified id in the request
 // `http://localhost:8080/api/transaction/${id}`
@@ -142,16 +126,48 @@ exports.deleteAll = (req, res) => {
     });
 };
 
-// find all published Tutorial
-// exports.findAllPublished = (req, res) => {
-//   Transaction.findAll({ where: { published: true } })
-//     .then(data => {
-//       res.send(data);
-//     })
-//     .catch(err => {
-//       res.status(500).send({
-//         message:
-//           err.message || "Some error occurred while retrieving tutorials."
-//       });
-//     });
-// };
+exports.createTransactionAndUpdateProject = (req, res) => {
+  // Validate request
+  if (!req.body.tran_amount 
+    || !req.body.tran_type 
+    || !req.body.orderID 
+    || !req.body.id
+    || !req.body.project_name
+    || !req.body.project_description
+    || !req.body.start_date
+    || !req.body.end_date
+    || !req.body.budget
+    || !req.body.status) {
+    res.status(400).send({
+      message: "Content can not be empty!"
+    });
+    return;
+  }
+
+  const id = req.body.id;
+
+  const transaction = {
+    amount: req.body.tran_amount,
+    sender_id: req.body.userId,
+    receiver_id: ADMIN_USER_ID,
+    project_id: id,
+    transactionId: req.body.orderID,
+    type: req.body.tran_type
+  }
+
+
+  // Save Tutorial in the database
+  Transaction.create(transaction)
+    .then(trans_data => {
+      // res.send(data);
+      ProjectController.update(req, res);
+
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the Tutorial."
+      });
+    });
+};
+

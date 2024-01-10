@@ -39,12 +39,17 @@ exports.create = (req, res) => {
     });
 };
 
-// Find a single Tutorial with an id
+// Find all notifications with an project id
 exports.findAll = (req, res) => {
-    const id = req.params.id;
-    console.log(id);
+    const id = req.params.projectId;
+    console.log("tesst", id);
     projectNotis.findAll({
-        where: {project_id: id}
+        where: {project_id: id}, 
+        include: [
+          {
+            model: db.user,
+            attributes: ['account_name']
+          }]
     })
       .then(data => {
         if (data) {

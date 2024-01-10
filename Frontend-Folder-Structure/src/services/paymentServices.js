@@ -9,15 +9,20 @@ const onAprrove = (data) => {
   };
 
 
-const paidAndUpdateProject = (data, access_token) => {
+const paidAndUpdateProject = (projectId, data, access_token) => {
   console.log(data);
-  return http.post(`/paypal/orders/${data.orderID}/prePaidCreateProject`, data, {headers: {
+  return http.post(`/paypal/orders/prePaidCreateProject/${data.orderID}/${projectId}`, data, {headers: {
     "Content-type": "application/json",
     "x-access-token": access_token,
   }});
 };
   
-
+const acceptProject = (projectId, data, access_token) => {
+  return http.post(`/paypal/orders/acceptProject/${projectId}`, data, {headers: {
+    "Content-type": "application/json",
+    "x-access-token": access_token,
+  }});
+}
 const createPayoutBatch = (data) => {
   return http.post('/paypal/createPayoutBatch', data);
 }
@@ -25,7 +30,8 @@ const paymentServices = {
  createOrder,
  onAprrove,
  createPayoutBatch,
- paidAndUpdateProject
+ paidAndUpdateProject,
+ acceptProject
  
 };
 

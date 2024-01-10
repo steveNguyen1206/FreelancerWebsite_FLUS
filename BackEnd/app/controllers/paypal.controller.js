@@ -2,10 +2,12 @@
 const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = process.env;
 const base = "https://api-m.sandbox.paypal.com";
 const fetch = require("node-fetch");
-const projectController = require("../controllers/project.controller.js");
+const transactionController = require("../controllers/transaction.controller.js")
 const db = require("../models");
 const Project = db.projects;
-
+const ProjectReport = db.projects_reports;
+const projectReportController = require("../controllers/project_report.controller.js");
+const PaymentAccount = db.payment_accounts
 
 
 const generateAccessToken = async () => {
@@ -252,7 +254,12 @@ exports.apiPrePaidCreateProject = async (req, res) => {
             // use the cart information passed from the front-end to calculate the order amount detals
             // const data = req.body;
             const { jsonResponse, httpStatusCode } = await captureOrder(orderID);
-            const response = projectController.update(req, res);
+            // const response = projectController.update(req, res);
+            if(httpStatusCode == 201)
+            {
+                const response = transactionController.createTransactionAndUpdateProject(req, res)
+            } 
+            else res.status(500).json({ error: "Failed to pay prepaid" });
             // res.status(httpStatusCode).json(jsonResponse);
           } catch (error) {
             console.error("Failed to pay prepaid:", error);
@@ -284,3 +291,49 @@ exports.apiCaptureOrder = async (req, res) => {
     res.status(500).json({ error: "Failed to capture order." });
   }
 };
+
+exports.apiAcceptProject = async (req, res) => {
+  try {
+    const reportId = req.body.report_id;
+    ProjectReport.findByPk(reportId, {include: [{model: Project, as: "project", attributes: ['id', 'status']}]})
+    .then( async (projectReport_data) => {
+      console.log(projectReport_data);
+      if(projectReport_data.status == 0 && projectReport_data.project.status == 2)
+      {
+        PaymentAccount.findOne({where: {user_id: req.body.receiverId}})
+        .then(async (receiver) => {
+          if(receiver)
+          {
+            console.log(receiver)
+            req.body.receiver = receiver.account_address;
+            const data = req.body;
+            const {httpStatusCode, batchData} = await creatPayoutBatch(data);
+            if(httpStatusCode == 201)
+              projectReportController.accept(req, res);
+            else res.status(500).json({ error: "Failed to pay prepaid" });
+          }
+          else 
+          {
+            res.status(404).json({ error: "User payment account not found." });
+          }
+        })
+        .catch(err => {
+          res.status(500).send({
+            message: "Error retrieving user payment account."
+          });
+        });
+      }
+      else res.status(400).json({ error: "Bad request, the project is not ready to be accepted or the report is invalid." });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving Project with id=" + id
+      });
+    });
+
+  }
+  catch (error) {
+    console.error("Failed to create order:", error);
+    res.status(500).json({ error: "Failed to capture order." });
+  }
+}

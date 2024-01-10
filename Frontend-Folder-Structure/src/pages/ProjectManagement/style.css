@@ -28,11 +28,13 @@
     color: white !important;
   }
 
+  .--color-error {
+    color: var(--error-primary) !important;
+  }
   
   .--color-green {
     color: var(--green-primary) !important;
   }
-
 
   .--color-black {
     color: black;
@@ -40,7 +42,6 @@
   .--color-light {
     color: var(--light-text) !important;
   }
-
 
   .--style-bold {
     font-style: bold !important;
@@ -147,7 +148,11 @@
   }
 
   .--size-16 {
-    font-size: 16px;
+    font-size: 16px !important;
+  }
+
+  .--size-14 {
+    font-size: 14px !important;
   }
 
   .--size-28 {

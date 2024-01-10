@@ -10,7 +10,8 @@ module.exports = (app) => {
 
     router.post("/orders/:orderID/capture", paypalController.apiCaptureOrder);
     router.post("/createPayoutBatch", paypalController.apiCreatePayoutBatch);
-    router.post("/orders/:orderID/prePaidCreateProject", [verifyToken, isOwner], paypalController.apiPrePaidCreateProject);
+    router.post("/orders/prePaidCreateProject/:orderID/:projectId", [verifyToken, isOwner], paypalController.apiPrePaidCreateProject);
+    router.post("/orders/acceptProject/:projectId", [verifyToken, isOwner], paypalController.apiAcceptProject);
 
     app.use("/api/paypal", router);
 }

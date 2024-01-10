@@ -10,7 +10,7 @@ module.exports = app => {
     // router.post("/:id", [verifyToken, isMember], projectReport.create);
   
     // Retrieve all projects
-    router.get("/:id", [verifyToken, isMemberOrOwner], projectNotis.findAll);
+    router.get("/:projectId", [verifyToken, isMemberOrOwner], projectNotis.findAll);
 
     // Retrieve a single Tutorial with id
     // router.get("/:id", project.findOne);

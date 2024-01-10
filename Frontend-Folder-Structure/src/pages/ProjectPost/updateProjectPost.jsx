@@ -13,6 +13,15 @@ const isValidTitle = (title) => {
   return titleRegex.test(title);
 };
 
+const isValidDate = (date) => {
+  if (date == '') return false;
+  const dateRegex = /^\d{4}\/\d{1,2}\/\d{1,2}$/;
+  const currentDate = new Date();
+  //input date is yyyy/mm/dd
+  const inputDate = new Date(date);
+  return currentDate.getTime() <= inputDate.getTime() && dateRegex.test(date);
+};
+
 const isValidDetail = (detail) => {
   if (!detail) return true;
   if (!detail) return true;
@@ -57,7 +66,6 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
       });
   };
 
-
   const [error, setError] = useState({
     title: '',
     image: '',
@@ -65,6 +73,7 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
     budgetMin: '',
     budgetMax: '',
     tag_id: '',
+    startDate: '',
   });
 
   const initState = {
@@ -74,6 +83,7 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
     budgetMin: '',
     budgetMax: '',
     tag_id: '',
+    startDate: '',
   };
 
   const [fileName, setFileName] = useState('');
@@ -100,6 +110,7 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
     newErrors.budgetMin = '';
     newErrors.budgetMax = '';
     newErrors.tag_id = '';
+    newErrors.startDate = '';
 
     let isValid = true;
 
@@ -175,16 +186,18 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
     budgetMin: updateProject.budgetMin,
     budgetMax: updateProject.budgetMax,
     tag_id: updateProject.tag_id,
+    startDate: updateProject.startDate,
     id: projectId,
   };
-
-  console.log(data)
 
   const handleUpdateClick = async () => {
     if (validateForm()) {
       console.log(data);
       try {
-        await projectPostServices.updateProject(data);
+        await projectPostServices.update(
+          data,
+          localStorage.getItem('AUTH_TOKEN')
+        );
         console.log('Form is valid. Project submitted successfully.');
         setShowOverlay(false);
         onUpdate();
@@ -258,22 +271,37 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
             <div className="error-message">{error.image}</div>
           </div>
 
-          <div className="project-tag-input">
-            <label htmlFor="projectTag">Project Tag</label>
-            <select
-              id="updateProjectTag"
-              name="tag_id"
-              value={updateProject.tag_id}
-              onChange={handleInputChange}
-            >
-              <option value="">Select a tag</option>
-              {tags.map((tag) => (
-                <option key={tag.id} value={tag.id}>
-                  {tag.subcategory_name}
-                </option>
-              ))}
-            </select>
-            <div className="error-message">{error.tag}</div>
+          <div id="project-tag-and-date">
+            <div className="project-tag-input-1">
+              <label htmlFor="projectTag">Project Tag *</label>
+              <select
+                id="projectTag"
+                name="tag_id"
+                value={updateProject.tag_id}
+                onChange={handleInputChange}
+              >
+                <option value="">Select a tag</option>
+                {tags.map((tag) => (
+                  <option key={tag.id} value={tag.id}>
+                    {tag.subcategory_name}
+                  </option>
+                ))}
+              </select>
+              <div className="error-message">{error.tag_id}</div>
+            </div>
+
+            <div id="start-date-project">
+              <label htmlFor="startDate">Start Date *</label>
+              <input
+                type="text"
+                id="startDate"
+                name="startDate"
+                placeholder="Start date: yyyy/mm/dd"
+                value={updateProject.startDate}
+                onChange={handleInputChange}
+              />
+              <div className="error-message">{error.startDate}</div>
+            </div>
           </div>
 
           <div className="project-detail-input">
@@ -289,7 +317,7 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
             <div className="error-message">{error.detail}</div>
           </div>
 
-          <div className="project-range-budget">
+          <div className="project-range-budget-1">
             <div className="budget-min-input">
               <label htmlFor="budgetMin">Budget Min</label>
               <input

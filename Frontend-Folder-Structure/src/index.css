@@ -17,11 +17,13 @@
   max-width: 100%;
 
   --light-text: #94938F;
+  --disabled-background: #b0afaf;
   --dark-text: #130E01;
   --green-accent: #12C418;
   --green-primary: #15A919;
   --mid-text: #656564;
   --light-green: #ABF7AE;
+  --error-primary: #bb1c1c;
 }
 
 a {
@@ -82,7 +84,16 @@ h1 {
   font-size: 16px;
 }
 
-.--button-green:hover {
+.my-button {
+
+}
+
+.my-button:disabled {
+  background-color: var(--disabled-background);
+  color: white;
+}
+
+.--button-green:hover:enabled {
   background-color: var(--green-primary);
 }
 
@@ -96,7 +107,7 @@ h1 {
   color: white;
 }
 
-.--button-gray:hover {
+.--button-gray:enabled:hover {
   background-color: var(--mid-text);
 }
 

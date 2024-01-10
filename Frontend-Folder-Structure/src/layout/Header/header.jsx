@@ -15,6 +15,7 @@ const Header = () => {
     localStorage.removeItem('LOGINID');
     localStorage.removeItem('AVT');
     setSignin(false);
+    window.location.href='/login';
   }
   const avatarSrc = localStorage.getItem('AVT') !== null && localStorage.getItem('AVT') !== 'https://imgur.com/gallery/ApNKGxs' ? localStorage.getItem('AVT') : avatar_green;
   return (
@@ -23,7 +24,7 @@ const Header = () => {
       <Navbar></Navbar>
       <div className='button-avatar' style={{display: "flex",flexWrap:"wrap" ,alignContent:"center", width:"250px", height:"100%" , marginRight:"3%", padding: "0.75%"}}>
         {signin && (
-          <img onClick={handleSignOut} src={avatarSrc}  style={{objectFit:"cover",height:"100%", margin:"1%",border: "1px solid #000", borderRadius:"50.964px", boxSizing:"border-box"}}/>
+          <button onClick={handleSignOut} className="btn btn-light">Sign Out</button>
         )}
         {!signin && (
           <div style={{display: "flex",flexWrap:"wrap" , alignContent:"center",width:"100%"}}>

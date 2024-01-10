@@ -31,7 +31,7 @@ db.freelancer_post = require("./freelancer_post.model.js")(
 db.contact = require("./contact.model.js")(sequelize, Sequelize);
 db.subcategories = require("./subcategory.model.js")(sequelize, Sequelize);
 db.bid = require("./bid.model.js")(sequelize, Sequelize);
-db.comment_proj = require("./Comment_proj.model.js")(sequelize, Sequelize);
+db.comment_proj = require("./comment_proj.model.js")(sequelize, Sequelize);
 db.project_post = require("./project_post.model.js")(sequelize, Sequelize);
 db.review = require("./Review.model.js")(sequelize, Sequelize);
 db.otp = require("./OTP.model.js")(sequelize, Sequelize);
@@ -110,11 +110,11 @@ db.transactions.belongsTo(db.projects, {
   onUpdate: "RESTRICT",
 });
 
-// db.payment_accounts.belongsTo(db.user, {
-//   foreignKey: 'user_id',
-//   onDelete: 'CASCADE',
-//   onUpdate: 'CASCADE'
-// })
+db.payment_accounts.belongsTo(db.user, {
+  foreignKey: 'user_id',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+})
 
 db.user.belongsToMany(db.categories, { through: "user_subcategory" });
 db.subcategories.belongsToMany(db.user, { through: "user_subcategory" });
@@ -124,17 +124,17 @@ db.issues.belongsTo(db.user, {
   onUpdate: "CASCADE",
 });
 
+
 db.issues.belongsTo(db.projects, {
   foreignKey: 'project_id',
   onDelete: 'CASCADE',
   onUpdate: 'CASCADE',
-  unique: true 
 })
 
 db.projects_reports.belongsTo(db.projects, {
   foreignKey: {
     name: "project_id",
-    unique: true
+    // unique: true
   },
   onDelete: 'CASCADE',
   onUpdate: 'CASCADE'
@@ -151,6 +151,15 @@ db.projects_notis.belongsTo(db.projects, {
 db.projects_notis.belongsTo(db.user, {
   foreignKey: {
     name: "creator_id",
+  },
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+})
+
+
+db.projects_notis.belongsTo(db.projects_reports, {
+  foreignKey: {
+    name: "report_id",
   },
   onDelete: 'CASCADE',
   onUpdate: 'CASCADE'
@@ -206,6 +215,12 @@ db.bid.belongsTo(db.project_post, {
   onUpdate: "CASCADE",
 });
 
+db.bid.belongsTo(db.subcategories, {
+  foreignKey: "skill_tag",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
 db.comment_proj.belongsTo(db.project_post, {
   foreignKey: "proj_post_id",
   onDelete: "CASCADE",
@@ -217,6 +232,12 @@ db.comment_proj.belongsTo(db.user, {
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
+
+db.comment_proj.belongsTo(db.user,{
+  foreignKey: "parent_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+})
 
 db.comment_proj.belongsTo(db.comment_proj, {
   foreignKey: {
@@ -247,6 +268,18 @@ db.review.belongsTo(db.user, {
 });
 
 db.review.belongsTo(db.user, {
+  foreignKey: "user_reviewed",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+db.user.hasMany(db.review, {
+  foreignKey: "user_review",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+db.user.hasMany(db.review, {
   foreignKey: "user_reviewed",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
