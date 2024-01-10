@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { WhiteButton } from '@/components';
 import './updateproject.css';
 import exitButton from '../../assets/exitButton.png';
 import UploadIcon from '../../assets/UploadIcon.png';
 import projectPostServices from '@/services/projectPostServices';
+import subcategoryService from '@/services/subcategoryService';
 
 const isValidTitle = (title) => {
   if (!title) return true;
@@ -38,13 +39,32 @@ const isValidImage = (image) => {
 
 const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
   const [showOverlay, setShowOverlay] = useState(isOpen);
+  const [tags, setTags] = useState([]);
+
+  useEffect(() => {
+    getTags();
+  }, []);
+
+  const getTags = () => {
+    subcategoryService
+      .findAll()
+      .then((response) => {
+        setTags(response.data);
+        console.log(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+
   const [error, setError] = useState({
     title: '',
     image: '',
     detail: '',
     budgetMin: '',
     budgetMax: '',
-    tag: '',
+    tag_id: '',
   });
 
   const initState = {
@@ -53,7 +73,7 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
     detail: '',
     budgetMin: '',
     budgetMax: '',
-    tag: '',
+    tag_id: '',
   };
 
   const [fileName, setFileName] = useState('');
@@ -79,7 +99,7 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
     newErrors.detail = '';
     newErrors.budgetMin = '';
     newErrors.budgetMax = '';
-    newErrors.tag = '';
+    newErrors.tag_id = '';
 
     let isValid = true;
 
@@ -99,29 +119,28 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
       isValid = false;
     }
 
-    if (!isValidTag(updateProject.tag)) {
-      newErrors.tag = 'Project tag must be a string.';
+    if (!isValidTag(updateProject.tag_id)) {
+      newErrors.tag_id = 'Project tag must be not empty.';
       isValid = false;
     }
 
     if (Number(updateProject.budgetMin) > Number(updateProject.budgetMax)) {
       newErrors.budgetMin =
-        'Minimum budget must be less than or equal to maximum budget.';
+        'Invalid budget. Minimum budget must be less than maximum budget.';
       newErrors.budgetMax =
-        'Minimum budget must be less than or equal to maximum budget.';
+        'Invalid budget. Maximum budget must be greater than minimum budget.';
       isValid = false;
-    }
-
-    if (!isValidBudget(updateProject.budgetMin)) {
-      isValid = false;
+    } else if (!isValidBudget(updateProject.budgetMin)) {
       newErrors.budgetMin =
-        'Invalid budget. Please enter a valid number greater than or equal to 0.';
-    }
-
-    if (!isValidBudget(updateProject.budgetMax)) {
+        'Invalid budget. Please enter a valid number greater than 0.';
       isValid = false;
+    } else if (!isValidBudget(updateProject.budgetMax)) {
       newErrors.budgetMax =
-        'Invalid budget. Please enter a valid number greater than or equal to 0.';
+        'Invalid budget. Please enter a valid number greater than 0.';
+      isValid = false;
+    } else {
+      newErrors.budgetMin = '';
+      newErrors.budgetMax = '';
     }
 
     if (
@@ -155,9 +174,11 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
     detail: updateProject.detail,
     budgetMin: updateProject.budgetMin,
     budgetMax: updateProject.budgetMax,
-    tag: updateProject.tag,
+    tag_id: updateProject.tag_id,
     id: projectId,
   };
+
+  console.log(data)
 
   const handleUpdateClick = async () => {
     if (validateForm()) {
@@ -239,14 +260,19 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
 
           <div className="project-tag-input">
             <label htmlFor="projectTag">Project Tag</label>
-            <input
-              type="text"
-              id="projectTag"
-              name="tag"
-              placeholder="Enter project tag ..."
-              value={updateProject.tag}
+            <select
+              id="updateProjectTag"
+              name="tag_id"
+              value={updateProject.tag_id}
               onChange={handleInputChange}
-            />
+            >
+              <option value="">Select a tag</option>
+              {tags.map((tag) => (
+                <option key={tag.id} value={tag.id}>
+                  {tag.subcategory_name}
+                </option>
+              ))}
+            </select>
             <div className="error-message">{error.tag}</div>
           </div>
 

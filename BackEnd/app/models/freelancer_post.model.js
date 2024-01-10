@@ -1,5 +1,8 @@
 module.exports = (sequelize, Sequelize) => {
     const Freelancer_post = sequelize.define("freelancer_post", {
+      title: {
+        type: Sequelize.STRING(125)
+      },
       about_me: {
         type: Sequelize.STRING(512)
       },

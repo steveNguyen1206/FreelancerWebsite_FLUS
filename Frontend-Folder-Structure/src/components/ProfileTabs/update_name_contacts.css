@@ -1,0 +1,41 @@
+@import url("../../assets/variables.css");
+
+.update-part-container {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    font-size: medium;
+    margin-bottom: 10px;
+    background: var(--accent);
+    opacity: 0.5;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.fields {
+    display: flex;
+    flex-direction: column;
+    /* margin-bottom: 10px; */
+}
+
+.update-button {
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+    margin-top: 5px;
+}
+
+.error-message {
+    color: var(--red);
+    font-size:small;
+}
+
+.success-message {
+    color: var(--primary);
+    font-size: small;
+}

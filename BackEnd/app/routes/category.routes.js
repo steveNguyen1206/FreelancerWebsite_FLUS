@@ -1,10 +1,14 @@
+const { authJwt, upload } = require("../middleware");
+
 module.exports = app => {
     const category = require("../controllers/category.controller.js");
   
     var router = require("express").Router();
   
     // Create a new Category
-    router.post("/", category.create);
+    // router.post("/", category.create);
+     // Create a new freelancer_post
+     router.post("/", upload.single("img"), category.create);
   
     // Retrieve all Category
     router.get("/", category.findAll);

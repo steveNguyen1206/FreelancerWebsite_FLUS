@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { WhiteButton } from '@/components';
 import './newproject.css';
 import exitButton from '../../assets/exitButton.png';
 import UploadIcon from '../../assets/UploadIcon.png';
 import projectPostServices from '@/services/projectPostServices';
+import subcategoryService from '@/services/subcategoryService';
 
 const isValidTitle = (title) => {
   if (!title) return false;
@@ -24,12 +25,28 @@ const isValidBudget = (budget) => {
 
 const isValidTag = (tag) => {
   if (!tag) return false;
-  const tagRegex = /^[a-zA-Z0-9\s/\\]*$/;
-  return tagRegex.test(tag);
+  return true;
 };
 
 const NewProject = ({ isOpen, onClose, onUpdate }) => {
   const [showOverlay, setShowOverlay] = useState(isOpen);
+  const [tags, setTags] = useState([]);
+
+  useEffect(() => {
+    getTags();
+  }, []);
+
+  const getTags = () => {
+    subcategoryService
+      .findAll()
+      .then((response) => {
+        setTags(response.data);
+        console.log(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const [error, setError] = useState({
     title: '',
@@ -37,7 +54,7 @@ const NewProject = ({ isOpen, onClose, onUpdate }) => {
     detail: '',
     budgetMin: '',
     budgetMax: '',
-    tag: '',
+    tag_id: '',
   });
 
   const initState = {
@@ -46,7 +63,7 @@ const NewProject = ({ isOpen, onClose, onUpdate }) => {
     detail: '',
     budgetMin: '',
     budgetMax: '',
-    tag: '',
+    tag_id: '',
   };
 
   const validateForm = () => {
@@ -71,11 +88,11 @@ const NewProject = ({ isOpen, onClose, onUpdate }) => {
     }
 
     // Validate tag
-    if (!isValidTag(newProject.tag)) {
-      newErrors.tag = 'Project tag must be a string.';
+    if (!isValidTag(newProject.tag_id)) {
+      newErrors.tag_id = 'Project tag must not be empty.';
       isValid = false;
     } else {
-      newErrors.tag = '';
+      newErrors.tag_id = '';
     }
 
     // Validate detail
@@ -86,29 +103,19 @@ const NewProject = ({ isOpen, onClose, onUpdate }) => {
       newErrors.detail = '';
     }
 
-    // Validate budgetMin
-    if (!isValidBudget(newProject.budgetMin)) {
-      newErrors.budgetMin =
-        'Invalid budget. Please enter a valid number greater than 0.';
-      isValid = false;
-    } else {
-      newErrors.budgetMin = '';
-    }
-
-    // Validate budgetMax
-    if (!isValidBudget(newProject.budgetMax)) {
-      newErrors.budgetMax =
-        'Invalid budget. Please enter a valid number greater than 0.';
-      isValid = false;
-    } else {
-      newErrors.budgetMax = '';
-    }
-
     if (Number(newProject.budgetMin) > Number(newProject.budgetMax)) {
       newErrors.budgetMin =
         'Invalid budget. Minimum budget must be less than maximum budget.';
       newErrors.budgetMax =
         'Invalid budget. Maximum budget must be greater than minimum budget.';
+      isValid = false;
+    } else if (!isValidBudget(newProject.budgetMin)) {
+      newErrors.budgetMin =
+        'Invalid budget. Please enter a valid number greater than 0.';
+      isValid = false;
+    } else if (!isValidBudget(newProject.budgetMax)) {
+      newErrors.budgetMax =
+        'Invalid budget. Please enter a valid number greater than 0.';
       isValid = false;
     } else {
       newErrors.budgetMin = '';
@@ -152,6 +159,7 @@ const NewProject = ({ isOpen, onClose, onUpdate }) => {
       console.log('Form has errors. Please fix them.');
     }
   };
+  console.log(newProject);
 
   return (
     <>
@@ -230,15 +238,20 @@ const NewProject = ({ isOpen, onClose, onUpdate }) => {
           </div>
           <div className="project-tag-input">
             <label htmlFor="projectTag">Project Tag *</label>
-            <input
-              type="text"
+            <select
               id="projectTag"
-              name="tag"
-              placeholder="Enter project tag ..."
-              value={newProject.tag}
+              name="tag_id"
+              value={newProject.tag_id}
               onChange={handleInputChange}
-            />
-            <div className="error-message">{error.tag}</div>
+            >
+              <option value="">Select a tag</option>
+              {tags.map((tag) => (
+                <option key={tag.id} value={tag.id}>
+                  {tag.subcategory_name}
+                </option>
+              ))}
+            </select>
+            <div className="error-message">{error.tag_id}</div>
           </div>
           <div className="project-range-budget">
             <div className="budget-min-input">
@@ -267,7 +280,7 @@ const NewProject = ({ isOpen, onClose, onUpdate }) => {
               <div className="error-message">{error.budgetMax}</div>
             </div>
           </div>
-          <WhiteButton name="Done" onClick={handleDoneClick} />
+          <WhiteButton text="Done" onClick={handleDoneClick} />
         </div>
       </div>
     </>

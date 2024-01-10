@@ -1,10 +1,28 @@
 import React from "react";
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 import "./offerDetailPopup.css";
-
+import contactService from '@/services/contactServices';
 import OfferDetailTag from "@/components/Offer/offerDetailTag";
 
 const OfferDetailPopup = ({setPopUpAppear}) => {
-  
+  const { id } = useParams();
+  const [contactOnes, setContactOnes] = useState([]);
+  useEffect(() => {
+    fetchContacts();
+  }, []);
+
+  const fetchContacts = async () => {
+    try {
+      const contactsData = await contactService.findAllBids(id);
+      setContactOnes(contactsData.data);
+      console.log('data', contactsData.data);
+    } catch (error) {
+      console.error('Error fetching Bid:', error);
+    }
+  };
+
+
   const handleExitClick = () => {
     setPopUpAppear(false);
   };
@@ -26,10 +44,13 @@ const OfferDetailPopup = ({setPopUpAppear}) => {
           </div>
           
           <div className="offer-container">
+            {/* <OfferDetailTag/>
             <OfferDetailTag/>
             <OfferDetailTag/>
-            <OfferDetailTag/>
-            <OfferDetailTag/>
+            <OfferDetailTag/> */}
+            {contactOnes.map((contactOne) => (
+              <OfferDetailTag contactOne={contactOne}/>
+            ))}
           </div>
       </div>
     </div>

@@ -17,12 +17,18 @@ const Navbar = () => {
   const handleCommunity = () => {
     // navigate('/community');
   }
+  const handleAbout = () => {
+    navigate('/aboutUs');
+  }
   
   return (
     <div className="container text-center" style={{display:"flex", alignContent:"center", width:"100%", flexWrap:"wrap", }}>
       <div className="row" style={{margin:"0",width:"100%", paddingLeft:"10%", paddingRight:"8%"}}>
         <div className="col" style={{display:"flex", justifyContent: "center"}}>
           <div className="nav_text" onClick={handleHome}>Home</div>
+        </div>
+        <div className="col" style={{display:"flex", justifyContent: "center"}}>
+          <div className="nav_text" onClick={handleAbout}>About</div>
         </div>
         <div className="col" style={{display:"flex", justifyContent: "center"}}>
           <div className="nav_text" onClick={handleFindJobs}>Find Jobs</div>
@@ -33,6 +39,7 @@ const Navbar = () => {
         <div className="col" style={{display:"flex", justifyContent: "center"}}>
           <div className="nav_text" onClick={handleCommunity}>Community</div>
         </div>
+        
       </div>
     </div>
   )

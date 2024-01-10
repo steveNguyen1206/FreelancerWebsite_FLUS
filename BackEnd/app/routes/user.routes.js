@@ -21,20 +21,26 @@ module.exports = (app) => {
   router.get('/getusers/:page&:size&:searchKey', user_controller.findUsersbyPage);
   router.get('/getusers/:page&:size', user_controller.findUsersbyPage);
 
-  // Update a User with id
-  router.put("/:id", user_controller.update); 
-
   // Update avatar of a user
   router.put("/avatar/:id", upload.single("avatar"), user_controller.updateAvatar);
 
   // Delete a User with account_name
   // router.delete("/deleteuser/:accountName", user_controller.deleteOnebyAccountName);
-
+  
   // Delete a User with reportedTimes
   // router.delete("/reported_times", user_controller.deleteOnebyReportedTimes);
-
+  
   // Update the status of a User by id and status param
-  // router.put("/status/:id&:status", user_controller.changeStatusByID);
+  router.put("/status/:id&:status", user_controller.changeStatusByID);
+  
+  // Change password of a User by id
+  router.put("/change_password", user_controller.changePassword);
 
+  // update name and social link of a User by id
+  router.put("/update_name_sociallink", user_controller.updateNameAndSocialLink);
+
+  // Update a User with id
+  router.put("/:id", user_controller.update);
+  
   app.use("/api/user", router);
 };

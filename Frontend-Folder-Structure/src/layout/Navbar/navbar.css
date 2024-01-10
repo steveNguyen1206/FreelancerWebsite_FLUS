@@ -16,5 +16,9 @@
 }
 
 .nav_text:active{
+    color: rgb(18, 151, 23);
+}
+
+.nav_text:hover{
     color: rgba(171, 247, 174, 1);
 }

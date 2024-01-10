@@ -5,7 +5,7 @@ import avatar from "../../assets/avatar_green.png";
 import { StarRating } from "@/components";
 import { Collapse } from "react-bootstrap";
 
-const OfferDetailTag = () => {
+const OfferDetailTag = ({ contactOne }) => {
     const [expanded, setExpanded] = useState(false);
     const [showSeeMore, setShowSeeMore] = useState(false);
     const textContainerRef = useRef(null);
@@ -31,6 +31,30 @@ const OfferDetailTag = () => {
         WebkitBoxOrient: 'vertical',
     };
 
+    // const contactOne = {
+    //     "id": 2,
+    //     "client_name": "Vy Vy",
+    //     "client_company": "ZyZy",
+    //     "job_name": "Software",
+    //     "job_description": "You have to do software for me",
+    //     "start_date": "2020-12-31",
+    //     "end_date": "2024-01-20",
+    //     "budget": 3000,
+    //     "status": 0,
+    //     "project_id": 1,
+    //     "createdAt": "2023-12-21T14:17:03.000Z",
+    //     "updatedAt": "2023-12-21T14:17:03.000Z",
+    //     "freelancer_post_id": 3,
+    //     "client_id": 1,
+    //     "user": {
+    //         "id": 1,
+    //         "account_name": "hoavienvohoang",
+    //         "profile_name": "Vo Hoang Hoa Vien",
+    //         "avt_url": "https://res.cloudinary.com/dunbnutmw/image/upload/v1703227364/gqxx79jsybefqcvqcop2.jpg",
+    //         "email": "vohoanghoavien@gmail.com"
+    //     }
+    // }
+
     return (
         <div className="offer">
             <div className="overlap">
@@ -43,13 +67,17 @@ const OfferDetailTag = () => {
                             <div className="name-container col">
                                 <div className="first-line-container row">
                                     <div className="text-wrapper-5">
-                                        Nguyen Thi Truc
+                                        {/* Nguyen Thi Truc */}
+                                        {contactOne.user.profile_name}
                                     </div>
                                     <div className="flag-container" >
                                         <img className="rectangle-2" alt="Rectangle" src={flag} />
                                     </div>
                                 </div>
-                                <span className="text-wrapper-6">(cogai20)</span>
+                                <span className="text-wrapper-6">
+                                    {/* (cogai20) */}
+                                    {contactOne.user.account_name}
+                                </span>
 
                                 <div className="group-2">
                                     <StarRating rating={4.6} width={140} />
@@ -60,18 +88,28 @@ const OfferDetailTag = () => {
                         <div className="detail-text-container" style={textContainerStyle} ref={textContainerRef}>
                             {/* <Collapse in={expanded}> */}
                             <div>
-                                <div className="job-name">CONTACT.JOB-NAME</div>
+                                <div className="job-name">
+                                    {/* CONTACT.JOB-NAME */}
+                                    {contactOne.job_name}
+                                </div>
                                 <span className="span" id="collapseSummary" >
-                                    CONTACT.JOB-DESCRIPTION. No logo? Bad logo? Ugly logo? Don’t stress! I’ve got you covered with high-quality, unique logos
+                                    {/* CONTACT.JOB-DESCRIPTION. No logo? Bad logo? Ugly logo? Don’t stress! I’ve got you covered with high-quality, unique logos
                                     tailored to your brand. Make a great first impression with a professional, high-end design. With 20+
                                     years of design and branding experience, I can make you and your brand look good.... No logo? Bad logo?
-                                    Ugly logo? Don’t stress! I’ve got you covered with high-quality, unique logos tailored to your brand..
+                                    Ugly logo? Don’t stress! I’ve got you covered with high-quality, unique logos tailored to your brand.. */}
+                                    {contactOne.job_description}
                                 </span>
                                 <div className="row" style={{ marginTop: "12px" }}>
                                     <div className="col date-offer">Start Date: </div>
-                                    <div className="col date-text">11/12/2023 CONTACT.START </div>
+                                    <div className="col date-text">
+                                        {/* 11/12/2023 CONTACT.START  */}
+                                        {contactOne.start_date}
+                                    </div>
                                     <div className="col date-offer">End Date: </div>
-                                    <div className="col date-text">22/3/2232 CONTACT.END </div>
+                                    <div className="col date-text">
+                                        {/* 22/3/2232 CONTACT.END  */}
+                                        {contactOne.end_date}
+                                    </div>
                                 </div>
                             </div>
                             {/* </Collapse> */}
@@ -89,7 +127,10 @@ const OfferDetailTag = () => {
                         )}
                     </div>
                     <div className="col-3">
-                        <div className="budget-wrapper">$600</div>
+                        <div className="budget-wrapper">
+                            {/* $600 */}
+                            ${contactOne.budget}
+                        </div>
 
                         <div className="btns">
                             <div className="overlap-group-3">

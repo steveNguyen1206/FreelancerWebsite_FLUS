@@ -7,7 +7,7 @@
     --star: rgba(236, 216, 35, 1);
     --white: rgba(255, 255, 255, 1);
     --black: rgba(0, 0, 0, 1);
-
+    --red: rgba(255, 0, 0, 1);
     --small-font-size: 12px;
     --medium-font-size: 16px;
     --large-font-size: 20px;
@@ -16,7 +16,7 @@
 }
 
 @font-face {
-    font-family: 'Inter';
+    font-family: 'Inter-Bold';
     src: local('Inter'),url(./fonts/Inter/Inter-Bold.ttf) format('truetype');
 }
 

@@ -11,8 +11,10 @@ import freelancer_post_Service from '@/services/freelancer_post_Service';
 import NewPost from '@/pages/FreelancerPost/newPost';
 import HireFreelancer  from '@/pages/FreelancerPost/hireFreelancer';
 import  ApproveOffer  from '@/pages/FreelancerPost/approveOffer';
+import { jwtDecode  } from 'jwt-decode';
 
 const FindFreelancer = () => {
+
   const navigate = useNavigate();
 
   const [posts, setPosts] = useState([]);
@@ -35,20 +37,22 @@ const FindFreelancer = () => {
     setIsOpen(true);
   };
   const [isChange, setIsChange] = useState(false);
-  
-  useEffect(() => {
-    // Fetch data from the API endpoint
-    fetch('http://localhost:8080/api/freelancer_post/allposts')
-      .then(response => response.json())
-      .then(data => setPosts(data))
-      .catch(error => console.error('Error fetching data:', error));
-  }, []);
+  const hadleClickPost = (postId) => {
+    navigate(`/freelancer_post/${postId}`)
+  }
+  // useEffect(() => {
+  //   // Fetch data from the API endpoint
+  //   fetch('http://localhost:8080/api/freelancer_post/allposts')
+  //     .then(response => response.json())
+  //     .then(data => setPosts(data))
+  //     .catch(error => console.error('Error fetching data:', error));
+  // }, []);
 
 
   return (
     <>
-    {/* {isOpen && <HireFreelancer isOpen={isOpen} onClose={() => setIsOpen(false)} onUpdate = {() => {setIsChange(true)}} />} */}
     {isOpen && <NewPost isOpen={isOpen} onClose={() => setIsOpen(false)} onUpdate = {() => {setIsChange(true)}} />}
+    {/* {isOpen && <ApproveOffer isOpen={isOpen} onClose={() => setIsOpen(false)} onUpdate = {() => {setIsChange(true)}} />} */}
       <div className="job-page">
         <div className="content">
           <div className="containerp">

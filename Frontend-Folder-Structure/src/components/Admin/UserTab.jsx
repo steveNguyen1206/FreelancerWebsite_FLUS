@@ -18,6 +18,8 @@ const UserTab = () => {
             const response = await userDataService.findUsersbyPage(page, 6, searchKey.toString());
             console.log("RESPONSE: ", response.data);
             const { users, totalPages } = response.data;
+            console.log("users: ", users);
+            console.log("totalPages: ", totalPages);
             setUsers(users);
             setTotalPages(totalPages);
         } catch (error) {

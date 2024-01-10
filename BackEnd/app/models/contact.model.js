@@ -1,5 +1,11 @@
 module.exports = (sequelize, Sequelize) => {
     const Contact = sequelize.define("contact", {
+      client_name: {
+        type: Sequelize.STRING(50)
+      },
+      client_company: {
+        type: Sequelize.STRING(50)
+      },
       job_name: {
         type: Sequelize.STRING(50)
       },
@@ -17,6 +23,9 @@ module.exports = (sequelize, Sequelize) => {
       },
       status: {
         type: Sequelize.TINYINT
+      },
+      project_id: {
+        type: Sequelize.INTEGER
       }
     });
   

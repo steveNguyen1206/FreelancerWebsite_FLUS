@@ -47,17 +47,9 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
   
   });
 
-
-  // const initState = {
-  //   title: '',
-  //   image: '',
-  //   detail: '',
-  //   budgetMin: '',
-  //   budgetMax: '',
-  //   tag: '',
-  // };
-
   const initState = {
+    title: '',
+    delivery_description: '',
     about_me: '',
     skill_description: '',
     lowset_price: '',
@@ -179,7 +171,7 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
         <div className="new-post-body">
 
         <div className="project-title-input">
-            <label htmlFor="projectTitle">Skill tag *</label>
+            <label htmlFor="skillTag">Skill tag *</label>
             <select className="filter" id="filter" style={{width: '650px'}}>
                 <option value="" disabled defaultValue>
                   Add skills

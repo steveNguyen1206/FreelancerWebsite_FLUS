@@ -9,4 +9,4 @@ const index = ({text}) => {
   )
 }
 
-export default index
+export default index;

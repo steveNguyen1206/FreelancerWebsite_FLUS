@@ -116,7 +116,7 @@ db.payment_accounts.belongsTo(db.user, {
   onUpdate: 'CASCADE'
 })
 
-db.user.belongsToMany(db.categories, { through: "user_subcategory" });
+db.user.belongsToMany(db.subcategories, { through: "user_subcategory" });
 db.subcategories.belongsToMany(db.user, { through: "user_subcategory" });
 
 db.issues.belongsTo(db.user, {

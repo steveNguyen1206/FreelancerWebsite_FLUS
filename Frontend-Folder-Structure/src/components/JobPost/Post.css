@@ -6,7 +6,7 @@
   padding: 0;
 }
 
-.pplocation img{
+.post-container .post-location img{
   height: 15px;
   width: 22px;
   margin-top: 20px;
@@ -14,30 +14,27 @@
 
 
 .post-container{
-  height: 280px;
   width: 880px;
   border: 3px solid #000;
   border-radius: 12px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding: 10px;
 }
 
-
-
-
-.pprofile{
+.post-container .post-profile{
   display: flex;
 }
 
-.pprofile img{
+.post-container .post-profile .img-post{
   margin: 10px;
   height: 80px;
   width: 80px;
 }
 
 
-.ptname {
+.post-container .post-name {
   margin-top: 15px;
   margin-left: 10px;
   font-size: 18px;
@@ -45,20 +42,20 @@
   font-weight: 700;
 }
 
-.ptusername {
+.post-container .post-username {
   margin-top: 12px;
   font-size: 19px;
 }
 
 
-.pname{
+.post-container .post-name{
   margin-right: 10px;
   font-size: var(--medium-font-size);
   font-family: Inter-Bold, sans-serif;
   font-weight: 600;
 }
 
-.pttitle{
+.post-container .post-title{
   display: flex;
   margin-left: 110px;
   margin-top: -57px;
@@ -67,7 +64,7 @@
   font-weight: 700;
 }
 
-.pttag{
+.post-container .post-tag{
   border-radius: 8px;
   margin-bottom: 10px;
   border: 2px solid var(--accent, #12C418);
@@ -75,14 +72,15 @@
   color: var(--accent, #12C418);
   text-align: center; 
   width: 70px;
+  align-items: center;
 }
 
-.pttags .pttag{
+.post-container .post-tags .post-tag{
   margin-left: 0;
   margin-right: 0;
 }
 
-.detail {
+.post-container .post-detail {
   max-width: 600px;
   max-height: 140px;
   margin-left: 70px;
@@ -90,13 +88,7 @@
 
 }
 
-.detail-header{
-  margin-left: 70px;
-  text-align: left;
-  margin-top: 0px;
-}
-
-.previews{
+.post-container .post-reviews{
   display: flex;
   justify-content: space-between;
   flex-direction: column;
@@ -104,33 +96,33 @@
   margin-top: 30px;
 }
 
-.rating{
+.post-container .post-rating{
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-evenly;
   text-align: center;
   align-items: center;
 }
 
-.rating-container{
+.post-container .rating-container{
   align-items: center;
   text-align: center;
   padding-top: 9px;
 }
 
-.pstars{
+.post-container .post-stars{
   width: 200px;
 }
 
 
-.pprice{
+.post-container .post-price{
   text-align: right;
   font-size: var(--xlarge-font-size);
   font-family: Inter-Bold, sans-serif;
   font-weight: 700;
 }
 
-.btn-p{
+.post-container .btn-bid-container{
   margin-top: 15px;
   display: flex;
   justify-content: space-around;
@@ -138,7 +130,7 @@
   width: 200px;
 }
 
-.btn-bid-project button{
+.post-container .btn-bid-project button{
   height: 40px;
   width: 80px;
   background-color: var(--primary);
@@ -146,22 +138,22 @@
   border-radius: 8px;
 }
 
-.wish button{
+.post-container .post-wish button{
   background-color: #FFF;
   border: none;
 }
 
-.rating img{
+.post-container .post-rating img{
   height: 15px;
   width: 15px;
 }
 
-.rating p{
+.post-container .post-rating p{
   margin: 0;
 }
 
 
-.pbid{
+.post-container .post-bid{
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -170,11 +162,13 @@
   align-items: center;
 }
 
-.wish img{
-  background-color: #FFF;   
+.post-container .post-wish img{
+  background-color: #FFF;  
+  height: 30px;
+  width: 30px; 
 }
 
-.pttags{
+.post-container .post-tags{
   display: flex;
   flex-direction: row;
   align-items: left;

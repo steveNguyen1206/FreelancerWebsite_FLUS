@@ -191,3 +191,19 @@
   font-size: 12px;
   margin-top: 5px;
 }
+
+.project-tag-input{
+  width: 650px;
+}
+
+.project-tag-input #updateProjectTag{
+  padding-left: 10px;
+  background-color: white;
+  color: #666;
+  border-radius: 8px;
+  border: 1px solid var(--primary);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  height: 35px;
+}
+
+

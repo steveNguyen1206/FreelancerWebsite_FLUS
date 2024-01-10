@@ -2,12 +2,14 @@ import React from 'react';
 import './Post.css';
 import vietnam from '../../assets/vietnam.png';
 import heart from '../../assets/heart-active.png';
+import unactiveHeart from '../../assets/heart-unactive.png';
 import { StarRating } from '..';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import userDataService from '../../services/userDataServices';
 import reviewServices from '../../services/reviewServices';
 import categoryServices from '../../services/categoryServices';
+import projectPostWishlistServices from '../../services/projectPostWishlistServices';
 
 const Post = ({
   projectId,
@@ -17,9 +19,8 @@ const Post = ({
   projectBudget,
   userID,
   handleBidClick,
+  ownerRating,
 }) => {
-  const navigate = useNavigate();
-
   // first, get owner project
   const [ownerProject, setOwnerProject] = useState([]);
 
@@ -47,86 +48,91 @@ const Post = ({
 
   const fetchProjectTags = async () => {
     const projectTagsData = await categoryServices.getNamefromId(projectTagsId);
-    // console.log(projectTagsData.data.subcategory_name);
+    console.log(projectTagsData.data.subcategory_name);
 
-    const projectTagsArray = projectTagsData.data.subcategory_name.includes(',')
-      ? projectTagsData.data.subcategory_name.split(',')
-      : [projectTagsData.data.subcategory_name];
-    setProjectTags(projectTagsArray);
-    // console.log('project tags array: ', projectTagsArray);
+    setProjectTags(projectTagsData.data.subcategory_name);
+    // console.log('project tag: ', projectTagsData.data.subcategory_name);
   };
 
-  // get client rating of owner project
-  const [owner, setOwner] = useState([]);
+  const [isLiked, setIsLiked] = useState('');
 
+  // check if user liked this project
   useEffect(() => {
-    fetchOwnerRating();
-  }, [ownerProject]);
+    projectPostWishlistServices
+      .isExisted(userID, projectId)
+      .then((response) => {
+        console.log('response: ', response);
+        if (response.data === true) {
+          setIsLiked(heart);
+        } else {
+          setIsLiked(unactiveHeart);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [userID, projectId]);
 
-  const fetchOwnerRating = async () => {
-    try {
-      const ownerRatingData = await reviewServices.getRatingClient(
-        ownerProject.id
-      );
-      setOwner(ownerRatingData.data);
-      // console.log(ownerRatingData.data);
-    } catch (error) {
-      console.error('Error fetching projects:', error);
+  const handleLikeClick = () => {
+    if (isLiked === unactiveHeart) {
+      projectPostWishlistServices.create(userID, projectId).then((response) => {
+        setIsLiked(heart);
+        console.log('response: ', response);
+      });
+    }
+    if (isLiked === heart) {
+      projectPostWishlistServices.remove(userID, projectId).then((response) => {
+        setIsLiked(unactiveHeart);
+        console.log('response: ', response);
+      });
     }
   };
 
   return (
     <div className="post-container">
       <div className="left-post">
-        <div className="pheader">
-          <div className="pprofile">
+        <div className="post-header">
+          <div className="post-profile">
             {/* {console.log('owner project: ', ownerProject)} */}
-            <img src={ownerProject.avt_url} alt="profile" />
-            <div className="ptname">{ownerProject.account_name}</div>
-            <div className="ptusername">({ownerProject.profile_name})</div>
-            <div className="pplocation">
+            <img className='img-post' src={ownerProject.avt_url} alt="profile" />
+            <div className="post-name">{ownerProject.account_name}</div>
+            <div className="post-username">({ownerProject.profile_name})</div>
+            <div className="post-location">
               <img src={vietnam} alt="vietnam" />
             </div>
           </div>
 
-          <div className="pttitle">{projectTitle}</div>
+          <div className="post-title">{projectTitle}</div>
 
-          <div className="pttags">
-            {/* {console.log('project tags: ', projectTags)} */}
-            {projectTags.map((subcategory_name) => (
-              <div className="pttag">{subcategory_name}</div>
-            ))}
+          <div className="post-tags">
+            <div className="post-tag">{projectTags}</div>
           </div>
         </div>
-        <div className="details">
-          <div className="detail-header"></div>
-          <div className="detail">
-            <div className="pdetail">{projectDetail}</div>
-          </div>
-        </div>
+        <div className="post-detail">{projectDetail}</div>
       </div>
 
       <div className="right-post">
-        <div className="previews">
-          <div className="rating">
-            <p>{owner.averageStar}</p>
+        <div className="post-reviews">
+          <div className="post-rating">
+            <p>{ownerRating}</p>
             <StarRating
-              rating={parseFloat(owner.averageStar)}
+              rating={parseFloat(ownerRating)}
+              width={100}
               className="pstars"
             />
           </div>
         </div>
-        <div className="pbid">
-          <div className="pprice">
+        <div className="post-bid">
+          <div className="post-price">
             ${`${projectBudget[0]} - ${projectBudget[1]}`}
           </div>
-          <div className="btn-p">
+          <div className="btn-bid-container">
             <div className="btn-bid-project">
               <button onClick={handleBidClick}>Bid</button>
             </div>
-            <div className="wish">
-              <button>
-                <img src={heart} alt="heart icon" />
+            <div className="post-wish">
+              <button onClick={handleLikeClick}>
+                <img src={isLiked} alt="heart icon" />
               </button>
             </div>
           </div>

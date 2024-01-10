@@ -20,6 +20,7 @@
     font-size: bold;
     align-items: center;
     text-align: center;
+    margin-bottom: 10px;
 }
 
 .border-proj-title{
@@ -34,7 +35,6 @@
     align-items: center;
     flex-direction: row;
     gap: 10px;
-
 }
 
 .tag{
@@ -108,7 +108,7 @@
     align-items: center;
     text-align: center;
     margin-bottom: 0;
-    margin-top: 10px;
+    margin-top: 6px;
 }
 
 .proj-rating-left p{
@@ -215,7 +215,7 @@
     font-family: "Inter-Bold", Helvetica;
     align-items: center;
     text-align: center;
-    margin: 0;
+    margin-top: 6px;
 }
 
 .project-jobs-right{
@@ -326,6 +326,11 @@ margin-top: 30px;
 .button-wish-project{
     background-color: #C7F9B4;
     border: none;
+}
+
+.button-wish-project img{
+    height: 30px;
+    width: 30px;
 }
 
 .project-bid-list-info{

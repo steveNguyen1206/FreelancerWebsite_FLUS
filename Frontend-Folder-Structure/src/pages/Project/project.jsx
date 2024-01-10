@@ -1,33 +1,43 @@
-import React from 'react';
-import vietnam from '../../assets/vietnam.png';
-import heart from '../../assets/heart-active.png';
-import './project.css';
-import { StarRating } from '@/components';
-import dollar from '../../assets/dollars.png';
-import delivery from '../../assets/delivery.png';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router';
+import { StarRating, Bid } from '@/components';
 import WhiteButton from '@/components/Button/WhiteButton';
-import line from '../../assets/line.png';
-import Comment from '@/components/Comment/Comment';
-import { Bid } from '@/components';
-import RelatedProject from '@/components/RelatedProject/RelatedProject';
-import { Carousel } from 'react-bootstrap';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { BidDetailPopup, UpdateProject } from '..';
+import BidPopup from '../Bid';
+import CommentProject from '../../components/Comment/CommentProject';
+
 import projectPostServices from '@/services/projectPostServices';
 import userDataService from '@/services/userDataServices';
 import categoryServices from '@/services/categoryServices';
 import reviewServices from '@/services/reviewServices';
-import { BidDetailPopup, UpdateProject } from '..';
-import styles from './project.css?inline';
+import bidServices from '@/services/bidServices';
+import projectPostWishlistServices from '@/services/projectPostWishlistServices';
+
+import vietnam from '../../assets/vietnam.png';
+import heart from '../../assets/heart-active.png';
+import unactiveHeart from '../../assets/heart-unactive.png';
+import dollar from '../../assets/dollars.png';
+import line from '../../assets/line.png';
+import './project.css';
 
 const Project = () => {
   const { id } = useParams();
-  console.log('id: ', id);
   const [project, setProject] = useState([]);
+  const [isOpenBid, setIsOpenBid] = useState(false);
+  const [projectTags, setProjectTags] = useState([]);
+  const [user, setUser] = useState([]);
+  const [owner, setOwner] = useState([]);
+  const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [isChange, setIsChange] = useState(false);
+  const [bidProject, setBidProject] = useState([]);
+  const [isLiked, setIsLiked] = useState('');
+  const [isChangeBid, setIsChangeBid] = useState(false);
 
   // const userId = localStorage.getItem('LOGINID')
   const userId = 1;
-  const [user, setUser] = useState([]);
+
+  const navigate = useNavigate();
 
   // get user by id
   useEffect(() => {
@@ -44,30 +54,30 @@ const Project = () => {
     });
   }, []);
 
-  const [projectTags, setProjectTags] = useState([]);
-
   useEffect(() => {
     fetchProjectTags();
-  }, [project.tag_id]);
-
-  const fetchProjectTags = async () => {
-    const projectTagsData = await categoryServices.getNamefromId(
-      project.tag_id
-    );
-    console.log(projectTagsData.data.subcategory_name);
-
-    const projectTagsArray = projectTagsData.data.subcategory_name.includes(',')
-      ? projectTagsData.data.subcategory_name.split(',')
-      : [projectTagsData.data.subcategory_name];
-    setProjectTags(projectTagsArray);
-    // console.log('project tags array: ', projectTagsArray);
-  };
-
-  const [owner, setOwner] = useState([]);
+  }, [id]);
 
   useEffect(() => {
     fetchOwnerRating();
   }, [project.user_id]);
+
+  useEffect(() => {
+    if (isChange) {
+      projectPostServices.getProjectbyId(id).then((response) => {
+        console.log('response: ', response);
+        setProject(response.data);
+      });
+      setIsChange(false);
+    }
+  }, [isChange]);
+
+
+  const fetchProjectTags = async () => {
+    const projectTagsData = await categoryServices.getNamefromId(project.tag_id);
+    console.log(projectTagsData.data.subcategory_name);
+    setProjectTags([projectTagsData.data.subcategory_name]);
+  };
 
   const fetchOwnerRating = async () => {
     try {
@@ -81,26 +91,82 @@ const Project = () => {
     }
   };
 
-  const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
-
   const handleEditProject = () => {
     setIsEditPopupOpen(true);
   };
 
-  const [isChange, setIsChange] = useState(false);
+  const onChangeBid = () => {
+    setIsChangeBid(!isChangeBid);
+  };
+  useEffect(() => {
+    fetchBidProject();
+  }, [isChangeBid]);
 
   useEffect(() => {
-    if (isChange) {
-      projectPostServices.getProjectbyId(id).then((response) => {
-        console.log('response: ', response);
-        setProject(response.data);
-      });
-      setIsChange(false);
+    if (isChangeBid) {
+      fetchBidProject();
+      setIsChangeBid(false);
     }
-  }, [isChange]);
-  
+  }, [isChangeBid]);
 
-  console.log(isEditPopupOpen);
+  const fetchBidProject = async () => {
+    try {
+      const bidProjectData = await bidServices.findBidByProjectId(id);
+      const bidProjectWithUser = await Promise.all(
+        bidProjectData.data.map(async (bid) => {
+          const userBidData = await userDataService.findOnebyId(bid.user_id);
+          const userBidRatingData = await reviewServices.getRatingFreelancer(
+            bid.user_id
+          );
+          return {
+            ...bid,
+            user: {
+              ...userBidData.data,
+              averageStar: userBidRatingData.data.averageStar,
+            },
+          };
+        })
+      );
+      setBidProject(bidProjectWithUser);
+      console.log('bid project: ', bidProjectWithUser);
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+    }
+  };
+  const bidNum = bidProject.length;
+
+  // check if user liked this project
+  useEffect(() => {
+    projectPostWishlistServices
+      .isExisted(userId, id)
+      .then((response) => {
+        console.log('response: ', response);
+        if (response.data === true) {
+          setIsLiked(heart);
+        } else {
+          setIsLiked(unactiveHeart);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [userId, id]);
+
+  const handleLikeClick = () => {
+    if (isLiked === unactiveHeart) {
+      projectPostWishlistServices.create(userId, id).then((response) => {
+        setIsLiked(heart);
+        console.log('response: ', response);
+      });
+    }
+    if (isLiked === heart) {
+      projectPostWishlistServices.remove(userId, id).then((response) => {
+        setIsLiked(unactiveHeart);
+        console.log('response: ', response);
+      });
+    }
+  };
+
   return (
     <>
       {isEditPopupOpen && (
@@ -113,7 +179,27 @@ const Project = () => {
           }}
         />
       )}
-      <BidPopup/>
+
+      {isDetailOpen && (
+        <BidDetailPopup
+          setPopUpAppear={setIsDetailOpen}
+          project_post_id={id}
+          onChange={() => {
+            setIsChangeBid(!isChangeBid);
+          }}
+        />
+      )}
+
+      {isOpenBid && (
+        <BidPopup
+          projectPostId={id}
+          isOpen={isOpenBid}
+          isClose={() => setIsOpenBid(false)}
+          onChange={() => {
+            setIsChangeBid(!isChangeBid);
+          }}
+        />
+      )}
       <div className="pproject">
         <div className="left-project">
           <div className="main-post">
@@ -141,7 +227,7 @@ const Project = () => {
                     </div>
                   </div>
                   <div className="proj-rating-left">
-                    <StarRating rating={owner.averageStar} width={200}/>
+                    <StarRating rating={owner.averageStar} width={150} />
                     <div className="proj-stars-left">
                       <p>{owner.averageStar}</p>
                     </div>
@@ -171,34 +257,11 @@ const Project = () => {
             <div className="comment-title">
               <p>Comments</p>
               <div className="proj-comment-detail">
-                <Comment />
+                <CommentProject project_post_id={id} user_id={userId} />
               </div>
             </div>
             <div className="proj-line">
               <img src={line} alt="line" />
-            </div>
-          </div>
-
-          <div className="related-project-wrapper">
-            <div className="related-project-title">
-              <p>Related Projects</p>
-            </div>
-
-            <div className="related-project-list">
-              <Carousel>
-                <Carousel.Item>
-                  <div className="related-project-item">
-                    <RelatedProject />
-                    <RelatedProject />
-                  </div>
-                </Carousel.Item>
-                <Carousel.Item>
-                  <div className="related-project-item">
-                    <RelatedProject />
-                    <RelatedProject />
-                  </div>
-                </Carousel.Item>
-              </Carousel>
             </div>
           </div>
         </div>
@@ -217,7 +280,7 @@ const Project = () => {
                   <p>({user.profile_name})</p>
                 </div>
                 <div className="project-right-stars">
-                  <StarRating rating={owner.averageStar} />
+                  <StarRating rating={owner.averageStar} width={100} />
                   <p>{owner.averageStar}</p>
                   <div className="project-right-nstars"></div>
                 </div>
@@ -227,24 +290,17 @@ const Project = () => {
               </div>
             </div>
 
-            <div className="project-jobs-right">
-              <div className="project-job-right">
-                <p>Job</p>
-                <p> Your job here</p>
-              </div>
-              <div className="project-job-right">
-                <p>Job</p>
-                <p> Your job here</p>
-              </div>
-              <div className="project-job-right">
-                <p>Job</p>
-                <p> Your job here</p>
-              </div>
-            </div>
-
             <div className="project-right-contact">
-              <WhiteButton name="Chat now" />
-              <WhiteButton name="View Profile" />
+              <WhiteButton text="Chat now" />
+              <WhiteButton
+                text="View Profile"
+                // onClick={() => {
+                //   navigate(`/profile/${id}`);
+                // }}
+                onClick={() => {
+                  window.open(`/profile/${userId}`, '_blank');
+                }}
+              />
             </div>
           </div>
           <div className="project-info">
@@ -254,34 +310,41 @@ const Project = () => {
                 <img src={dollar} alt="dollar" />
                 <p>${`${project.budget_min} - ${project.budget_max}`}</p>
               </div>
-              {/* <div className="project-type">
-              <img src={location} alt="location" />
-              <p>Remote project</p>
-            </div> */}
-              <div className="project-time">
-                <img src={delivery} alt="delivery" />
-                <p>5 Day Delivery</p>
-              </div>
             </div>
 
             <div className="btn-bid-and-wish">
-              <button className="button-bid-project">Bid</button>
-              <button className="button-wish-project">
-                <img src={heart} alt="heart" />
+              <button
+                onClick={() => {
+                  setIsOpenBid(true);
+                }}
+                className="button-bid-project"
+              >
+                Bid
+              </button>
+              <button className="button-wish-project" onClick={handleLikeClick}>
+                <img src={isLiked} alt="heart icon" />
               </button>
             </div>
           </div>
           <div className="project-bid-list-info">
-            <div className="view-detail">
+            <div className="view-detail" onClick={() => setIsDetailOpen(true)}>
               <p>View details</p>
             </div>
-            <p>4 BID</p>
+            <p>{`${bidNum} Bids`}</p>
             <div className="proj-bid-list">
-              <Bid />
-              <Bid />
-              <Bid />
-              <Bid />
-              <Bid />
+              {/* const Bid = ({username, price, skill, profileImage, rating}) => { */}
+              {bidProject.map((bid) => (
+                <Bid
+                  key={bid.id}
+                  bidId={bid.id}
+                  username={bid.user.account_name}
+                  price={bid.price}
+                  skill={bid.skill}
+                  profileImage={bid.user.avt_url}
+                  rating={bid.user.averageStar}
+                  onChangeBid={onChangeBid}
+                />
+              ))}
             </div>
           </div>
         </div>

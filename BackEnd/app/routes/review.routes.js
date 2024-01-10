@@ -6,6 +6,8 @@ module.exports = (app) => {
 
   router.get("/get_rating_client/:id", review_controller.getRatingClient);
 
+  router.get("/get_rating_freelancer/:id", review_controller.getRatingFreelancer);
+
 
   app.use("/api/review", router);
 };

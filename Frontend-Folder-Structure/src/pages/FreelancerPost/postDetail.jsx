@@ -8,7 +8,7 @@ import dollar from '../../assets/dollars.png';
 import revision from '../../assets/revision.png';
 import delivery from '../../assets/delivery.png';
 import line from '../../assets/line.png';
-import Comment from '@/components/Comment/Comment';
+// import Comment from '@/components/Comment/Comment';
 import { Bid } from '@/components';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
@@ -19,6 +19,7 @@ import reviewServices from '@/services/reviewServices';
 import UpdatePost from './updatePost';
 import OfferDetailPopup from './offerDetailPopup';
 import HireFreelancer from '../FreelancerPost/hireFreelancer';
+import contactService from '@/services/contactServices';
 
 const PostDetail = () => {
   const { id } = useParams();
@@ -51,17 +52,14 @@ const PostDetail = () => {
     fetchProjectTags();
   }, [project.tag_id]);
 
+
+
   const fetchProjectTags = async () => {
     const projectTagsData = await categoryServices.getNamefromId(
       project.tag_id
     );
     console.log(projectTagsData.data.subcategory_name);
-
-    const projectTagsArray = projectTagsData.data.subcategory_name.includes(',')
-      ? projectTagsData.data.subcategory_name.split(',')
-      : [projectTagsData.data.subcategory_name];
-    setProjectTags(projectTagsArray);
-    // console.log('project tags array: ', projectTagsArray);
+    setProjectTags([projectTagsData.data.subcategory_name]);
   };
 
   const [owner, setOwner] = useState([]);
@@ -103,6 +101,22 @@ const PostDetail = () => {
     setShowOfferPopup(true);
   };
 
+
+  const [bidOnes, setBidOnes] = useState([]);
+  useEffect(() => {
+    fetchBids();
+  }, []);
+
+  const fetchBids = async () => {
+    try {
+      const bidsData = await contactService.findAllBids(id);
+      setBidOnes(bidsData.data);
+      console.log('data', bidsData.data);
+    } catch (error) {
+      console.error('Error fetching Bid:', error);
+    }
+  };
+
   return (
     <>
       {isEditPopupOpen && (
@@ -120,8 +134,8 @@ const PostDetail = () => {
           <div className="main-post">
             <div className="border-proj-title">
               <div className="proj-title">
-                {/* <p>{project.title}</p> */}
-                <p>Project title here</p>
+                <p>{project.title}</p>
+                {/* <p>Project title here</p> */}
               </div>
             </div>
             <div className="tags">
@@ -237,11 +251,16 @@ const PostDetail = () => {
             </div>
             <p>4 Offers</p>
             <div className="proj-bid-list">
+
+              {bidOnes.map((bidOne) => (
+                <Bid bidOne = {bidOne}/>
+              ))}
+              
+              {/* <Bid />
               <Bid />
               <Bid />
               <Bid />
-              <Bid />
-              <Bid />
+              <Bid /> */}
             </div>
           </div>
         </div>
