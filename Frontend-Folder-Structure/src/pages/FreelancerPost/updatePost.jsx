@@ -39,6 +39,8 @@ const isValidImage = (image) => {
 };
 
 const UpdatePost = ({ isOpen, onClose, onUpdate }) => {
+  const userId = localStorage.getItem('LOGINID');
+
   const [showOverlay, setShowOverlay] = useState(isOpen);
   const [error, setError] = useState({
 
@@ -47,6 +49,7 @@ const UpdatePost = ({ isOpen, onClose, onUpdate }) => {
   const postId = currentURL.split("/").pop();
 
   const initState = {
+    freelancer_id: userId,
     title: '',
     delivery_description: '',
     about_me: '',
