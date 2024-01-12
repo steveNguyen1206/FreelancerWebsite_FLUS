@@ -130,4 +130,9 @@
     display: flex;
     justify-content: center;
   }
-  
+
+.UserTab .MuiFormControl-root{
+  height: 80%;
+  padding: 0px;
+  margin: 0px;
+}
