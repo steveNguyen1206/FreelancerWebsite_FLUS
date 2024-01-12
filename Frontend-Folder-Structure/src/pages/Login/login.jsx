@@ -100,6 +100,7 @@ const LogIn = () => {
           localStorage.setItem('AVT', result.data.avt_url);
           console.log('Token: ' + result.data.accessToken + " " + result.data.id);
           setSignin(true);
+          navigate('/admin')
         } catch (error) {
           console.log('Error with GoogleLogin' + error);
         }
