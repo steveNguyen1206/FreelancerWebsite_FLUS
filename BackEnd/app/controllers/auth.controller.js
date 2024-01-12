@@ -83,6 +83,7 @@ exports.signin = (req, res) => {
         email: user.email,
         roles: authorities,
         accessToken: token,
+        avt_url: user.avt_url,
       });
     })
     .catch((err) => {
@@ -220,6 +221,7 @@ exports.googleLogin = (req, res) => {
           email: user.email,
           roles: authorities,
           accessToken: token,
+          avt_url: user.avt_url,
         });
       }
     )
@@ -227,4 +229,8 @@ exports.googleLogin = (req, res) => {
       // return error
       res.status(500).send({ message: err.message });
     });
+};
+
+exports.sendIsAdminTrue = (req, res) => {
+  res.status(200).send({ isAdmin: true });
 };

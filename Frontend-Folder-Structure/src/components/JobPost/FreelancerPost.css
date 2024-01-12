@@ -6,7 +6,7 @@
   padding: 0;
 }
 
-.left-post {
+.post-container .left-post {
   width: 75%;
 }
 
@@ -19,42 +19,42 @@
 }
 
 
-.pprofile{
+.post-container .pprofile{
   display: flex;
   align-items: center;
 }
 
-.pprofile img{
+.post-container .pprofile img{
   height: 40px;
   object-fit: cover;
   width: auto;
 }
 
-.plocation img{
+.post-container .plocation img{
   height: 10px;
   width: auto;
 }
 
-.pname {
+.post-container .pname {
   margin-left: 10px;
 
 }
 
 
-.pname{
+.post-container .pname{
   margin-right: 10px;
   font-size: var(--medium-font-size);
   font-family: Inter-Bold, sans-serif;
   font-weight: 600;
 }
 
-.content-container{
+.post-container .content-container{
   width: 100%;
   padding-left: 40px;
   padding-right: 20px;
   height: 100%;
 }
-.ptitle{
+.post-container .ptitle{
   display: flex;
   font-size: var(--medium-font-size);
   font-family: Inter-Bold, sans-serif;
@@ -63,7 +63,7 @@
 }
 
 
-.post-tag{
+.post-container .post-tag{
   margin-top: 0px;
   border-radius: 8px;
   margin-bottom: 10px;
@@ -75,7 +75,7 @@
   padding: 0px 5px;
 }
 
-.detail-content {
+.post-container .detail-content {
   max-width: 600px;
   text-align: left;
   display: -webkit-box;
@@ -85,7 +85,7 @@
   overflow: hidden;
 }
 
-.previews{
+.post-container .previews{
   display: flex;
   justify-content: space-between;
   flex-direction: column;
@@ -93,7 +93,7 @@
   margin-top: 30px;
 }
 
-.rating-row{
+.post-container .rating-row{
   display: flex;
   flex-direction: row;
   text-align: center;
@@ -103,12 +103,12 @@
 
 
 
-.pstars{
+.post-container .pstars{
   width: 200px;
 }
 
 
-.pprice{
+.post-container .pprice{
   text-align: right;
   color: #12C418;
   font-size: var(--xlarge-font-size);
@@ -116,7 +116,7 @@
   font-weight: 700;
 }
 
-.btn-row{
+.post-container .btn-row{
   margin-top: 15px;
   display: flex;
   text-align: center;
@@ -124,7 +124,7 @@
   justify-content: center;
 }
 
-.btn-bid button{
+.post-container .btn-bid button{
   height: 40px;
   width: 80px;
   background-color: var(--primary);
@@ -134,21 +134,21 @@
   margin-bottom: 10px;
 }
 
-.btn-bid button:active{
+.post-container .btn-bid button:active{
   background-color: #066409;
 }
 
-.rating img{
+.post-container .rating img{
   height: 15px;
   width: 15px;
 }
 
-.rating p{
+.post-container .rating p{
   margin: 0;
 }
 
 
-.pbid{
+.post-container .pbid{
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -157,11 +157,11 @@
   align-items: center;
 }
 
-.num-reviews-wrapper {
+.post-container .num-reviews-wrapper {
     text-align: center;
   }
 
-.btn-row img{
+.post-container .btn-row img{
   height: 40px;
   object-fit: cover;
   margin-left: 15px;

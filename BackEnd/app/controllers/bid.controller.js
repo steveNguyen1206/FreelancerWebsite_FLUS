@@ -74,3 +74,22 @@ exports.changeBidStatus = (req, res) => {
 }
 
 
+exports.getDistinctUserIdsByStatus = (req, res) => {
+    const status = req.params.bid_status;
+    Bid.findAll({
+        attributes: [[db.Sequelize.fn('DISTINCT', db.Sequelize.col('user_id')), 'user_id']],
+        where: { status: status }
+    })
+        .then(data => {
+            res.status(200).send(data);
+        })
+        .catch(err => {
+            console.log("err: ", err);
+            res.status(500).send({
+                message:
+                err.message || "Some error occurred while retrieving distinct user ids."
+            });
+        });
+}
+
+

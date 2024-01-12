@@ -6,6 +6,7 @@ import userDataService from '@/services/userDataServices';
 
 const UpdateNameContacts = ({ user_id }) => {
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   // handle profile name change
   const [profileName, setProfileName] = useState('');
@@ -30,28 +31,27 @@ const UpdateNameContacts = ({ user_id }) => {
 
   // handle save name & contacts
   const handleSaveNameContacts = () => {
+    setErrorMessage('');
+    setSuccessMessage('');
+
     // create object from unempty fields
     const fields = {};
     if (profileName) fields['profile_name'] = profileName;
     if (accountName) fields['account_name'] = accountName;
     if (socialLink) fields['social_link'] = socialLink;
 
-    console.log(fields);
-
     // check if object is empty
     if (Object.keys(fields).length === 0) {
       setErrorMessage('Please fill in at least one field.');
-      console.log(errorMessage);
       return;
     }
 
     // call API to update name & contacts
     userDataService.updateNameAndSocialLink({id: user_id, data: fields})
       .then((response) => {
-        console.log(response.data);
+        setSuccessMessage('Updated successfully');
       })
       .catch((error) => {
-        console.log(error);
         setErrorMessage('Something went wrong. Please try again.');
       });
   };
@@ -66,7 +66,10 @@ const UpdateNameContacts = ({ user_id }) => {
         <EditTextField field_name={"Social Link"} onChange={handleSocialLinkChange}/>
       </div>
 
-      <UpdateButton button_name={"Save Name & Contacts"} onClick={handleSaveNameContacts}/>
+      <div className="error-message">{errorMessage}</div>
+      <div className="success-message">{successMessage}</div>
+
+      <UpdateButton className="update-button" button_name={"Save Name & Contacts"} onClick={handleSaveNameContacts}/>
     </div>
   );
 };

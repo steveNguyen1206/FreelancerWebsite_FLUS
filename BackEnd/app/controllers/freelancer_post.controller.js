@@ -107,8 +107,9 @@ exports.findAndChangeStatus = (req, res) => {
 
 // Retrieve all Freelancer_post from the database.
 exports.findAll = (req, res) => {
-    const freelancer_id = req.query.freelancer_id;
-    var condition = freelancer_id ? { freelancer_id: { [Op.like]: `%${freelancer_id}%` } } : null;
+    const freelancer_id = req.params.freelancer_id;
+    
+     var condition = freelancer_id ? { freelancer_id: { [Op.like]: `%${freelancer_id}%` } } : null;
 
     Freelancer_post.findAll({ where: condition })
         .then(data => {
@@ -320,29 +321,29 @@ exports.update = async (req, res) => {
     }
 };
 // Delete a Category with the specified id in the request
-exports.delete = (req, res) => {
-    const id = req.params.id;
+// exports.delete = (req, res) => {
+//     const id = req.params.id;
 
-    Freelancer_post.destroy({
-        where: { id: id }
-    })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Freelancer_post was deleted successfully!"
-                });
-            } else {
-                res.send({
-                    message: `Cannot delete Freelancer_post with id=${id}. Maybe Freelancer_post was not found!`
-                });
-            }
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: "Could not delete Freelancer_post with id=" + id
-            });
-        });
-};
+//     Freelancer_post.destroy({
+//         where: { id: id }
+//     })
+//         .then(num => {
+//             if (num == 1) {
+//                 res.send({
+//                     message: "Freelancer_post was deleted successfully!"
+//                 });
+//             } else {
+//                 res.send({
+//                     message: `Cannot delete Freelancer_post with id=${id}. Maybe Freelancer_post was not found!`
+//                 });
+//             }
+//         })
+//         .catch(err => {
+//             res.status(500).send({
+//                 message: "Could not delete Freelancer_post with id=" + id
+//             });
+//         });
+// };
 
 // // Delete all Tutorials from the database.
 // exports.deleteAll = (req, res) => {
@@ -362,8 +363,14 @@ exports.delete = (req, res) => {
 // };
 
 exports.findAllPosts = (req, res) => {
-    const freelancer_id = req.query.freelancer_id;
-    var condition = freelancer_id ? { freelancer_id: { [Op.like]: `%${freelancer_id}%` } } : null;
+    const freelancer_id = req.params.freelancer_id;
+
+    // console.log("#############################\n");
+    // console.log("FIND ALL FREELANCER POSTS");
+    // console.log("Params: ", req.params);
+    // console.log("freelancer_id: ", freelancer_id);
+   
+    var condition = freelancer_id ? { freelancer_id: { [Op.eq]: `${freelancer_id}` } } : null;
 
     Freelancer_post.findAll({
         where: condition,
@@ -413,3 +420,151 @@ exports.getFreelancerEmail = (req, res) => {
         });
       });
   };
+
+  function getPagination(page, size) {
+    // page > 0, size > 0
+    const limit = size;
+    const offset = (page - 1) * size;
+    return { limit, offset };
+  }
+  
+  exports.findFreePostsByPage = (req, res) => {
+    console.log("\nMY PARAMS:", req.params);
+    const { page, size, searchKey } = req.params; // page: 1..n, size: 1..m
+    console.log(
+      "FFFFFFFFFFFFFFFFFFFF",
+      "page: " + page + ", size: " + size + ", searchKey: " + searchKey
+    );
+  
+    // condition to check searchKey in account_name or profile_name
+    var condition =
+      searchKey && searchKey !== "undefined" && searchKey !== ""
+        ? {
+            [Op.or]: [
+              { title: { [Op.like]: `%${searchKey}%` } },
+              { detail: { [Op.like]: `%${searchKey}%` } },
+            ],
+          }
+        : null;
+  
+    const { limit, offset } = getPagination(parseInt(page), parseInt(size));
+  
+    // Find all users with condition by page
+    Freelancer_post.findAndCountAll({ where: condition, limit, offset })
+      .then((data) => {
+        const { rows: free_posts, count: totalItems } = data;
+  
+        // // Extract only the necessary information from each user
+        // const simplifiedProjPosts = proj_posts.map((proj_post) => ({
+        //   id: proj_post.id,
+        //   title: proj_post.title,
+        //   detail: proj_post.detail,
+        //   budget_min: proj_post.budget_min,
+        //   budget_max: proj_post.budget_max,
+        //   status: proj_post.status,
+        // }));
+  
+        const response = {
+          totalItems,
+          free_posts: free_posts,
+          currentPage: parseInt(page),
+          totalPages: Math.ceil(totalItems / limit),
+        };
+  
+        res.send(response);
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message: err.message || "Some error occurred while retrieving users.",
+        });
+      });
+  };
+
+  
+// Change user status by user id and status param
+exports.changeStatusByID = (req, res) => {
+    const { id, status } = req.params;
+  
+    if (!id || parseInt(status) < 0 || parseInt(status) > 2) {
+      res.status(400).send({
+        message: "Invalid projpost id or status!",
+      });
+      return;
+    }
+  
+    Freelancer_post.update({ status }, { where: { id } })
+      .then((num) => {
+        if (num[0] === 1) {
+          res.send({
+            message: "Freelancer_post status updated successfully!",
+          });
+        } else {
+          res.send({
+            message: `Cannot update Post with id=${id}. Maybe Post was not found!`,
+          });
+        }
+      })
+      .catch((err) => {
+        console.error("Sequelize Error:", err);
+        res.status(500).send({
+          message: "Could not update Post with id=" + id,
+        });
+      });
+  };
+
+async function handleDelete(file) {
+    try {
+        const res = await cloudinary.uploader.destroy(file, {
+            resource_type: "image",
+        });
+        return res;
+    } catch (error) {
+        console.error("Error deleting image:", error);
+        throw error;
+    }
+}
+
+exports.deleteById = (req, res) => {
+    const { id } = req.params;
+
+    Freelancer_post.findByPk(id)
+        .then((project) => {
+            if (!project) {
+                res.status(404).send({
+                    message: `Freelancer_post with id=${id} not found.`,
+                });
+                return;
+            }
+
+            const imageUrls = project.imgage_post_urls;
+
+            Freelancer_post.destroy({ where: { id } })
+                .then((num) => {
+                    if (num === 1) {
+                        // Handle delete the file using imageUrls
+                        handleDelete(imageUrls);
+                        res.send({
+                            message: "Post was deleted successfully!",
+                        });
+                    } else {
+                        res.send({
+                            message: `Cannot delete Post with id=${id}. Maybe Post was not found!`,
+                        });
+                    }
+                })
+                .catch((err) => {
+                    console.error("Sequelize Error:", err);
+                    res.status(500).send({
+                        message: "Could not delete Post with id=" + id,
+                    });
+                });
+        })
+        .catch((err) => {
+            console.error("Sequelize Error:", err);
+            res.status(500).send({
+                message: "Could not find Freelancer_post with id=" + id,
+            });
+        });
+};
+
+  

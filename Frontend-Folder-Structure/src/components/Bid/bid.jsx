@@ -12,11 +12,11 @@ const Bid = ({
   onChangeBid,
 }) => {
   const handleAccept = () => {
-    // console.log('accept');
-    // bidServices.changeBidStatus(bidId, 1).then((response) => {
-    //   console.log('response: ', response);
-    //   // onChangeBid();
-    // });
+    console.log('accept');
+    bidServices.changeBidStatus(bidId, 1).then((response) => {
+      console.log('response: ', response);
+      // onChangeBid();
+    });
   };
 
   const handleReject = () => {

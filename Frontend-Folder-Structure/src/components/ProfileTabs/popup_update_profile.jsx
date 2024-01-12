@@ -1,26 +1,21 @@
 import React from 'react';
 import './popup_update_profile.css';
-import { useState } from 'react';
 import { RedCloseButton } from '@/components';
 import { UpdateAvartar, UpdateTags, UpdatePassword, UpdateNameContacts} from '@/components';
 
-const PopupUpdateProfile = ({ m_state, m_function, user_profile }) => {
-  // id: '',
-  // account_name: '',
-  // profile_name: '',
-  // phone_number: '',
-  // nationality: '',
-  // user_type: 0,
-  // email: '',
-  // avt_url: '',
-  // social_link: '',
+const PopupUpdateProfile = ({ user_profile, handleCloseIconClick }) => {
+  // user_profile: user profile data, with:
+    // id: '',
+    // account_name: '',
+    // profile_name: '',
+    // phone_number: '',
+    // nationality: '',
+    // user_type: 0,
+    // email: '',
+    // avt_url: '',
+    // social_link: '',
 
-  const user_id = user_profile.id;
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const handleCloseIconClick = () => {
-    m_function(false);
-  };
+  const user_id = user_profile.id || null;
 
   return (
     <div className="update-profile-container">
@@ -40,10 +35,14 @@ const PopupUpdateProfile = ({ m_state, m_function, user_profile }) => {
           {/* Column 3.1: Tags & Password*/}
           <div className='col split-to-two-row'>
             {/* Row 3.1.1: Tags*/}
-            <div>
-              <UpdateTags user_id={user_id}/>
-            </div>
+            {/* if user_id != null to render UpdateTags */}
 
+            {user_id && 
+              (<div>
+                <UpdateTags user_id={user_id}/>
+              </div>)
+            }
+    
             {/* Row 3.1.2: Password */}
             <div>
               <UpdatePassword user_id={user_id}/>

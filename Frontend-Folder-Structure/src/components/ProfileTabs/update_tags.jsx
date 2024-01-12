@@ -2,43 +2,42 @@ import './update_tags.css';
 import React, { useState, useEffect } from 'react';
 import { UpdateButton, TagContainer } from '@/components';
 import subcategoryService from '@/services/subcategoryService';
-import userSubcategoryService from '@/services/userSubcategoryServices';  
+import userSubcategoryService from '@/services/userSubcategoryServices';
 
 const UpdateTags = ({ user_id }) => {
   const [errorMessage, setErrorMessage] = useState('');
-
-  const initialSkills = [
-    {
-      'id': '',
-      'subcategory_name': ''
-    }
-  ];
+  const [successMessage, setSuccessMessage] = useState('');
+  const [refresh, setRefresh] = useState(0);
 
   // get skills by user id
-  const [userSkills, setUserSkills] = useState(initialSkills);
+  const [userSkills, setUserSkills] = useState([]);
+  const [skills, setSkills] = useState([]);
+  const [selectingSkill, setSelectingSkill] = useState('');
 
+  // get skills and user skills when refresh change
   useEffect(() => {
+    setSelectingSkill('');
     getUserSkills();
-  }, []);
+  }, [refresh]);
+
+  // get all skills when user skills change
+  useEffect(() => {
+    getSkills();
+  }, [userSkills]);
 
   // get all skills of an user
   const getUserSkills = () => {
-    // userSubcategoryService.findAll(user_id)
-    //   .then((response) => {
-    //     setUserSkills(response.data);
-    //     console.log(response.data);
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //     setErrorMessage(e.message);
-    //   });
-  }
-
-  const [skills, setSkills] = useState(initialSkills);
-
-  useEffect(() => {
-    getSkills();
-  }, []);
+    userSubcategoryService
+      .findAll(user_id)
+      .then((response) => {
+        setUserSkills(response.data);
+        setRefresh();
+      })
+      .catch((e) => {
+        const message = e.response.data.message;
+        setErrorMessage(message);
+      });
+  };
 
   // get all skills in database
   const getSkills = () => {
@@ -46,26 +45,49 @@ const UpdateTags = ({ user_id }) => {
       .findAll()
       .then((response) => {
         // remove skills that user already has
-        const filteredSkills = response.data.filter(skill => !userSkills.some(userSkill => userSkill.subcategory_name === skill.subcategory_name));
+        const filteredSkills = response.data.filter(
+          (skill) =>
+            !userSkills.some(
+              (userSkill) =>
+                userSkill.subcategory_name === skill.subcategory_name
+            )
+        );
         setSkills(filteredSkills);
-
-        // setSkills(response.data);
-        // console.log(response.data);
       })
       .catch((e) => {
-        console.log(e);
-        setErrorMessage(e.message);
+        const message = e.response.data.message;
+        setErrorMessage(message);
       });
-  }
+  };
 
-  const [selectingSkill, setSelectingSkill] = React.useState({});
+  const handleSelectingSkillChange = (e) => {
+    setSelectingSkill(e.target.value);
+  };
 
-  const handleSelectingSkillChange = (event) => {
-    const selectedOption = event.target.value;
-    if (selectedOption) {
-      setSelectingSkill(selectedOption);
-      console.log(selectingSkill);
+  const handleAddTag = () => {
+    setErrorMessage('');
+    setSuccessMessage('');
+
+    if (selectingSkill === '') {
+      setErrorMessage('Please select a skill');
+      return;
     }
+
+    const data = {
+      id: user_id,
+      subcategoryId: selectingSkill,
+    };
+
+    userSubcategoryService
+      .create(data)
+      .then((response) => {
+        setRefresh(refresh ^ 1);
+        setSuccessMessage('Tag added successfully');
+      })
+      .catch((e) => {
+        const message = e.response.data.message;
+        setErrorMessage(message);
+      });
   };
 
   return (
@@ -73,20 +95,38 @@ const UpdateTags = ({ user_id }) => {
       <div className="title">Job Tags</div>
 
       <div className="add-a-tag">
-      <select className="input-tag" onChange={handleSelectingSkillChange}>
-        {skills.map(skill => (
-          <option key={skill.id} value={skill.subcategory_name}>
-            {skill.subcategory_name}
+        <select
+          className="input-tag"
+          value={selectingSkill}
+          onChange={handleSelectingSkillChange}
+        >
+          <option value="" disabled>
+            Select a skill
           </option>
-        ))}
-      </select>
+          {skills.map((skill) => (
+            <option key={skill.subcategory_name} value={skill.id}>
+              {skill.subcategory_name}
+            </option>
+          ))}
+        </select>
 
-        <UpdateButton button_name={'Add'} />
+        <UpdateButton button_name={'Add'} onClick={handleAddTag} />
       </div>
 
       <div className="current-tags">
-        <TagContainer list_tag={['tag1', 'tag2']} />
+        <TagContainer
+          userId={user_id}
+          list_tag={userSkills}
+          refreshFunction={() => {
+            setRefresh(refresh ^ 1);
+          }}
+          errorMessage={setErrorMessage}
+          successMessage={setSuccessMessage}
+        />
       </div>
+
+      <div className="error-message">{errorMessage}</div>
+      <div className="success-message">{successMessage}</div>
     </div>
   );
 };

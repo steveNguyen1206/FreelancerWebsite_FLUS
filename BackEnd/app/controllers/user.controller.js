@@ -181,7 +181,8 @@ exports.update = (req, res) => {
 
 exports.updateAvatar = async (req, res) => {
   const id = 1;
-  console.log(req.params);
+  console.log("######### UPDATE AVATAR #########");
+  console.log(req);
 
   // đoạn code này để test upload hình ảnh lên cloud mà ko cập nhật lại bảng user, do chấn chưa đăng ký bằng sms đượt :>>
   // cái này chạy được thì cái trên chạy đc, it should work :))

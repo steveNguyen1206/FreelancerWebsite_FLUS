@@ -10,7 +10,6 @@
   
   .about-us .div {
     background-color: #ffffff;
-    height: 3661px;
     overflow: hidden;
     position: relative;
     width: 100%;
@@ -91,6 +90,7 @@
     display: flex;
     flex-wrap: wrap;
     margin-top: 3%;
+    margin-bottom: 3%;
   }
   
   .to-instruction-txt:active{
@@ -261,114 +261,67 @@
   
   
   
-  .about-us .group-wrapper {
-    height: 865px;
-    left: 0;
-    position: absolute;
-    top: 2345px;
-    width: 1440px;
+  .about-us .StatisticSection {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
   }
   
-  .about-us .group-2 {
-    height: 801px;
-    left: 81px;
+  .about-us .inner-post {
     position: relative;
-    top: 33px;
-    width: 1285px;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 3%;
+  }
+  .about-us .text-wrapper-10 {
+    color: #000000;
+    font-family: "Lemon", Helvetica;
+    font-size: 30px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: normal;
+    width: auto;
+    text-align: center;
   }
   
-  .about-us .overlap-group-2 {
+
+  .about-us .result-container {
     border: 5px solid;
     border-color: #009304;
     border-radius: 20px;
-    height: 728px;
-    left: 0;
-    position: absolute;
-    top: 73px;
-    width: 1277px;
+    height: 100%;
+    margin-top: 1%;
+    width: 80%;
+    align-self: center;
   }
-  
-  .about-us .carousel-icon {
-    height: 16px;
-    left: 594px;
-    position: absolute;
-    top: 677px;
-    width: 81px;
+  .about-us .result-container>.row {
+    margin-top: 2%;
+    margin-bottom: 2%;
   }
-  
-  .about-us .img {
-    height: 425px;
-    left: 110px;
-    position: absolute;
-    top: 114px;
-    width: 549px;
-  }
-  
-  .about-us .rectangle-2 {
-    height: 57px;
-    left: 844px;
-    position: absolute;
-    top: 199px;
-    width: 67px;
-  }
-  
-  .about-us .rectangle-3 {
-    height: 57px;
-    left: 844px;
-    position: absolute;
-    top: 325px;
-    width: 67px;
+
+  .about-us .result-container .col-3{
+    text-align: left;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 24px;
+    font-weight: 400;
+    color: #058008;
+
   }
   
   .about-us .text-wrapper-7 {
     color: #000000;
-    font-family: "Inter-Regular", Helvetica;
-    font-size: 30px;
+    font-family: "Inter", Helvetica;
+    font-size: 24px;
     font-weight: 400;
-    left: 936px;
     letter-spacing: 0;
     line-height: normal;
-    position: absolute;
-    top: 210px;
-    width: 304px;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    text-align: center;
   }
   
-  .about-us .text-wrapper-8 {
-    color: #000000;
-    font-family: "Inter-Regular", Helvetica;
-    font-size: 30px;
-    font-weight: 400;
-    left: 244px;
-    letter-spacing: 0;
-    line-height: normal;
-    position: absolute;
-    top: 569px;
-    width: 358px;
-  }
-  
-  .about-us .text-wrapper-9 {
-    color: #000000;
-    font-family: "Inter-Regular", Helvetica;
-    font-size: 30px;
-    font-weight: 400;
-    left: 936px;
-    letter-spacing: 0;
-    line-height: normal;
-    position: absolute;
-    top: 336px;
-    width: 304px;
-  }
-  
-  .about-us .text-wrapper-10 {
-    color: #000000;
-    font-family: "Lemon-Regular", Helvetica;
-    font-size: 40px;
-    font-weight: 400;
-    left: 441px;
-    letter-spacing: 0;
-    line-height: normal;
-    position: absolute;
-    top: 0;
-  }
-  
+
  

@@ -1,5 +1,5 @@
 import { Routes, Route, BrowserRouter as Router } from 'react-router-dom';
-import { Home, LogIn, Profile, Shop, SignUp, Project, FindFreelancer, Job, UpdateAvatarForm, AboutUs} from '@/pages';
+import { Home, LogIn, Profile, Shop, SignUp, Project, FindFreelancer, Job, AboutUs} from '@/pages';
 import { Footer, Header, Navbar } from '@/layout';
 import { PayPalDemo } from '@/pages/Payment';
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -24,26 +24,22 @@ const Routers = () => {
           <Route path="/shop" element={<Shop />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/profile/:id" element={<Profile />} />
-          <Route path="/myprofile/:id"  element={<Profile access_token={localStorage.getItem('AUTH_TOKEN')} />} />
-
-          <Route path="/project" element={<Project />} />
-          <Route path="/project-manage/:id" element={<ProjectManagement own={false}/>} />
-          <Route path="/my-project-manage/:id" element={<ProjectManagement own={true}/>} />
-          <Route path="/my-project-manage" element={<ProjectManagement own={true}/>} />
-          <Route path="/project-manage" element={<ProjectManagement own={false}/>} />
-
           {/* <Route path="/profile/updateAvatar/:id" element={<UpdateAvatarForm />} /> */}
           <Route path="/paypal-demo" element={<PayPalDemo />} />
           <Route path="/project/:id" element={<Project />} />
+          <Route path="/findfreelancer" element={<FindFreelancer/>} />
           <Route path="/job" element={<Job/>} />
           <Route path="/project-manage" element={<ProjectManagement/>} />
+          <Route path="/my-project-manage" element={<ProjectManagement own={true}/>} />
+          <Route path="/my-project-manage" element={<ProjectManagement own={true}/>} />
+          <Route path="/project-manage" element={<ProjectManagement own={false}/>} />
           <Route path="/skill" element={<Skill />} />
           <Route path="/updateproject" element={<UpdateProject />} />
           <Route path="/newproject" element={<NewProject />} />
           <Route path="/admin" element={<Admin/>} />
             {/* Add more routes as needed */}
-          <Route path="/profile/updateAvatar/:id" element={<UpdateAvatarForm />} />
-          {/* <Route path="/paypal-demo" element={<PayPalDemo />} /> */}
+          {/* <Route path="/profile/updateAvatar/:id" element={<UpdateAvatarForm />} /> */}
+          <Route path="/paypal-demo" element={<PayPalDemo />} />
           <Route path="/findFreelancer" element={<FindFreelancer />} />
           <Route path="/findFreelancer/:id" element={<PostDetail />} />
           <Route path="/myprofile/:id"  element={<Profile access_token={localStorage.getItem('AUTH_TOKEN')} />} />

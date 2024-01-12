@@ -14,6 +14,11 @@ export {default as UserRow} from './Admin/UserRow'
 export {default as UserTab} from './Admin/UserTab'
 export {default as CategoryBlock} from './Admin/CategoryBlock'
 export {default as CategoryTab} from './Admin/CategoryTab'
+export {default as ProjectPostTab} from './Admin/ProjectPostTab'
+export {default as ProjectPostRow} from './Admin/ProjectPostRow'
+export {default as FreelancerPostTab} from './Admin/FreelancerPostTab'
+export {default as FreelancerPostRow} from './Admin/FreelancerPostRow'
+export {default as ComplainTab} from './Admin/ComplainTab'
 
 export {default as WhiteButton} from './Button/WhiteButton'
 export {default as RedCloseButton} from "./Button/redCloseButton";
@@ -37,5 +42,12 @@ export {default as EditTextField} from './ProfileTabs/EditTextField'
 export {default as EditTag} from './ProfileTabs/EditTag'
 export {default as UpdateButton} from './ProfileTabs/UpdateButton'
 export {default as TagContainer} from './ProfileTabs/TagContainer'
+export{default as UpdateAvatarForm} from "./ProfileTabs/updateAvatarForm"
+export {default as HorizonFreelancerPostCell} from './HorizontalPostCell/HorizonFreelancerPostCell'
 
+export {default as ProjectPostsTab} from './ProfileTabs/ProjectPostsTab'
+export {default as FreelancerPostsTab} from './ProfileTabs/FreelancerPostsTab'
+export {default as WishlistTab} from './ProfileTabs/WishlistTab'
+export {default as CalendarTab} from './ProfileTabs/CalendarTab'
+export {default as PaymentAccountTab} from './ProfileTabs/PaymentAccountTab'
 

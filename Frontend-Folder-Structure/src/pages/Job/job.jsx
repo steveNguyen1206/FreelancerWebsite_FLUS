@@ -66,7 +66,6 @@ const Job = () => {
     setSearchTitle(event.target.value);
   };
 
-
   const filteredProjects = projects.filter(
     (project) =>
       project.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
@@ -102,8 +101,6 @@ const Job = () => {
   const handleRangeChange = (newSelectedRange) => {
     setSelectedRange(newSelectedRange);
   };
-
- 
 
   return (
     <>

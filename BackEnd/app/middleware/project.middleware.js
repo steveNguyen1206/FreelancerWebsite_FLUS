@@ -68,8 +68,6 @@ isMemberOrOwner = (req, res, next) => {
     })
 };
 
-
-
 const projectMiddlware = {
     isMember: isMember,
     isOwner: isOwner,

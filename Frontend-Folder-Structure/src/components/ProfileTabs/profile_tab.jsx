@@ -1,8 +1,7 @@
 import React from 'react';
 import './profile_tab.css';
-import { SmallProj, WhiteButton } from '@/components';
+import { SmallProj } from '@/components';
 import projectPostWishlistServices from '@/services/projectPostWishlistServices';
-// import './profile.css'
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import WishlistPost from '../DisplayCard/wishlist';

@@ -14,7 +14,7 @@ exports.create = (req, res) => {
   // Validate request
   if (!req.body.name || !req.body.description || !req.body.startDate || !req.body.endDate || ! req.body.budget || !req.body.owner || ! req.body.member) {
     res.status(400).send({
-      message: "Missing information!"
+      message: "Missing information!",
     });
     return;
   }
@@ -41,7 +41,7 @@ exports.create = (req, res) => {
   console.log("project: ",project);
   // Save Tutorial in the database
   Project.create(project)
-    .then(project_data => {
+    .then((project_data) => {
       const notification = {
         title: "Project was created",
         content: "This is the first begining of your project. Happy freelancing!",
@@ -56,18 +56,18 @@ exports.create = (req, res) => {
         .catch(err => {
           return res.status(500).json({
             message:
-              err.message || "Some error occurred while creating project notification."
+              err.message ||
+              "Some error occurred while creating project notification.",
           });
         });
     })
     .catch(err => {
       return res.status(500).json({
         message:
-          err.message || "Some error occurred while creating the Project."
+          err.message || "Some error occurred while creating the Project.",
       });
     });
 };
-
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
@@ -76,13 +76,13 @@ exports.findAll = (req, res) => {
   var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
 
   Project.findAll({ where: condition })
-    .then(data => {
+    .then((data) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving tutorials."
+          err.message || "Some error occurred while retrieving projects.",
       });
     });
 };
@@ -111,13 +111,13 @@ exports.findMemberOne = (req, res) => {
         res.send(data);
       } else {
         res.status(404).send({
-          message: `Cannot find Project with id=${id}.`
+          message: `Cannot find Project with id=${id}.`,
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message: "Error retrieving Priject with id=" + id
+        message: "Error retrieving Priject with id=" + id,
       });
     });
 };
@@ -146,13 +146,58 @@ exports.findOwnerOne = (req, res) => {
         res.send(data);
       } else {
         res.status(404).send({
-          message: `Cannot find Project with id=${id}.`
+          message: `Cannot find Project with id=${id}.`,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error retrieving Priject with id=" + id,
+      });
+    });
+};
+
+
+// Find a all project with given user menber id
+exports.findMemberAll = (req, res) => {
+  console.log("test get all member project")
+  const userId = req.userId;
+  console.log("userid ", userId)
+  Project.findAll({ where: { member_id: userId }, attributes: ['id', 'project_name', 'start_date', 'end_date', 'budget', 'status'] })
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find Project in which user id=${id} is member.`
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).send({
+        message: "Error retrieving Project with error: " + err
+      });
+    });
+};
+
+// Find a single Tutorial with an id
+exports.findOwnerAll = (req, res) => {
+  const userId = req.userId;
+
+  Project.findAll({ where: { owner_id: userId }, attributes: ['id', 'project_name', 'start_date', 'end_date', 'budget', 'status'] })
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find Project in which user id=${id} is owner.`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error retrieving Priject with id=" + id
+        message: "Error retrieving Project with error: " + err
       });
     });
 };
@@ -263,22 +308,22 @@ exports.delete = (req, res) => {
   const id = req.params.projectId;
 
   Project.destroy({
-    where: { id: id }
+    where: { id: id },
   })
-    .then(num => {
+    .then((num) => {
       if (num == 1) {
         res.send({
-          message: "Tutorial was deleted successfully!"
+          message: "Tutorial was deleted successfully!",
         });
       } else {
         res.send({
-          message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`
+          message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`,
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message: "Could not delete Tutorial with id=" + id
+        message: "Could not delete Tutorial with id=" + id,
       });
     });
 };
@@ -287,15 +332,15 @@ exports.delete = (req, res) => {
 exports.deleteAll = (req, res) => {
   Project.destroy({
     where: {},
-    truncate: false
+    truncate: false,
   })
-    .then(nums => {
+    .then((nums) => {
       res.send({ message: `${nums} Tutorials were deleted successfully!` });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all tutorials."
+          err.message || "Some error occurred while removing all tutorials.",
       });
     });
 };
@@ -303,38 +348,37 @@ exports.deleteAll = (req, res) => {
 // find all published Tutorial
 exports.findAllPublished = (req, res) => {
   Project.findAll({ where: { published: true } })
-    .then(data => {
+    .then((data) => {
       res.send(data);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving tutorials."
+          err.message || "Some error occurred while retrieving tutorials.",
       });
     });
 };
 
 exports.createNull = (req, res) => {
-
   // Create a Project
   const project = {
-    project_name: '',
-    project_description: '',
-    start_date: '01/01/2001',
-    end_date: '02/02/2002',
+    project_name: "",
+    project_description: "",
+    start_date: "01/01/2001",
+    end_date: "02/02/2002",
     budget: 0,
     status: 0,
   };
 
   // Save Project in the database
   Project.create(project)
-    .then(data => {
-      return res.json(data.id)
+    .then((data) => {
+      return res.json(data.id);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Tutorial."
+          err.message || "Some error occurred while creating the Tutorial.",
       });
     });
 };

@@ -87,6 +87,7 @@ const FindFreelancer = () => {
         return posts;
     }
   };
+  console.log('filteredPosts', filteredPosts); 
 
   return (
     <>

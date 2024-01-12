@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import "./aboutUs.css";
 import banner from "../../assets/banner.jpg";
 import Slider from "react-slick";
@@ -8,7 +8,61 @@ import avatar from "../../assets/avatar_green.png";
 import { StarRating } from "@/components";
 import human from "../../assets/Human.png";
 import { Carousel, CarouselItem } from "react-bootstrap";
+import userDataServices from "../../services/userDataServices";
+import bidService from "@/services/bidServices";
+
 const AboutUs = () => {
+
+  const [userCount, setUserCount] = useState(0);
+  const [acceptedBidCount, setAcceptedBidCount] = useState(0);
+  const [waitingBidCount, setWaitingBidCount] = useState(0);
+  const [acceptedContactCount, setAcceptedContactCount] = useState(0);
+
+
+  useEffect(() => {
+    const fetchUserCount = async () => {
+      try {
+        const users = await userDataServices.findAll(); // Call the findAll method
+        console.log("users num:",  users.data.length);
+        setUserCount(users.data.length); // Set the userCount state to the length of the users array
+      } catch (error) {
+        console.error("Error fetching user count:", error);
+      }
+    };
+    const fetchAcceptedBidCount = async () => {
+      try {
+        const accepted_user_id = await bidService.getDistinctUserIdsByStatus(1); // Call the findAll method
+        console.log("accepted bid:",  accepted_user_id.data.length);
+        setAcceptedBidCount(accepted_user_id.data.length); // Set the userCount state to the length of the users array
+      } catch (error) {
+        console.error("Error fetching accepted_user_id:", error);
+      }
+    };
+    const fetchWaitingBidCount = async () => {
+      try {
+        const waiting_user_id = await bidService.getDistinctUserIdsByStatus(0); // Call the findAll method
+        console.log("waiting bid:",  waiting_user_id.data.length);
+        setWaitingBidCount(waiting_user_id.data.length); // Set the userCount state to the length of the users array
+      } catch (error) {
+        console.error("Error fetching waiting_user_id:", error);
+      }
+    };
+    const fetchAcceptedContactCount = async () => {
+      try {
+        const accepted_client_id = await bidService.getDistinctUserIdsByStatus(1); // Call the findAll method
+        console.log("accepted bid:",  accepted_client_id.data.length);
+        setAcceptedContactCount(accepted_client_id.data.length); // Set the userCount state to the length of the users array
+      } catch (error) {
+        console.error("Error fetching accepted_client_id:", error);
+      }
+    };
+    fetchAcceptedContactCount();
+    fetchWaitingBidCount();
+    fetchAcceptedBidCount();
+    fetchUserCount();
+  }, []);
+
+  
 
   const carousel_settings = {
     dots: true,
@@ -37,6 +91,7 @@ const AboutUs = () => {
       },
     ],
   };
+
   return (
     <div className="about-us">
       <div className="div">
@@ -168,24 +223,30 @@ const AboutUs = () => {
           </CarouselItem>
         </Carousel>
       </div>
-      {/* <div className="group-wrapper">
-        <div className="group-2">
-          <div className="overlap-group-2">
-            <div className="carousel-icon">
-              <div className="ellipse-2" />
-              <div className="ellipse-3" />
-              <div className="ellipse-4" />
+      <div className="StatisticSection">
+        <div className="inner-post">
+          <div className="text-wrapper-10">Our Achievements</div>
+          <div className="result-container">
+            <div className="row">
+              <div className="text-wrapper-7 col-9">Total Users: </div>
+              <div className="col-3">{userCount} </div>
             </div>
-            <img className="img" alt="Rectangle" src="rectangle-2844.png" />
-            <img className="rectangle-2" alt="Rectangle" src="rectangle-2845.svg" />
-            <img className="rectangle-3" alt="Rectangle" src="rectangle-2846.svg" />
-            <div className="text-wrapper-7">People having a job</div>
-            <p className="text-wrapper-8">Type of user in our web</p>
-            <div className="text-wrapper-9">People waiting</div>
+            <div className="row">
+              <div className="text-wrapper-7  col-9">People having a job: </div>
+              <div className="col-3">{acceptedBidCount} </div>
+            </div>
+            {/* <div className="row">
+              <div className="text-wrapper-7  col-9">People waiting: </div>
+              <div className="col-3">{waitingBidCount} </div>
+            </div> */}
+            <div className="row">
+              <div className="text-wrapper-7  col-9">Clients find their freelancers: </div>
+              <div className="col-3">{acceptedContactCount} </div>
+            </div>
           </div>
-          <div className="text-wrapper-10">Our site’s results</div>
+          
         </div>
-      </div> */}
+      </div>
 
       
     </div>

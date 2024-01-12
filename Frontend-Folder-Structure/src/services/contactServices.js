@@ -1,7 +1,14 @@
 import { http } from "./http-common";
 
 const create = (data) => {
-    return http.post("/contact", data);
+    const access_token = localStorage.getItem('AUTH_TOKEN');
+    console.log("access_token: ", access_token);
+    return http.post("/contact", data, {
+        headers: {
+            "Content-type": 'application/json',
+            "x-access-token": access_token
+            },
+    });
 };
 
 const findAll = () => {
@@ -26,19 +33,29 @@ const countBids = freelancer_post_id => {
 }
 
 const changeContactStatus = (contact_id, status) => {
-  return http.put("/contact/changeContactStatus/" + contact_id + "/" + status);
+  const access_token = localStorage.getItem('AUTH_TOKEN');
+  return http.put("/contact/changeContactStatus/" + contact_id + "/" + status, {
+    headers: {
+      "Content-type": "application/json",
+      "x-access-token": access_token,
+    },
+  });
 }
 
 const showContactByContactId = contact_id => {
   return http.get(`/contact/showContact/${contact_id}`);
 }
 
+const getDistinctClientIdsByStatus = status => {
+  return http.get(`/contact/getDistinctClientIdsByStatus/${status}`);
+};
 
 const contactService = {
     create,
     findAll,
     findOne,
     findAllBids,
+    getDistinctClientIdsByStatus,    
     countBids,
     findZeroStatusBids,
     changeContactStatus,

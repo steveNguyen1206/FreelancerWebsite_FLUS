@@ -5,17 +5,28 @@ import categoryService from '@/services/categoryService';
 import { useState } from 'react';
 
 const AddCategory = ({ m_state, m_function, fetchFunction }) => {
-  const [categoryName, setCategoryName] = useState('');
+  const initState = {
+    name: '', // Tên category
+    img: null // Lấy file ảnh luôn
+  };
+
   const [errorMessage, setErrorMessage] = useState('');
+  const [newCategory, setNewCategory] = useState(initState);
+  
+  const handleCategoryNameChange = (event) => {
+    // remove invalid space in the input
+    const { name, value } = event.target;
+    setNewCategory({...newCategory, [name]: value.trim()});
+  };
+
+  const handleFileChange = (event) => {
+    setNewCategory({...newCategory, img: event.target.files[0]});
+  };
 
   const handleAddCategory = (event) => {
       // call api to add category
-      const data = {
-          name: categoryName,
-        };
-        console.log(data);
     categoryService
-      .create(data)
+      .create(newCategory)
       .then((response) => {
         console.log(response.data);
 
@@ -35,11 +46,6 @@ const AddCategory = ({ m_state, m_function, fetchFunction }) => {
     m_function(false);
   };
 
-  const handleCategoryNameChange = (event) => {
-    // remove invalid space in the input
-    setCategoryName(event.target.value.trim());
-    console.log(categoryName);
-  };
 
   return (
     <div className="cate-main-container">
@@ -55,31 +61,26 @@ const AddCategory = ({ m_state, m_function, fetchFunction }) => {
           </div>
 
           <div className="cate-info-field">
-            {/* <div className="input-container">
-                            <label for="inputCategory" class="form-label">
-                                Category Name
-                            </label>
-                            <select class="form-select" aria-label="Category Select">
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                            
-                        </div> */}
             <div className="input-container">
               <label for="inputCategory" class="form-label">
                 Category Name
               </label>
               <input
                 id="inputCategory"
-                name="categoryName"
+                name="name"
                 type="text"
                 class="form-control"
                 aria-label="CategoryName"
                 aria-describedby="basic-addon1"
                 onChange={handleCategoryNameChange}
               />
+            </div>
+
+            <div className="input-container">
+              <label for="inputCategory" class="form-label">
+                Category Image
+              </label>
+              <input name='img' className="chose-category-image" type="file" onChange={handleFileChange} />
             </div>
 
             <div className="add-category-button" onClick={handleAddCategory}>

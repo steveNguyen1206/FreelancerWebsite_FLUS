@@ -273,6 +273,28 @@ exports.findAllBids = (req, res) => {
 //         });
 // };
 
+
+exports.getDistinctClientIdsByStatus = (req, res) => {
+  const status = req.params.bid_status;
+  Contact.findAll({
+      attributes: [[db.Sequelize.fn('DISTINCT', db.Sequelize.col('client_id')), 'client_id']],
+      where: { status: status }
+  })
+      .then(data => {
+          res.status(200).send(data);
+      })
+      .catch(err => {
+          console.log("err: ", err);
+          res.status(500).send({
+              message:
+              err.message || "Some error occurred while retrieving distinct client_ids."
+          });
+      });
+}
+
+
+
+
 exports.countBids = (req, res) => {
   const post_id = req.params.freelancer_post_id;
   console.log(post_id);
