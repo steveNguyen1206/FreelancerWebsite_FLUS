@@ -71,8 +71,8 @@ isUser = (req, res, next) => {
     next();
 };
 
-const freelancerPostMiddleware = {
-    isOwnerPost: isOwnerPost,
+const contactMiddleware = {
+    isOwnerContact: isOwnerContact,
     isUser: isUser
 }
-module.exports = freelancerPostMiddleware;
+module.exports = contactMiddleware;
