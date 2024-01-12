@@ -3,10 +3,10 @@ const User = db.user;
 const FreelacerPost = db.freelancer_post;
 
 isOwnerPost = (req, res, next) => {
-    const id = req.params.freelancerPostId;
+    const id = req.params.id;
     const userId = req.userId;
     // console.log(id, userId)
-    Project.findOne({where: {id: id}, attributes: ["freelancer_id"]})
+    FreelacerPost.findOne({where: {id: id}, attributes: ["freelancer_id"]})
     .then((data) => {
         console.log(data.freelancer_id)
         if(data.freelancer_id == userId)
