@@ -8,6 +8,8 @@ import banUserActive from "../../assets/banUser_active.png";
 import eyeLight from "../../assets/eyeLight.png";
 import avatar_green from "../../assets/avatar_green.png";
 import userDataService from "../../services/userDataServices";
+import projectPostServices from "@/services/projectPostServices";
+import freelancerPostService from "@/services/freelancerPostServices";
 
 const UserRow = ({ user, refreshUsers, setRefreshUsers }) => {
     
@@ -22,6 +24,7 @@ const UserRow = ({ user, refreshUsers, setRefreshUsers }) => {
         userDataService.removeUserByAccName(account_name)
             .then((response) => {
                 setRefreshUsers((prev) => !prev);
+                
             })
             .catch((error) => {
                 console.error(error);
@@ -42,6 +45,22 @@ const UserRow = ({ user, refreshUsers, setRefreshUsers }) => {
                 console.log("Status changed: ", newStatus);
                 setActive(newStatus);
                 setRefreshUsers((prev) => !prev);
+                //Change status of project post of user id
+                projectPostServices.findAndChangeStatusByUserID(id, newStatus)
+                .then((response) => {
+                    console.log("Status changed project post: ", newStatus);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+                //Change status of freelancer post of user id
+                freelancerPostService.findAndChangeStatusByUserID(id, newStatus)
+                .then((response) => {
+                    console.log("Status changed freelancer post: ", newStatus);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
             })
             .catch((error) => {
                 console.error(error);

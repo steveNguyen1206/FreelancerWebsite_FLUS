@@ -19,6 +19,7 @@ const ProjectPostRow = ({
     projectTagsId,
     projectDetail,
     projectBudget,
+    projectStatus,
     userID,
     handleBidClick,
     setRefreshProjPosts,
@@ -56,7 +57,7 @@ const ProjectPostRow = ({
       // console.log('project tag: ', projectTagsData.data.subcategory_name);
     };
 
-    const [active, setActive] = useState(status); // State to trigger refresh
+    const [active, setActive] = useState(projectStatus); // State to trigger refresh
     const handleChangeStatus = () => {
         const newStatus = active === 0 ? 1 : 0; // Change the logic based on your requirements
         projectPostServices.changeStatusByID(projectId, newStatus)

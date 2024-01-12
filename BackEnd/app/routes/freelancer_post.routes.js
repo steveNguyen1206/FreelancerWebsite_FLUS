@@ -41,6 +41,8 @@ module.exports = app => {
     // Delete a Projpost with id
     router.delete("/deletefreepost/:id", freelancer_post.deleteById);
 
+    //Update post status by user id
+    router.put("/findAndChangeStatus/:userId&:status", freelancer_post.findAndChangeStatus);
 
     app.use('/api/freelancer_post', router);
   };

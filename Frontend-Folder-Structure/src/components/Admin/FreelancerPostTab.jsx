@@ -90,6 +90,7 @@ const FreelancerPostTab = () => {
                         freepostTagsId={post.skill_tag}
                         freepostDescription={post.skill_description}
                         freepostBudget={post.lowest_price}
+                        freepostStatus={post.status}
                         userID={post.freelancer_id}
                         setRefreshFreePosts={setRefreshFreePosts}
                         handleViewClick={() => {

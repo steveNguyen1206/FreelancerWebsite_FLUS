@@ -56,6 +56,10 @@ const removePostById = (id) => {
   return http.delete(`/project_post/deleteprojpost/${id}`);
 };
 
+const findAndChangeStatusByUserID = (user_id, status) => {
+  return http.put("/project_post/findAndChangeStatus/" + user_id + "&" + status);
+};
+
 const projectPostServices = {
   sendProject,
   getAllProjects,
@@ -65,6 +69,7 @@ const projectPostServices = {
   findProjPostsByPage,
   changeStatusByID,
   removePostById,
+  findAndChangeStatusByUserID,
 };
 
 export default projectPostServices;

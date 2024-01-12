@@ -90,6 +90,7 @@ const ProjectPostTab = () => {
                         projectTagsId={project.tag_id}
                         projectDetail={project.detail}
                         projectBudget={[project.budget_min, project.budget_max]}
+                        projectStatus={project.status}
                         userID={project.user_id}
                         setRefreshProjPosts={setRefreshProjPosts}
                         handleBidClick={() => {

@@ -1,11 +1,11 @@
-import http from "../http-common";
+import http from "./http-common";
 
-const findAndChangeStatus = (user_id, status) => {
-    return http.get("/freelancer_post/findAndChangeStatus/" + user_id + "&" + status);
+const findAndChangeStatusByUserID = (user_id, status) => {
+    return http.put("/freelancer_post/findAndChangeStatus/" + user_id + "&" + status);
 };
 
 const freelancerPostService = {
-    findAndChangeStatus,
+    findAndChangeStatusByUserID,
 };
   
   export default freelancerPostService;

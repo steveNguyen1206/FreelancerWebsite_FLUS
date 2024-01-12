@@ -20,6 +20,7 @@ const FreelancerPostRow = ({
     freepostTagsId,
     freepostDescription,
     freepostBudget,
+    freepostStatus,
     userID, 
     handleViewClick,
     setRefreshFreePosts,
@@ -57,9 +58,9 @@ const FreelancerPostRow = ({
       // console.log('freepost tag: ', freepostTagsData.data.subcategory_name);
     };
 
-    const [active, setActive] = useState(status); // State to trigger refresh
+    const [active, setActive] = useState(freepostStatus); // State to trigger refresh
     const handleChangeStatus = () => {
-        const newStatus = active === 0 ? 1 : 0; // Change the logic based on your requirements
+        const newStatus = active == 0 ? 1 : 0; // Change the logic based on your requirements
         freelancer_post_Service.changeStatusByID(freepostId, newStatus)
             .then((response) => {
                 console.log("Status changed: ", newStatus);
@@ -135,7 +136,7 @@ const FreelancerPostRow = ({
                 <div className="btn-row">
                     <div class="col">
                         <img class="recycle-bin" alt="Recycle bin" src={recycleBin} onClick={handleRemoveProjPost}/>
-                        <img className="ban-icon" src={active === 0 ? banUserActive : banUser} onClick={handleChangeStatus} />
+                        <img className="ban-icon" src={active == 0 ? banUserActive : banUser} onClick={handleChangeStatus} />
                         <img class="eye-light" onClick={handleViewClick} src={eyeLight}/>
 
                     </div>
