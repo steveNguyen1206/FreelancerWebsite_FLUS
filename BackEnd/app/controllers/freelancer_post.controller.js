@@ -421,7 +421,7 @@ exports.getFreelancerEmail = (req, res) => {
         ? {
             [Op.or]: [
               { title: { [Op.like]: `%${searchKey}%` } },
-              { detail: { [Op.like]: `%${searchKey}%` } },
+              { skill_description: { [Op.like]: `%${searchKey}%` } },
             ],
           }
         : null;

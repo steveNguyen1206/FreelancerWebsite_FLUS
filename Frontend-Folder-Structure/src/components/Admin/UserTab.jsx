@@ -12,6 +12,7 @@ const UserTab = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [refreshUsers, setRefreshUsers] = useState(false); // State to trigger refresh
     const [searchKey, setSearchKey] = useState(""); // State for search key
+    const [noMatching, setNoMatching] = useState(false); // State for search key
 
     const fetchUsers = async () => {
         try {
@@ -22,6 +23,11 @@ const UserTab = () => {
             console.log("totalPages: ", totalPages);
             setUsers(users);
             setTotalPages(totalPages);
+            if(users.length == 0) {
+                setNoMatching(true);
+            }else{
+                setNoMatching(false);
+            }
         } catch (error) {
             console.error(error);
         }
@@ -79,6 +85,7 @@ const UserTab = () => {
                     <div className="text-wrapper-27 col">Registration Date</div>
                     <div className="col"></div>
                 </div>
+                {noMatching && (<div style={{color:"red", textAlign:"center", width:"100%"}}>No matching results</div>)}
                 <div className="table-user">
                     {users.map(user => (
                         <UserRow key={user.id} user={user} refreshUsers={refreshUsers}
