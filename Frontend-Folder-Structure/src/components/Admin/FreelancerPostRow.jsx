@@ -11,6 +11,7 @@ import banUser from '../../assets/banUser.png';
 import banUserActive from '../../assets/banUser_active.png';
 import recycleBin from '../../assets/recycleBin.png';
 import freelancer_post_Service from '@/services/freelancer_post_Service';
+import avatar_green from '../../assets/avatar_green.png';
 
 
 const FreelancerPostRow = ({
@@ -89,7 +90,7 @@ const FreelancerPostRow = ({
             <div className="left-post">
             <div className="pheader">
                 <div className="pprofile">
-                <img src={ownerProject.avt_url} alt="profile" />
+                <img src={ownerProject.avt_url != "https://imgur.com/gallery/ApNKGxs" ? ownerProject.avt_url : avatar_green} alt="profile" />
                 <div className="pname">{ownerProject.profile_name} </div>
                 <div className="pusername">({ownerProject.account_name})</div>
                 <div className="plocation">

@@ -11,6 +11,7 @@ import banUser from '../../assets/banUser.png';
 import banUserActive from '../../assets/banUser_active.png';
 import recycleBin from '../../assets/recycleBin.png';
 import projectPostServices from '@/services/projectPostServices';
+import avatar_green from '../../assets/avatar_green.png';
 
 
 const ProjectPostRow = ({
@@ -89,7 +90,7 @@ const ProjectPostRow = ({
           <div className="post-header">
             <div className="post-profile">
               {/* {console.log('owner project: ', ownerProject)} */}
-              <img className='img-post' src={ownerProject.avt_url} alt="profile" />
+              <img className='img-post' src={ownerProject.avt_url != "https://imgur.com/gallery/ApNKGxs" ? ownerProject.avt_url : avatar_green} alt="profile" />
               <div className="post-name">{ownerProject.account_name}</div>
               <div className="post-username">({ownerProject.profile_name})</div>
               <div className="post-location">
