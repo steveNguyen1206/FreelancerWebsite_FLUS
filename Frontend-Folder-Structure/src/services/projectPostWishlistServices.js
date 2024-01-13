@@ -1,26 +1,44 @@
-import http from "./http-common";
+import http from './http-common';
 
-const create = (userId, projectPostId) => {
-    return http.post(`/wishlist/${userId}/${projectPostId}`);
-}
+const create = (projectPostId, access_token) => {
+  return http.post(`/wishlist/${projectPostId}`, {}, {
+    headers: {
+      'Content-Type': 'application/json',
+      'x-access-token': access_token,
+    },
+  });
+};
 
+const remove = (projectPostId, access_token) => {
+  return http.delete(`/wishlist/${projectPostId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      'x-access-token': access_token,
+    },
+  });
+};
 
-const remove = (userId, projectPostId) => {
-    return http.delete(`/wishlist/${userId}/${projectPostId}`);
-}
+const getWishlistByUserId = (access_token) => {
+  return http.get(`/wishlist/get_wishlist/`, {
+    headers: {
+      'Content-Type': 'application/json',
+      'x-access-token': access_token,
+    },
+  });
+};
 
-const getWishlistByUserId = (userId) => {
-    console.log(userId);
-    return http.get(`/wishlist/get_wishlist/${userId}`);
-}
-
-const isExisted = (userId, projectPostId) => {
-    return http.get(`/wishlist/is_existed/${userId}/${projectPostId}`);
-}
+const isExisted = (projectPostId, access_token) => {
+  return http.get(`/wishlist/is_existed/${projectPostId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      'x-access-token': access_token,
+    },
+  });
+};
 
 export default {
-    create,
-    remove,
-    getWishlistByUserId,
-    isExisted,
+  create,
+  remove,
+  getWishlistByUserId,
+  isExisted,
 };

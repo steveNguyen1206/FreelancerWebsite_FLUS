@@ -3,7 +3,6 @@ import { WhiteButton } from '@/components';
 import './hireFreelancer.css';
 import exitButton from '../../assets/exitButton.png';
 import UploadIcon from '../../assets/UploadIcon.png';
-// import projectServices from '@/services/projectPostServices';
 import subcategoryService from '@/services/subcategoryService';
 import userDataService from '@/services/userDataServices';
 import freelancer_post_Service from '@/services/freelancer_post_Service';

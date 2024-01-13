@@ -33,7 +33,7 @@ exports.create = (req, res) => {
     status: 0,
     owner_id: req.body.owner,
     member_id: req.body.member,
-    // created_bid_id: req.body.bid_id,
+    created_bid_id: req.body.bid_id,
     created_contact_id: req.body.contact_id,
     tag_id: req.body.tag_id,
   };
