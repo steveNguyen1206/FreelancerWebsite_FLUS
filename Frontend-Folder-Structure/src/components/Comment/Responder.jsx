@@ -21,13 +21,7 @@ const calculateTimeDifference = (dateCreated) => {
   return { days, hours, minutes, seconds };
 };
 
-const Responder = ({ user_id, commentContent, dateCreated }) => {
-  const [user, setUser] = useState('');
-
-  useEffect(() => {
-    fetchUser();
-  }, [user_id]);
-
+const Responder = ({ user, userRating, commentContent, dateCreated }) => {
   const timeDifference = calculateTimeDifference(dateCreated);
   const timeDifferenceArray = Object.values(timeDifference);
   const timeDifferenceArrayLength = timeDifferenceArray.length;
@@ -57,33 +51,6 @@ const Responder = ({ user_id, commentContent, dateCreated }) => {
     }
   }
 
-  const fetchUser = async () => {
-    try {
-      const userData = await userDataService.findOnebyId(user_id);
-      setUser(userData.data);
-      console.log('user dataaaaaaaa: ', userData.data);
-    } catch (error) {
-      console.error('Error fetching user:', error);
-    }
-  };
-
-  // get rating of user
-  const [rating, setRating] = useState([]);
-
-  useEffect(() => {
-    fetchRating();
-  }, [user_id]);
-
-  const fetchRating = async () => {
-    try {
-      const ratingData = await reviewService.getRatingFreelancer(user_id);
-      setRating(ratingData.data);
-      console.log('rating data: ', ratingData.data);
-    } catch (error) {
-      console.error('Error fetching rating:', error);
-    }
-  };
-
   return (
     <>
       <div className="responder">
@@ -101,10 +68,8 @@ const Responder = ({ user_id, commentContent, dateCreated }) => {
           </div>
         </div>
         <div className="comment-star">
-          <StarRating
-            rating={rating.average_rating === null ? 0 : rating.average_rating}
-          />
-          <p>{rating.average_rating}</p>
+          <StarRating rating={userRating} />
+          <p>{userRating}</p>
         </div>
 
         <div className="comment-content">

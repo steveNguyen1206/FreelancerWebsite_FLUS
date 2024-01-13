@@ -23,31 +23,34 @@ const bidProject = (data, access_token) => {
   });
 };
 
-const findBidByProjectPostId = (project_id, access_token) => {
-  return http.get('/bid/findBidByProjectId/' + project_id, {
-    headers: {
-      'Content-Type': 'application/json',
-      'x-access-token': access_token,
-    },
-  });
+const findBidByProjectPostId = (project_id) => {
+  return http.get('/bid/findBidByProjectId/' + project_id);
 };
 
 const acceptBid = (bid_id, access_token) => {
-  return http.put('/bid/acceptBid/' + bid_id,{}, {
-    headers: {
-      'Content-Type': 'application/json',
-      'x-access-token': access_token,
-    },
-  });
+  return http.put(
+    '/bid/acceptBid/' + bid_id,
+    {},
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': access_token,
+      },
+    }
+  );
 };
 
 const rejectBid = (bid_id, access_token) => {
-  return http.put('/bid/rejectBid/' + bid_id,{}, {
-    headers: {
-      'Content-Type': 'application/json',
-      'x-access-token': access_token,
-    },
-  });
+  return http.put(
+    '/bid/rejectBid/' + bid_id,
+    {},
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': access_token,
+      },
+    }
+  );
 };
 
 const getNumOfBid = (project_id, access_token) => {
@@ -58,7 +61,6 @@ const getNumOfBid = (project_id, access_token) => {
     },
   });
 };
-
 
 const changeOtherBidStatus = (bid_id, status, access_token) => {
   return http.put('/bid/changeOtherBidStatus/' + bid_id + '/' + status, {

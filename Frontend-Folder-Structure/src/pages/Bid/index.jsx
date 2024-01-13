@@ -130,7 +130,6 @@ const BidPopup = ({ isOpen, isClose, projectPostId, onChange, budgetMin, budgetM
 
   const handleDoneClick = () => {
     if (validateForm()) {
-      console.log('bid: ', bid);
       bidServices
         .bidProject(bid, localStorage.getItem('AUTH_TOKEN'))
         .then(() => {

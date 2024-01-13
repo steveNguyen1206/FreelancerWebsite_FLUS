@@ -46,7 +46,7 @@ const Project = () => {
   useEffect(() => {
     projectPostServices.getOnebyId(id).then((response) => {
       setProject(response.data);
-      console.log('response: ', response.data);
+      // console.log('response: ', response.data); ok 
       setLoading(true);
     });
   }, [id]);
@@ -134,7 +134,7 @@ const Project = () => {
     }
   }, [project]);
 
-  if (project.status != 1) navigate(`/job`);
+  
 
   if (loading)
     return (
@@ -149,15 +149,16 @@ const Project = () => {
             }}
           />
         )}
-
         {isDetailOpen && (
           <BidDetailPopup
             setPopUpAppear={setIsDetailOpen}
-            project_post_id={id}
             onChange={() => {
               setIsChangeBid(!isChangeBid);
             }}
             bidProject={bidProject}
+            projectPost={project}
+            isOwnerProjectPost={isOwnerProjectPost}
+            onChangeProjectId={onChangeProjectId}
           />
         )}
 
@@ -249,9 +250,6 @@ const Project = () => {
                 Edit
               </button>
             )}
-            {/* <button onClick={handleEditProject} className="button-edit">
-              Edit
-            </button> */}
             <div className="job-profile">
               <div className="right-profile">
                 <img src={project.user.avt_url} alt="profile" />

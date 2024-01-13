@@ -233,12 +233,6 @@ db.comment_proj.belongsTo(db.user, {
   onUpdate: "CASCADE",
 });
 
-db.comment_proj.belongsTo(db.user,{
-  foreignKey: "parent_id",
-  onDelete: "CASCADE",
-  onUpdate: "CASCADE",
-})
-
 db.comment_proj.belongsTo(db.comment_proj, {
   foreignKey: {
     name: "parent_id",

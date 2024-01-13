@@ -6,7 +6,6 @@ const projectPost = db.project_post;
 const review = db.review;
 const Project = db.projects;
 
-
 exports.create = (req, res) => {
   console.log("req.body: ", req.body);
 
@@ -29,7 +28,6 @@ exports.create = (req, res) => {
     skill_tag: req.body.skill_id,
   };
 
-
   Bid.create(bid)
     .then((data) => {
       res.status(200).send(data);
@@ -43,13 +41,12 @@ exports.create = (req, res) => {
 
 exports.findBidByProjectId = (req, res) => {
   const project_id = req.params.project_id;
-
   Bid.findAll({
     where: { proj_post_id: project_id, status: 0 },
     include: [
       {
         model: db.user,
-        attributes: ["id", "account_name", "email", "avt_url"],
+        attributes: ["id", "account_name", "email", "avt_url", "profile_name"],
       },
 
       {
@@ -158,7 +155,12 @@ exports.acceptBid = (req, res) => {
 
       let endDate = new Date(project.start_date);
       endDate.setDate(endDate.getDate() + duration);
-      let endDateString = endDate.getFullYear() + "-" + (endDate.getMonth() + 1) + "-" + endDate.getDate();
+      let endDateString =
+        endDate.getFullYear() +
+        "-" +
+        (endDate.getMonth() + 1) +
+        "-" +
+        endDate.getDate();
 
       projectData.end_date = endDateString;
       projectData.tag_id = project.tag_id;
@@ -170,12 +172,15 @@ exports.acceptBid = (req, res) => {
     })
     .then((newProject) => {
       // Update all other bids for the project post to -1
-      return Bid.update({ status: -1 }, { where: { proj_post_id: projectPostId, id: { [Op.ne]: bid_id } } })
-        .then(() => newProject);
+      return Bid.update(
+        { status: -1 },
+        { where: { proj_post_id: projectPostId, id: { [Op.ne]: bid_id } } }
+      ).then(() => newProject);
     })
     .then((newProject) => {
       // Update the status of the project post to -1
-      return projectPost.update({ status: 0 }, { where: { id: projectPostId } })
+      return projectPost
+        .update({ status: 0 }, { where: { id: projectPostId } })
         .then(() => newProject);
     })
     .then((newProject) => {
@@ -191,7 +196,6 @@ exports.acceptBid = (req, res) => {
     });
 };
 
-
 exports.rejectBid = (req, res) => {
   const bid_id = req.params.bid_id;
 
@@ -206,4 +210,4 @@ exports.rejectBid = (req, res) => {
         message: err.message || "Some error occurred while reject bid.",
       });
     });
-}
+};

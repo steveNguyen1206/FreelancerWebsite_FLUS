@@ -4,7 +4,14 @@ import { Bid, StarRating } from '@/components';
 import { useEffect, useState } from 'react';
 import BidDetailTag from '@/components/Bid/bidDetailTag';
 
-const BidDetailPopup = ({ setPopUpAppear, project_post_id, onChange, bidProject}) => {
+const BidDetailPopup = ({
+  setPopUpAppear,
+  onChange,
+  bidProject,
+  projectPost,
+  isOwnerProjectPost,
+  onChangeProjectId
+}) => {
   const handleExitClick = () => {
     setPopUpAppear(false);
     onChange();
@@ -33,22 +40,12 @@ const BidDetailPopup = ({ setPopUpAppear, project_post_id, onChange, bidProject}
           {bidProject.map((bid) => (
             <BidDetailTag
               key={bid.id}
-              bidId={bid.id}
-              accout_name={bid.user.account_name}
-              profileImage={bid.user.avt_url}
-              username={bid.user.profile_name}
-              message={bid.message}
-              startDate={new Date(bid.createdAt).toISOString().split('T')[0]}
-              endDate={
-                new Date(
-                  new Date(bid.createdAt).getTime() + bid.duration * 86400000
-                )
-                  .toISOString()
-                  .split('T')[0]
-              }
-              avgRating={bid.user.averageStar}
-              price={bid.price}
+              project={projectPost}
+              bid={bid}
               onChangeBid={() => setIsChange(!isChange)}
+              isOwnerProjectPost={isOwnerProjectPost}
+              onChangeProjectId={onChangeProjectId}
+              
             />
           ))}
         </div>

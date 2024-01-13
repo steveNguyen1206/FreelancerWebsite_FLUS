@@ -91,6 +91,8 @@ const Job = () => {
     setSelectedRange(newSelectedRange);
   };
 
+
+  console.log('projects', projects)
   return (
     <>
       {isOpen && (

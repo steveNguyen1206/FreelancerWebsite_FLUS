@@ -2,10 +2,6 @@ import './CommentProjectPost.css';
 import vietnam from '../../assets/vietnam.png';
 import { StarRating } from '..';
 import { useEffect, useState } from 'react';
-import userDataService from '../../services/userDataServices';
-import reviewService from '@/services/reviewServices';
-import commentService from '@/services/commentServices';
-
 const calculateTimeDifference = (dateCreated) => {
   const now = new Date();
   const createdDate = new Date(dateCreated);
@@ -23,14 +19,15 @@ const calculateTimeDifference = (dateCreated) => {
 };
 
 const Commentator = ({
-  user_id,
+  user,
+  userRating,
   commentContent,
   dateCreated,
   comment_id,
   project_post_id,
   handleResponderSubmit,
+  isLogin,
 }) => {
-  const [user, setUser] = useState('');
   const [isReplyOpen, setIsReplyOpen] = useState(false);
   const [replyText, setReplyText] = useState('');
 
@@ -45,7 +42,7 @@ const Commentator = ({
 
   const handleSendClick = () => {
     
-    handleResponderSubmit(replyText, project_post_id, user_id, comment_id);
+    handleResponderSubmit(replyText, project_post_id, comment_id);
     setIsReplyOpen(false);
     setReplyText('');
   };
@@ -80,36 +77,6 @@ const Commentator = ({
     }
   }
 
-  useEffect(() => {
-    fetchUser();
-  }, [user_id]);
-
-  const fetchUser = async () => {
-    try {
-      const userData = await userDataService.findOnebyId(user_id);
-      setUser(userData.data);
-      console.log('user data: ', userData.data);
-    } catch (error) {
-      console.error('Error fetching user:', error);
-    }
-  };
-
-  const [rating, setRating] = useState([]);
-
-  useEffect(() => {
-    fetchRating();
-  }, [user_id]);
-
-  const fetchRating = async () => {
-    try {
-      const ratingData = await reviewService.getRatingFreelancer(user_id);
-      setRating(ratingData.data);
-      console.log('rating data: ', ratingData.data);
-    } catch (error) {
-      console.error('Error fetching rating:', error);
-    }
-  };
-
   return (
     <>
       <div className="commentator">
@@ -128,9 +95,9 @@ const Commentator = ({
         </div>
         <div className="comment-star">
           <StarRating
-            rating={rating.average_rating === null ? 0 : rating.average_rating}
+            rating={userRating}
           />
-          <p>{rating.average_rating}</p>
+          <p>{userRating}</p>
         </div>
         <div className="comment-content">
           <p>{commentContent}</p>
@@ -152,7 +119,7 @@ const Commentator = ({
             </>
           ) : (
             <button className="reply-btn" onClick={handleReplyClick}>
-              Reply
+              {isLogin && 'Reply'}
             </button>
           )}
         </div>
