@@ -46,7 +46,7 @@ const Project = () => {
   useEffect(() => {
     projectPostServices.getOnebyId(id).then((response) => {
       setProject(response.data);
-      // console.log('response: ', response.data); ok 
+      // console.log('response: ', response.data); ok
       setLoading(true);
     });
   }, [id]);
@@ -133,8 +133,6 @@ const Project = () => {
       }
     }
   }, [project]);
-
-  
 
   if (loading)
     return (
@@ -236,7 +234,7 @@ const Project = () => {
               <div className="comment-title">
                 <p>Comments</p>
                 <div className="proj-comment-detail">
-                  <CommentProject project_post_id={id}/>
+                  <CommentProject project_post_id={id} />
                 </div>
               </div>
               <div className="proj-line">
@@ -300,14 +298,16 @@ const Project = () => {
               </div>
 
               <div className="btn-bid-and-wish">
-                <button
-                  onClick={() => {
-                    setIsOpenBid(true);
-                  }}
-                  className="button-bid-project"
-                >
-                  Bid
-                </button>
+                {!isOwnerProjectPost && (
+                  <button
+                    onClick={() => {
+                      setIsOpenBid(true);
+                    }}
+                    className="button-bid-project"
+                  >
+                    Bid
+                  </button>
+                )}
                 <button
                   className="button-wish-project"
                   onClick={handleLikeClick}
