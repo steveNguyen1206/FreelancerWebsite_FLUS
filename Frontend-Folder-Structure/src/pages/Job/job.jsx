@@ -30,7 +30,7 @@ const Job = () => {
   const fetchProjects = async () => {
     try {
       const projectsData = await projectPostServices.getAll();
-      console.log('projectsData', projectsData);
+      // console.log('projectsData', projectsData);
       setProjects(projectsData.data);
     } catch (error) {
       console.error('Error fetching projects:', error);
