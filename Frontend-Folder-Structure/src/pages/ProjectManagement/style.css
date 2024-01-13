@@ -719,4 +719,8 @@
   .detail-container h4:hover {
     cursor: pointer;
   }
-  
+
+  .my-rating > span {
+    margin: 0 16px;
+  }
+

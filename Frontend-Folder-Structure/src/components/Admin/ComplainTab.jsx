@@ -8,6 +8,7 @@ import Pagination from '@mui/material/Pagination';
 import issueServices from "@/services/issueServices";
 import IssueRow from "./IssueRow";
 
+
 const ComplainTab = () => {
     const [issues, setIssues] = useState([]);
     const [page, setPage] = useState(1);
@@ -71,7 +72,7 @@ const ComplainTab = () => {
             <div className="overlap-5">
                 <div className="table-user">
                     {issues.map(issue => (
-                        <IssueRow key={issue.id} issue={issue} />
+                        <IssueRow key={issue.id} issue={issue} setRefreshIssues={setRefreshIssues} refreshIssues={refreshIssues} />
                     ))}
                 </div>
 

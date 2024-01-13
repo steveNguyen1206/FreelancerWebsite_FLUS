@@ -10,10 +10,9 @@ export const ProjectContent = () => {
 
   function calculateTimeProgress(startDateString, endDateString) {
     // Convert date strings to Date objects
-    console.log(endDateString)
     const startDate = new Date(startDateString);
     const endDate = new Date(endDateString);
-    console.log(startDateString, endDateString);
+    console.log("STATUS", project.status);
   
     // Get the current date
     const currentDate = new Date();
@@ -69,11 +68,11 @@ export const ProjectContent = () => {
 
             <div className="filed-container">
               <div className="label-text">Status</div>
-              <div className="value-text">{project.status == ProjectStatus.COMPLETED ? "Finished" : ( project.status == ProjectStatus.CANCELED ? "Failed" : "In progress")}</div>
+              <div className="value-text">{project.status == ProjectStatus.COMPLETED ? "Finished" : ( project.status == ProjectStatus.CANCELED ? "Failed" : ( project.status == ProjectStatus.CLOSED ? "Closed" : "In progress"))}</div>
             </div>  
             </div>
 
-            {project.status != ProjectStatus.COMPLETED && project.status != ProjectStatus.CANCELED &&
+            {project.status != ProjectStatus.COMPLETED && project.status != ProjectStatus.CANCELED && project.status != ProjectStatus.CLOSED &&
             (
             <div className="progress-container">
               <h4 className="title-text --size-20" >Progress</h4>
@@ -88,7 +87,7 @@ export const ProjectContent = () => {
             )}
 
             <div className="project-requirement-container">
-              <h4 className="title-text --size-20">Requierments</h4>
+              <h4 className="title-text --size-20">Requirements</h4>
               <p>{project.project_description}</p>
             </div>
 
