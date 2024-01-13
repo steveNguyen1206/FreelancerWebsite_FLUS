@@ -15,7 +15,9 @@ module.exports = app => {
     router.get("/", freelancer_post.findAll);
 
     router.get("/allposts/:freelancer_id", freelancer_post.findAllPosts);
-    router.get("/allposts/", freelancer_post.findAllPosts);
+
+    // router.get("/allposts/", freelancer_post.findAllPosts);
+    router.get("/allallposts/", freelancer_post.findAllAll);
   
     // Retrieve a single freelancer_post with id
     router.get("/:id", freelancer_post.findOne);
