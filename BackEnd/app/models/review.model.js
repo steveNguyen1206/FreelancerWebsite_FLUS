@@ -1,7 +1,7 @@
 module.exports = (sequelize, Sequelize) => {
     const Review = sequelize.define("review", {
       star: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         allowNull: false
       },
       comment: {

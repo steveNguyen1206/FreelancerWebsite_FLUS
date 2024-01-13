@@ -130,6 +130,11 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
       isValid = false;
     }
 
+    if (!isValidDate(updateProject.startDate)) {
+      newErrors.startDate = 'Invalid date. Please enter a valid date.';
+      isValid = false;
+    }
+
     if (!isValidTag(updateProject.tag_id)) {
       newErrors.tag_id = 'Project tag must be not empty.';
       isValid = false;

@@ -24,6 +24,7 @@ isMember = (req, res, next) => {
     })
 };
 
+
 isOwner = (req, res, next) => {
     const id = req.params.projectId ?  req.params.projectId :  req.body.id;
     const userId = req.userId;
@@ -68,11 +69,6 @@ isMemberOrOwner = (req, res, next) => {
 
     })
 };
-
-
-
-
-
 
 const projectMiddlware = {
     isMember: isMember,

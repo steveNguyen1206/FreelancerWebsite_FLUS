@@ -5,8 +5,6 @@ import starFull from "../../assets/StarRating/starFullGreen.png"
 import starEmpty from "../../assets/StarRating/starEmpty.png"
 import './star.css'
 
-
-
 const star = ({rating, width}) => {
     // const percentage = (rating / 5) * 100;
     return(

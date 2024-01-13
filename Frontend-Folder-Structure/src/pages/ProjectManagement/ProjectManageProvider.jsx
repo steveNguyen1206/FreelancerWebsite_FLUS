@@ -21,6 +21,8 @@ export const ProjectManageProvider = ({own, projectId, children }) => {
   const [projectTab, setProjectTab] = useState("general");
   const [reportId, setReportId] = useState(null);
   const [error, setError] = useState(null);
+  const [notis, setNotis] = useState([])
+
 
 
   const contextValue = {
@@ -30,7 +32,8 @@ export const ProjectManageProvider = ({own, projectId, children }) => {
     projectTab,
     setProjectTab,
     reportId, setReportId,
-    error, setError
+    error, setError,
+    notis, setNotis
   };
   console.log("project id", project.id);
 

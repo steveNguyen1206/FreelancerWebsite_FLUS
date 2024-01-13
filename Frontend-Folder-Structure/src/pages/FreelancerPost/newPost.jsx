@@ -7,52 +7,73 @@ import freelancer_post_Service from '@/services/freelancer_post_Service';
 import subcategoryService from '@/services/subcategoryService';
 import userDataService from '@/services/userDataServices';
 
-// const isValidTitle = (title) => {
-//   if (!title) return false;
-//   const titleRegex = /^[a-zA-Z0-9\s]*$/;
-//   return titleRegex.test(title);
-// };
+const isValidTitle = (title) => {
+  if (!title) return false;
+  const titleRegex = /^[a-zA-Z0-9\s]*$/;
+  return titleRegex.test(title);
+};
 
-// const isValidDetail = (detail) => {
-//   const detailRegex = /^.{10,}$/;
-//   return detailRegex.test(detail);
-// };
+const isValidAboutMe = (about_me) => {
+  // const detailRegex = /^.{10,}$/;
+  // return detailRegex.test(detail);
+  const aboutMeRegex = /^[a-zA-Z0-9\s]*$/;  
+  return aboutMeRegex.test(about_me);
+};
 
-// const isValidBudget = (budget) => {
-//   if (budget === '') return false;
-//   const budgetRegex = /^[0-9]*$/;
-//   return budgetRegex.test(budget) && budget > 0;
-// };
+const isValidDeliveryDescription = (delivery_description) => {
+  const descriptionRegex = /^[a-zA-Z0-9]{1,511}$/;
+  return descriptionRegex.test(delivery_description);
+};
 
-// const isValidTag = (tag) => {
-//   if (!tag) return false;
-//   const tagRegex = /^[a-zA-Z0-9\s/\\]*$/;
-//   return tagRegex.test(tag);
-// };
+const isValidSkillDescription = (skill_description) => {
+  const skillRegex = /^[a-zA-Z0-9\s]{1,511}$/;
+  return skillRegex.test(skill_description);
+};
+
+const isValidLowestPrice = (lowset_price) => {
+  if (lowset_price === '') return false;
+  const lowestPriceRegex = /^[0-9]*$/;
+  return lowestPriceRegex.test(lowset_price) && lowset_price > 0;
+};
+
+const isValidDeliveryDue = (delivery_due) => {
+  if (delivery_due === '') return false;
+  const deliveryDueRegex = /^[0-9]*$/;
+  return deliveryDueRegex.test(delivery_due) && delivery_due >= 0;
+};
+
+const isValidRevisionNumber = (revision_number) => {
+  if (revision_number === '') return false;
+  const revisionNumberRegex = /^[0-9]*$/;
+  return revisionNumberRegex.test(revision_number) && revision_number >= 0;
+};
+
+
 
 const NewPost = ({ isOpen, onClose, onUpdate }) => {
+  const userId = localStorage.getItem('LOGINID');
   const [showOverlay, setShowOverlay] = useState(isOpen);
 
-  // const [error, setError] = useState({
-  //   title: '',
-  //   image: '',
-  //   detail: '',
-  //   budgetMin: '',
-  //   budgetMax: '',
-  //   tag: '',
-  // });
-
-  const [error, setError] = useState({
-
+  const [errors, setErrors] = useState({
+    title: '',
+    image: '',
+    about_me: '',
+    delivery_description: '',
+    skill_description: '',
+    lowset_price: '',
+    delivery_due: '',
+    revision_number: '',
   });
 
   const initState = {
+    freelancer_id: userId,
     title: '',
     delivery_description: '',
     about_me: '',
     skill_description: '',
     lowset_price: '',
     delivery_due: '',
+    revision_number: '',
     imgage_post_urls: '',
     skill_tag: '',
     image_file: null // Lấy file ảnh luôn
@@ -60,6 +81,59 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
 
   const validateForm = () => {
     let isValid = true;
+    const newErrors = {...errors};
+
+    if (!isValidTitle(newPost.title)) {
+      newErrors.title = 'Title is invalid. Title must be alphanumeric and not empty.';
+      isValid = false;
+    } else {
+      newErrors.title = '';
+    }
+
+    if (!isValidAboutMe(newPost.about_me)) {
+      newErrors.about_me = 'About me is invalid. About me must be alphanumeric and not empty.';
+      isValid = false;
+    } else {
+      newErrors.about_me = '';
+    }
+
+    if (!isValidDeliveryDescription(newPost.delivery_description)) {
+      newErrors.delivery_description = 'Delivery description is invalid. Delivery description must be alphanumeric and not empty.';
+      isValid = false;
+    } else {
+      newErrors.delivery_description = '';
+    }
+
+    if (!isValidSkillDescription(newPost.skill_description)) {
+      newErrors.skill_description = 'Skill description is invalid. Skill description must be alphanumeric and not empty.';
+      isValid = false;
+    } else {
+      newErrors.skill_description = '';
+    }
+
+    if (!isValidLowestPrice(newPost.lowset_price)) {
+      newErrors.lowset_price = 'Lowest price is invalid. Lowest price must be numeric and greater than 0.';
+      isValid = false;
+    } else {
+      newErrors.lowset_price = '';
+    }
+
+    if (!isValidDeliveryDue(newPost.delivery_due)) {
+      newErrors.delivery_due = 'Delivery due is invalid. Delivery due must be numeric and greater than or equal to 0.';
+      isValid = false;
+    }
+    else {
+      newErrors.delivery_due = '';
+    }
+
+    if (!isValidRevisionNumber(newPost.revision_number)) {
+      newErrors.revision_number = 'Revision number is invalid. Revision number must be numeric and greater than or equal to 0.';
+      isValid = false;
+    } else {
+      newErrors.revision_number = '';
+    }
+
+    setErrors(newErrors);
     return isValid;
   };
   const initialSkills = [
@@ -181,7 +255,7 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
                 </option>
               ))}
             </select>
-            <div className="error-message">{error.title}</div>
+            {/* <div className="error-message">{errors.title}</div> */}
           </div>
 
           <div className="add-image-input">
@@ -216,7 +290,7 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
                 Supported formats: JPEG, PNG, JPG
               </p>
             </div>
-            <div className="error-message">{error.image}</div>
+            {/* <div className="error-message">{errors.}</div> */}
           </div>
 
           <div className="project-title-input">
@@ -229,7 +303,7 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
               defaultValue={newPost.title}
               onChange={handleInputChange}
             />
-            <div className="error-message">{error.title}</div>
+            <div className="error-message">{errors.title}</div>
           </div>
 
           <div className="project-title-input">
@@ -242,7 +316,7 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
               defaultValue={newPost.about_me}
               onChange={handleInputChange}
             />
-            <div className="error-message">{error.title}</div>
+            <div className="error-message">{errors.about_me}</div>
           </div>
 
           <div className="project-detail-input">
@@ -255,7 +329,7 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
               defaultValue={newPost.skill_description}
               onChange={handleInputChange}
             />
-            <div className="error-message">{error.detail}</div>
+            <div className="error-message">{errors.skill_description}</div>
           </div>
           {/* <div className="project-tag-input">
             <label htmlFor="projectTag">Project Tag *</label>
@@ -280,7 +354,7 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
                 defaultValue={newPost.lowset_price}
                 onChange={handleInputChange}
               />
-              <div className="error-message">{error.budgetMin}</div>
+              <div className="error-message">{errors.lowset_price}</div>
             </div>
 
             <div className="post-budget-min-input">
@@ -293,7 +367,7 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
                 defaultValue={newPost.delivery_due}
                 onChange={handleInputChange}
               />
-              <div className="error-message">{error.delivery_due}</div>
+              <div className="error-message">{errors.delivery_due}</div>
             </div>
             <div className="post-budget-min-input">
               <label htmlFor="revisionNum">Revision Number</label>
@@ -305,7 +379,7 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
                 defaultValue={newPost.revision_number}
                 onChange={handleInputChange}
               />
-              <div className="error-message">{error.revision_number}</div>
+              <div className="error-message">{errors.revision_number}</div>
             </div>
           </div>
           <div className="project-title-input">
@@ -319,7 +393,7 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
               defaultValue={newPost.delivery_description}
               onChange={handleInputChange}
             />
-            <div className="error-message">{error.delivery_description}</div>
+            <div className="error-message">{errors.delivery_description}</div>
           </div>
           <button className='done-button' onClick={handleDoneClick}>Done</button>
         </div>

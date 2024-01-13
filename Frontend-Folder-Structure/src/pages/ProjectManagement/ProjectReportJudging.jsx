@@ -9,6 +9,7 @@ import projectService from '@/services/projectServices';
 import { useState, useEffect } from 'react';
 import { formattedDateString } from '@/helper/helper';
 import { getCurrentDateTime } from '@/helper/helper';
+import { get } from 'jquery';
 
 const PROJECT_ACCEPTED = 3;
 const PROJECT_REJECTED = 4;
@@ -45,7 +46,7 @@ export const ProjectReportJudging = () => {
         setError(error.response.data.message);
         console.log(error.response.data.message);
       });
-  }, []);
+  }, [project]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -111,16 +112,12 @@ export const ProjectReportJudging = () => {
     let noti_title = '';
     let noti_message = '';
 
-    if (project_status == 4) {
-      noti_title = 'The report is rejected.';
-      noti_message =
-        'The project owner reject this report. Dont wory, freelancer still have chance to fix it until end date of project. Good luck!';
-    } else {
-      noti_title =
-        'The report is particial passed and project is giving some extra time.';
-      noti_message =
-        'The project owner extend the deadline of this project. Freelancer have to make a new report before end date of project. Good luck!';
-    }
+
+    noti_title =
+      'The report is particial passed and project is giving some extra time.';
+    noti_message =
+      'The project owner extend the deadline of this project. Freelancer have to make a new report before end date of project. Good luck!';
+  
 
     const payload = {
       ...reference.project,
@@ -153,11 +150,17 @@ export const ProjectReportJudging = () => {
       batch_id: getCurrentDateTime(),
       subject: `Honorarium for your work on project ${reference.project.project_name}`,
       message: "You do a great job. Thank you for your contribution!",
-      cost: reference.project.budget,
+      costs: [ // array of costs
+        reference.project.budget 
+      ],
+      // cost: reference.project.budget,
       currency: "USD",
-      sender_item_id: reference.project.id,
+      sender_item_ids: [reference.project.id + reference.project.member_id + getCurrentDateTime()],
       // receiver: "sb-3di0w28451063@personal.example.com",
-      receiverId: reference.project.member_id,
+      receiverIds: [  // array of receivers id
+        reference.project.member_id
+      ],
+      // receiverId: reference.project.member_id,
       noti_title: noti_title,
       noti_content: noti_message,
       report_id: reference.reportId,
@@ -173,6 +176,48 @@ export const ProjectReportJudging = () => {
       throw error;
     }
   }
+
+  // create reject project function
+  const rejectProject = async () => {
+    let noti_title = 'The report is rejected.';
+    let noti_message = 'We are so sorry to say that the project owner has rejected this work. After five days, if there is no complaint, we fill refound 70% of budget to project owner, and 30% to freelancer. Please contact to us for refound issues in within five days.';
+
+    const payoutPayload = {
+      batch_id: getCurrentDateTime(),
+      subject: `Honorarium for your work on project ${reference.project.project_name}`,
+      message: "You do a great job. Thank you for your contribution!",
+      // costs: 70% budget for owner, 30% budget for freelancer
+      costs: [
+        (reference.project.budget * 70) / 100,
+        (reference.project.budget * 30) / 100
+      ],
+      currency: "USD",
+      // create sender_item_id that is a list of concat of project id and owner id, member id
+      sender_item_ids: [
+        reference.project.id + reference.project.owner_id + getCurrentDateTime(),
+        reference.project.id + reference.project.member_id + getCurrentDateTime()
+      ],
+      // sender_item_id: reference.project.id,
+      // receiverIds: owner and freelancer id
+      receiverIds: [
+        reference.project.owner_id,
+        reference.project.member_id
+      ],
+      noti_title: noti_title,
+      noti_content: noti_message,
+      report_id: reference.reportId,
+    }
+    try {
+      const response = await paymentServices.rejectProject(reference.project.id, payoutPayload, localStorage.getItem('AUTH_TOKEN'));
+      setUpdated(true);
+      console.log(response)
+    }
+    catch (error){
+      setUpdated(false);
+      console.error("Error reject project", error);
+      throw error;
+    }
+  };
 
   return (
     <>
@@ -230,7 +275,7 @@ export const ProjectReportJudging = () => {
         </div>
       )}
 
-      {(project.status == 2 || project.status == 3 || project.status == 4) &&
+      {(project.status == 2 || project.status == 3 || project.status == 4 || project.status == 5) &&
         (error ? (
           <>{error}</>
         ) : (
@@ -316,8 +361,8 @@ export const ProjectReportJudging = () => {
                     <button
                       className="my-button --button-gray"
                       style={{ margin: '0 5px' }}
-                      onClick={() =>
-                        updateReport(REPORT_REJECTED, PROJECT_REJECTED)
+                      onClick={
+                        rejectProject
                       }
                       disabled={project.status == 4 || project.status == 3}
 

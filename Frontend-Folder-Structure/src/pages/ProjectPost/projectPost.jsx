@@ -46,7 +46,6 @@ const Project = () => {
   useEffect(() => {
     projectPostServices.getOnebyId(id).then((response) => {
       setProject(response.data);
-      // console.log('response: ', response.data); ok
       setLoading(true);
     });
   }, [id]);

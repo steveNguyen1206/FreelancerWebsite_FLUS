@@ -21,6 +21,21 @@
 .fields {
     display: flex;
     flex-direction: column;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
 }
 
+.update-button {
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+    margin-top: 5px;
+}
+
+.error-message {
+    color: var(--red);
+    font-size:small;
+}
+
+.success-message {
+    color: var(--primary);
+    font-size: small;
+}

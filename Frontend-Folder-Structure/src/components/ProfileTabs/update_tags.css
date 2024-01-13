@@ -22,3 +22,13 @@
     height: 100px;
     width: 100%;
 }
+
+.error-message {
+  color: var(--red);
+  font-size:small;
+}
+
+.success-message {
+  color: var(--primary);
+  font-size: small;
+}

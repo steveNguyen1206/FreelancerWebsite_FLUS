@@ -3,7 +3,7 @@ const config = require("../config/auth.config");
 const Op = db.Sequelize.Op;
 const Bid = db.bid;
 const projectPost = db.project_post;
-const review = db.review;
+const review = db.reviews;
 const Project = db.projects;
 
 exports.create = (req, res) => {
@@ -211,3 +211,21 @@ exports.rejectBid = (req, res) => {
       });
     });
 };
+
+exports.getDistinctUserIdsByStatus = (req, res) => {
+  const status = req.params.bid_status;
+  Bid.findAll({
+      attributes: [[db.Sequelize.fn('DISTINCT', db.Sequelize.col('user_id')), 'user_id']],
+      where: { status: status }
+  })
+      .then(data => {
+          res.status(200).send(data);
+      })
+      .catch(err => {
+          console.log("err: ", err);
+          res.status(500).send({
+              message:
+              err.message || "Some error occurred while retrieving distinct user ids."
+          });
+      });
+}

@@ -13,7 +13,7 @@ const CategoryTab = () => {
   const fetchCategories = async () => {
     try {
       const response = await categoryService.findAllwithSubcate(
-        searchKey.toString()
+        searchKey.toString(), localStorage.getItem('AUTH_TOKEN')
       );
       setCategories(response.data);
       console.log(response.data);

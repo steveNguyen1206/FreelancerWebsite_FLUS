@@ -2,7 +2,7 @@ const db = require("../models");
 const comment = db.comment_proj;
 const Op = db.Sequelize.Op;
 const user = db.user;
-const review = db.review;
+const review = db.reviews;
 
 const getRatingClient = (user_id) => {
   return review

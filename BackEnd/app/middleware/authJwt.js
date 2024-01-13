@@ -5,8 +5,8 @@ const User = db.user;
 
 verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"];
-  console.log("token: ", token);
 
+  console.log("VERIFY TOKEN: " + token);
   if (!token) {
     return res.status(403).send({
       message: "No token provided!",
@@ -20,6 +20,7 @@ verifyToken = (req, res, next) => {
       });
     }
     req.userId = decoded.id;
+    console.log("IDDDD " + req.userId);
     next();
   });
 };
@@ -28,6 +29,7 @@ isAdmin = (req, res, next) => {
   User.findByPk(req.userId)
     .then((user) => {
       if (user.user_type === 2) {
+        console.log("ADMIN", req.params);
         next();
       } else {
         res.status(403).send({

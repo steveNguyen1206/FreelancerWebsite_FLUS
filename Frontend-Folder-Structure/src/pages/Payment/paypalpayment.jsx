@@ -30,6 +30,7 @@ const PayPalPayment = () => {
       sender_item_id: "123456789",
       receiver: "sb-3di0w28451063@personal.example.com"
     }
+    console.log(payoutPayload.batch_id);
 
     const createOrder = async (data) => {
         // Order is created on the server and the order id is returned

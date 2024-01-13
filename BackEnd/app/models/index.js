@@ -33,7 +33,7 @@ db.subcategories = require("./subcategory.model.js")(sequelize, Sequelize);
 db.bid = require("./bid.model.js")(sequelize, Sequelize);
 db.comment_proj = require("./comment_proj.model.js")(sequelize, Sequelize);
 db.project_post = require("./project_post.model.js")(sequelize, Sequelize);
-db.review = require("./Review.model.js")(sequelize, Sequelize);
+db.reviews = require("./Review.model.js")(sequelize, Sequelize);
 db.otp = require("./OTP.model.js")(sequelize, Sequelize);
 
 db.transactions = require("./transaction.model.js")(sequelize, Sequelize);
@@ -116,7 +116,7 @@ db.payment_accounts.belongsTo(db.user, {
   onUpdate: 'CASCADE'
 })
 
-db.user.belongsToMany(db.categories, { through: "user_subcategory" });
+db.user.belongsToMany(db.subcategories, { through: "user_subcategory" });
 db.subcategories.belongsToMany(db.user, { through: "user_subcategory" });
 
 db.issues.belongsTo(db.user, {
@@ -171,7 +171,7 @@ db.projects.belongsTo(db.subcategories, {
   onUpdate: "CASCADE",
 });
 
-db.projects.belongsTo(db.freelancer_post, {
+db.projects.belongsTo(db.contact, {
   foreignKey: {
     name: "created_contact_id",
     allowNull: true,
@@ -255,25 +255,25 @@ db.project_post.belongsTo(db.user, {
 //   onUpdate: 'CASCADE'
 // })
 
-db.review.belongsTo(db.user, {
+db.reviews.belongsTo(db.user, {
   foreignKey: "user_review",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
 
-db.review.belongsTo(db.user, {
+db.reviews.belongsTo(db.user, {
   foreignKey: "user_reviewed",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
 
-db.user.hasMany(db.review, {
+db.user.hasMany(db.reviews, {
   foreignKey: "user_review",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
 
-db.user.hasMany(db.review, {
+db.user.hasMany(db.reviews, {
   foreignKey: "user_reviewed",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",

@@ -1,4 +1,5 @@
 const db = require("../models");
+const cloudinary = require("../config/cloudinary.config");
 const Category = db.categories;
 const Subcategory = db.subcategories;
 const Op = db.Sequelize.Op;
@@ -16,31 +17,71 @@ exports.getNameSubcategory = (req, res) => {
 }
 
 // Create and Save a new Category
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
+  console.log("############ CREATE CATEGORY ############");
+  // console.log("req: ", req);
   // Validate request
   if (!req.body.name) {
     res.status(400).send({
-      message: "Content can not be empty!",
+      message: "Category name can not be empty!",
     });
     return;
   }
 
-  // Create a Category
-  const category = {
-    name: req.body.name,
-  };
-  console.log(category);
-  // Save Category in the database
-  Category.create(category)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Category.",
-      });
+  if (!req.file) {
+    res.status(400).send({
+      message: "Category image can not be empty!",
     });
+    return;
+  }
+
+  async function handleUpload(file) { // đưa lên cloud
+    const res = await cloudinary.uploader.upload(file, {
+        resource_type: "auto",
+    });
+
+    return res;
+  }
+
+  // Create a Category
+  try {
+    // lấy link trên cloud
+    const b64 = Buffer.from(req.file.buffer).toString("base64");
+    let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+    const cldRes = await handleUpload(dataURI);
+    // console.log(cldRes.secure_url);
+    const img_url = cldRes.secure_url;
+    // console.log("img_url: ", img_url)
+    // console.log("req.body: ", req.body)
+    const category = {
+        name: req.body.name,
+        img: img_url,
+    };
+    // console.log("category: ", category)
+    // Save Category in the database
+    Category.create(category)
+        .then(data => {
+            // res.send(data);
+            return res.status(200).json({
+                message: "Category was created successfully.",
+                // avt_url: avt_url
+            });
+        })
+        .catch(err => {
+            return res.status(500).json({
+                message:
+                    err.message ||
+                    "Some error while creating category"
+            });
+        });
+
+} catch (error) {
+    console.log(error);
+    res.status(500).json({
+        message:
+            "Error while creating category"
+    });
+}
 };
 
 // Retrieve all Category from the database.

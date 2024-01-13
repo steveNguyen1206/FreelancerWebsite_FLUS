@@ -65,7 +65,7 @@ export const ProjectReport = () => {
     }
     setError(null);
   
-  }, []);
+  }, [project]);
 
   return (
     <div className="project-content-container">

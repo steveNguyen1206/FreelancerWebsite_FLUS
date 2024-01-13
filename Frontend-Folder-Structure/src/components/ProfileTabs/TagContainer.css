@@ -1,6 +1,6 @@
 @import url('../../assets/variables.css');
 
-.tag-container {
+.tags-container {
     height: 100px;
     width: 100%;
     display: flex;

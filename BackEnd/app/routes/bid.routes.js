@@ -19,6 +19,9 @@ module.exports = (app) => {
 
     
     router.get("/getProjectPostfromBid/:bid_id", [verifyToken], bid.getProjectPostfromBid);
+
+    router.get("/getDistinctUserIdsByStatus/:bid_status", bid.getDistinctUserIdsByStatus);
+  
   
     app.use("/api/bid", router);
   };

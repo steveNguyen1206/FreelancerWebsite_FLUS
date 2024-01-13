@@ -11,21 +11,9 @@ import { formattedDateString } from '@/helper/helper';
 
 export const ProjectNotification = () => {
 
-  const {project, setProject,  projectTab, setProjectTab, setReportId} = useProjectManageContext();
-  const [notis, setNotis] = useState([])
+  const {setProjectTab, setReportId, notis} = useProjectManageContext();
   const [error, setError] = useState(null)
 
-  useEffect(()=> {
-    projectService.getALlNotifications(project.id, localStorage.getItem("AUTH_TOKEN"))
-    .then( (notis_data) => {
-        console.log(notis_data.data)
-        setNotis(notis_data.data)
-    })
-    .catch( (error)=> {
-        console.log(error);
-        setError(error.response.data.message);
-    })
-  }, [])
 
   const handleViewReport = (id) => {
     setProjectTab('report');

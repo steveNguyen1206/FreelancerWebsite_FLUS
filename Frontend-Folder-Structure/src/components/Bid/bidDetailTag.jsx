@@ -103,7 +103,7 @@ const BidDetailTag = ({ project, bid, onChangeBid, isOwnerProjectPost ,onChangeP
                 />
               </div>
               <div className="name-container col">
-                <div className="first-line-container row">
+                <div className="first-line-container">
                   <div className="text-wrapper-5">{bid.user.account_name}</div>
                   <div className="flag-container">
                     <img className="rectangle-2" alt="Rectangle" src={flag} />

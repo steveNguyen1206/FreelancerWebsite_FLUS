@@ -1,0 +1,30 @@
+@import url('../../assets/variables.css');
+
+.update-avatar-selection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.update-avatar-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 60%;
+}
+
+.chose-file-button {
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+}
+
+.error-message {
+    color: var(--red);
+    font-size:small;
+}
+
+.success-message {
+    color: var(--primary);
+    font-size: small;
+}

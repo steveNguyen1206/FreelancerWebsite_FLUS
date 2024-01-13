@@ -14,20 +14,28 @@ import ApproveOffer from '@/pages/FreelancerPost/approveOffer';
 import { jwtDecode } from 'jwt-decode';
 
 const FindFreelancer = () => {
+  const userId = localStorage.getItem('LOGINID');
+  console.log('userId', userId);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const handleFilterChange = (newSelectedTags) => {
+    setSelectedTags(newSelectedTags);
+    console.log('newSelectedTags', newSelectedTags);
+  };
   const [posts, setPosts] = useState([]);
-  useEffect(() => {
-    fetchPosts();
-  }, []);
+  
 
   const fetchPosts = async () => {
     try {
       const postsData = await freelancer_post_Service.allposts();
       setPosts(postsData.data);
-      console.log('data', postsData.data);
+      // console.log('data', postsData.data);
     } catch (error) {
       console.error('Error fetching projects:', error);
     }
   };
+  useEffect(() => {
+    fetchPosts();
+  }, []);
 
   const [isOpen, setIsOpen] = useState(false);
   const handleNewPost = () => {
@@ -49,10 +57,10 @@ const FindFreelancer = () => {
     setSearchTitle(event.target.value);
   };
 
-  const [selectedTags, setSelectedTags] = useState([]);
-  const handleFilterChange = (newSelectedTags) => {
-    setSelectedTags(newSelectedTags);
-  };
+  // const [selectedTags, setSelectedTags] = useState([]);
+  // const handleFilterChange = (newSelectedTags) => {
+  //   setSelectedTags(newSelectedTags);
+  // };
 
   const [selectedRange, setSelectedRange] = useState([0, 10000]);
   const handleRangeChange = (newSelectedRange) => {
@@ -85,10 +93,11 @@ const FindFreelancer = () => {
         return posts;
     }
   };
+  console.log('filteredPosts', filteredPosts); 
 
   return (
     <>
-      {isOpen && <NewPost isOpen={isOpen} onClose={() => setIsOpen(false)} onUpdate={() => { setIsChange(true) }} />}
+      {(userId != null) && isOpen && <NewPost isOpen={isOpen} onClose={() => setIsOpen(false)} onUpdate={() => { setIsChange(true) }} />}
       {/* {isOpen && <ApproveOffer isOpen={isOpen} onClose={() => setIsOpen(false)} onUpdate = {() => {setIsChange(true)}} />} */}
       <div className="job-page">
         <div className="content">
@@ -96,7 +105,7 @@ const FindFreelancer = () => {
             <div className="topbar">
               <div className="button">
                 {/* <button className="btn-new-post" onClick={event =>  window.location.href='/createFreelancerPost'}>+ New Post</button> */}
-                <button className="btn-new-post" onClick={handleNewPost}>+ New Post</button>
+                {userId && (<button className="btn-new-post" onClick={handleNewPost}>+ New Post</button>)}
               </div>
               <Search 
                 onSearchChange={handleSearchChange} 

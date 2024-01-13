@@ -13,7 +13,7 @@ const isValidTitle = (title) => {
 };
 
 const isValidDetail = (detail) => {
-  const detailRegex = /^.{10,}$/;
+  const detailRegex = /^[\p{P}\p{L}\s]{10,}$/gu;
   return detailRegex.test(detail);
 };
 

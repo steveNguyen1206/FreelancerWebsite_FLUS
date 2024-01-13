@@ -9,15 +9,17 @@ const findMemberOnebyId = (id, access_token) => {
     }});
   };
 
-// const createProject = (access_token, data) => {
-//   return http.post(`/project`, data, {headers: {
-//     "Content-type": "application/json",
-//     "x-access-token": access_token,
-//   }});
-// }
+// const createProject = (access_token) => {
+  const createProject = (data) => {
+  return http.post("/project",  data);
+}
 
-const createProject = (data) => {
-  return http.post(`/project`, data);
+const getAllProject = () => {
+  return http.get("/project/all");
+};
+
+const updateProjectNotNull = (id, data) => {
+  return http.put(`/project/updateNotNull/${id}`, data);
 }
 
 const configureProject = (id, access_token, data) => {
@@ -82,6 +84,10 @@ const findOwnerOnebyId = (id, access_token) => {
     }});
   }
 
+  const createNull = () => {
+    return http.post("/project/createNull");
+  };
+
   const getAllOwnProjects = (access_token) => {
     return http.get(`project/all-own`, {headers: {
       "Content-type": "application/json",
@@ -110,7 +116,10 @@ const findOwnerOnebyId = (id, access_token) => {
     getALlNotifications,
     getNewestProjectReport,
     getAllOwnProjects,
-    getAllMemberProjects
+    getAllMemberProjects,
+    createNull,
+    getAllProject,
+    updateProjectNotNull
   };
 
   export default projectService;

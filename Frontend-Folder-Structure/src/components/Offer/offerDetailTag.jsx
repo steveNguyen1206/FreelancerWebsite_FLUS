@@ -13,6 +13,11 @@ const OfferDetailTag = ({ contactOne }) => {
 
     const handleAccept = () => {
         console.log('accept');
+        console.log('bidOne.id: ', contactOne.id);
+        contactService.changeContactStatus(contactOne.id, -1).then((response) => {
+            console.log('response: ', response);
+            // onChangeBid();
+        });
     };
 
     const handleReject = () => {

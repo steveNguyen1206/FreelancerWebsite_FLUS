@@ -3,7 +3,7 @@ const cloudinary = require("../config/cloudinary.config");
 const project_post = db.project_post;
 const user = db.user;
 const subcategories = db.subcategories;
-const review = db.review;
+const review = db.reviews;
 const comment_proj = db.comment_proj;
 
 // Create and Save a new Project_post
@@ -369,4 +369,160 @@ exports.update = async (req, res) => {
       message: "Internal server error",
     });
   }
+};
+
+
+// Define the getPagination function
+function getPagination(page, size) {
+    // page > 0, size > 0
+    const limit = size;
+    const offset = (page - 1) * size;
+    return { limit, offset };
+  }
+  
+  exports.findProjPostsByPage = (req, res) => {
+    console.log("\nMY PARAMS:", req.params);
+    const { page, size, searchKey } = req.params; // page: 1..n, size: 1..m
+    console.log(
+      "FFFFFFFFFFFFFFFFFFFF",
+      "page: " + page + ", size: " + size + ", searchKey: " + searchKey
+    );
+  
+    // condition to check searchKey in account_name or profile_name
+    var condition =
+      searchKey && searchKey !== "undefined" && searchKey !== ""
+        ? {
+            [Op.or]: [
+              { title: { [Op.like]: `%${searchKey}%` } },
+              { detail: { [Op.like]: `%${searchKey}%` } },
+            ],
+          }
+        : null;
+  
+    const { limit, offset } = getPagination(parseInt(page), parseInt(size));
+  
+    // Find all users with condition by page
+    project_post.findAndCountAll({ where: condition, limit, offset })
+      .then((data) => {
+        const { rows: proj_posts, count: totalItems } = data;
+  
+        // // Extract only the necessary information from each user
+        // const simplifiedProjPosts = proj_posts.map((proj_post) => ({
+        //   id: proj_post.id,
+        //   title: proj_post.title,
+        //   detail: proj_post.detail,
+        //   budget_min: proj_post.budget_min,
+        //   budget_max: proj_post.budget_max,
+        //   status: proj_post.status,
+        // }));
+  
+        const response = {
+          totalItems,
+          proj_posts: proj_posts,
+          currentPage: parseInt(page),
+          totalPages: Math.ceil(totalItems / limit),
+        };
+  
+        res.send(response);
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message: err.message || "Some error occurred while retrieving users.",
+        });
+      });
+  };
+  
+
+// Change user status by user id and status param
+exports.changeStatusByID = (req, res) => {
+    const { id, status } = req.params;
+  
+    if (!id || parseInt(status) < 0 || parseInt(status) > 2) {
+      res.status(400).send({
+        message: "Invalid projpost id or status!",
+      });
+      return;
+    }
+  
+    project_post.update({ status }, { where: { id } })
+      .then((num) => {
+        if (num[0] === 1) {
+          res.send({
+            message: "Proj Post status updated successfully!",
+          });
+        } else {
+          res.send({
+            message: `Cannot update Post with id=${id}. Maybe Post was not found!`,
+          });
+        }
+      })
+      .catch((err) => {
+        console.error("Sequelize Error:", err);
+        res.status(500).send({
+          message: "Could not update Post with id=" + id,
+        });
+      });
+  };
+
+exports.deleteById = (req, res) => {
+    const { id } = req.params;
+
+    project_post.findByPk(id)
+        .then((project) => {
+            if (!project) {
+                res.status(404).send({
+                    message: `Project with id=${id} not found.`,
+                });
+                return;
+            }
+
+            const imageUrls = project.imgage_post_urls;
+
+            project_post.destroy({ where: { id } })
+                .then((num) => {
+                    if (num === 1) {
+                        // Handle delete the file using imageUrls
+                        handleDelete(imageUrls);
+                        res.send({
+                            message: "Post was deleted successfully!",
+                        });
+                    } else {
+                        res.send({
+                            message: `Cannot delete Post with id=${id}. Maybe Post was not found!`,
+                        });
+                    }
+                })
+                .catch((err) => {
+                    console.error("Sequelize Error:", err);
+                    res.status(500).send({
+                        message: "Could not delete Post with id=" + id,
+                    });
+                });
+        })
+        .catch((err) => {
+            console.error("Sequelize Error:", err);
+            res.status(500).send({
+                message: "Could not find Project with id=" + id,
+            });
+        });
+};
+
+exports.findOwnerProject = (req, res) => {
+  const project_post_id = req.params.id;
+
+  project_post.findByPk(project_post_id)
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find Project Post with id=${project_post_id}.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: `Error retrieving Project Post with id=${project_post_id}.`
+      });
+    });
 };

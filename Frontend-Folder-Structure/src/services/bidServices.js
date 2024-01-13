@@ -80,14 +80,24 @@ const getProjectPostfromBid = (bid_id, access_token) => {
   });
 };
 
+const changeBidStatus = (bid_id, status) => {
+  return http.put('/bid/changeBidStatus/' + bid_id + '/' + status);
+};
+
+const getDistinctUserIdsByStatus = (status) => {
+  return http.get('/bid/getDistinctUserIdsByStatus/' + status);
+};
+
 const bidService = {
   bidProject,
-  findBidByProjectPostId,
   acceptBid,
   rejectBid,
   getNumOfBid,
+  changeBidStatus,
   changeOtherBidStatus,
   getProjectPostfromBid,
+  findBidByProjectPostId,
+  getDistinctUserIdsByStatus,
 };
 
 export default bidService;

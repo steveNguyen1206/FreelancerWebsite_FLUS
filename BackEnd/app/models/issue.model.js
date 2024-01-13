@@ -8,6 +8,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING(1024),
         allowNull: true
       },
+      amount: {
+        type: Sequelize.DOUBLE,
+        allowNull: false
+      },
       type: {
         type: Sequelize.INTEGER,
         allowNull: false
