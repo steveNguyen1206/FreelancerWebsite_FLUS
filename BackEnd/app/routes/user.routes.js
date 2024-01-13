@@ -33,7 +33,7 @@ module.exports = (app) => {
   // router.delete("/reported_times", user_controller.deleteOnebyReportedTimes);
   
   // Update the status of a User by id and status param
-  router.put("/status/:id&:status", [verifyToken, isAdmin], user_controller.changeStatusByID);
+  router.put("/status/:useridtochange&:status", [verifyToken, isAdmin], user_controller.changeStatusByID);
   
   // Change password of a User by id
   router.put("/change_password", [verifyToken, isOwner], user_controller.changePassword);

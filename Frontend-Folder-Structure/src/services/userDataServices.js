@@ -65,10 +65,18 @@ const removeUserByAccName = (accountName, access_token) => {
 
 const changeStatusByID = (id, status, access_token) => {
   console.log("changeStatusByID: ", id, status, access_token);
-  return http.put(`/user/status/${id}&${status}`, {headers: {
-    "Content-type": "application/json",
-    "x-access-token": access_token,
-  }});
+  
+  const data = {
+    useridtochange: id,
+    status: status
+  };
+
+  return http.put(`/user/status/${id}&${status}`, data, {
+    headers: {
+      "Content-type": "application/json",
+      "x-access-token": access_token,
+    },
+  });
 };
 
 const changePassword = (data) => {

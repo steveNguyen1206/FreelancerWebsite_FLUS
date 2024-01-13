@@ -90,7 +90,11 @@ const findFreePostsByPage = (page, size, searchKey, access_token) => {
 
 
 const changeStatusByID = (id, status, access_token) => {
-  return http.put(`/freelancer_post/status/${id}&${status}`, {headers: {
+  const data = {
+    id: id,
+    status: status,
+  };
+  return http.put(`/freelancer_post/status/${id}&${status}`,data, {headers: {
     "Content-type": "application/json",
     "x-access-token": access_token,
   }});
