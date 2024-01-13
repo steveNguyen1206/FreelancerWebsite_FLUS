@@ -44,32 +44,32 @@ const Filter = ({ selectedTags, onSelectedTagsChange, onSelectedRangeChange }) =
     }
   };
 
-  const location = useLocation();
-  useEffect(() => {
-    // Read the category from the query parameter
-    const params = new URLSearchParams(location.search);
-    const category = params.get('category');
+  // const location = useLocation();
+  // useEffect(() => {
+  //   // Read the category from the query parameter
+  //   const params = new URLSearchParams(location.search);
+  //   const category = params.get('category');
 
-    if (category) {
-      subcategoryService
-      .findAll()
-      .then((response) => {
-        setSkills(response.data);
-        // Set the selected category in the filter
-        setSelectedSkills([category]);
-        // Apply the filter logic as needed
-        console.log('response.data tag before get id', response.data);
-        console.log('skills tag before get id', skills);
-        const categoryId = getIdbyName(category);
-        onSelectedTagsChange([categoryId]);
-        console.log('selectedTags in filter', categoryId);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+  //   if (category) {
+  //     subcategoryService
+  //     .findAll()
+  //     .then((response) => {
+  //       setSkills(response.data);
+  //       // Set the selected category in the filter
+  //       setSelectedSkills([category]);
+  //       // Apply the filter logic as needed
+  //       console.log('response.data tag before get id', response.data);
+  //       console.log('skills tag before get id', skills);
+  //       const categoryId = getIdbyName(category);
+  //       onSelectedTagsChange([categoryId]);
+  //       console.log('selectedTags in filter', categoryId);
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
       
-    }
-  }, [location.search]);
+  //   }
+  // }, [location.search]);
 
   
 

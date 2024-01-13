@@ -112,7 +112,7 @@ exports.googleSignup = (req, res) => {
           account_name: req.body.account_name,
           password: bcrypt.hashSync(req.body.password, 8),
           profile_name: req.body.profile_name,
-          phone_number: "",
+          phone_number: 0,
           nationality: req.body.nationality,
           user_type: req.body.user_type,
           email: req.body.email,
