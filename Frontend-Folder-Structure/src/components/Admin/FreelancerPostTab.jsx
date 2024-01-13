@@ -18,7 +18,7 @@ const FreelancerPostTab = () => {
 
     const fetchFreePosts = async () => {
         try {
-            const response = await freelancer_post_Service.findFreePostsByPage(page, 3, searchKey.toString());
+            const response = await freelancer_post_Service.findFreePostsByPage(page, 3, searchKey.toString(), localStorage.getItem("AUTH_TOKEN"));
             console.log("RESPONSE: ", response.data);
             const { free_posts, totalPages } = response.data;
             console.log("freeposts: ", free_posts);
@@ -88,7 +88,7 @@ const FreelancerPostTab = () => {
                         freepostTitle={post.title}
                         freepostTagsId={post.skill_tag}
                         freepostDescription={post.skill_description}
-                        freepostBudget={post.lowest_price}
+                        freepostBudget={post.lowset_price}
                         freepostStatus={post.status}
                         userID={post.freelancer_id}
                         setRefreshFreePosts={setRefreshFreePosts}

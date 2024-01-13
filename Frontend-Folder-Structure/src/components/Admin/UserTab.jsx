@@ -19,7 +19,7 @@ const UserTab = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await userDataService.findUsersbyPage(page, 6, searchKey.toString());
+            const response = await userDataService.findUsersbyPage(page, 6, searchKey.toString(), localStorage.getItem("AUTH_TOKEN"));
             // console.log("RESPONSE: ", response.data);
             const { users, totalPages } = response.data;
             // console.log("users: ", users);

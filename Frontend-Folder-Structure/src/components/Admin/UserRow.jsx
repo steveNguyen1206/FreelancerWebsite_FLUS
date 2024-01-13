@@ -21,7 +21,7 @@ const UserRow = ({ user, refreshUsers, setRefreshUsers }) => {
 
     const handleRemoveUser = () => {
         console.log("Remove user: ", account_name);
-        userDataService.removeUserByAccName(account_name)
+        userDataService.removeUserByAccName(account_name, localStorage.getItem("AUTH_TOKEN"))
             .then((response) => {
                 setRefreshUsers((prev) => !prev);
                 
@@ -40,7 +40,7 @@ const UserRow = ({ user, refreshUsers, setRefreshUsers }) => {
     const [active, setActive] = useState(status); // State to trigger refresh
     const handleChangeStatus = () => {
         const newStatus = active === 0 ? 1 : 0; // Change the logic based on your requirements
-        userDataService.changeStatusByID(id, newStatus)
+        userDataService.changeStatusByID(id, newStatus, localStorage.getItem("AUTH_TOKEN"))
             .then((response) => {
                 console.log("Status changed: ", newStatus);
                 setActive(newStatus);

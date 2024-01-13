@@ -61,7 +61,7 @@ const ProjectPostRow = ({
     const [active, setActive] = useState(projectStatus); // State to trigger refresh
     const handleChangeStatus = () => {
         const newStatus = active === 0 ? 1 : 0; // Change the logic based on your requirements
-        projectPostServices.changeStatusByID(projectId, newStatus)
+        projectPostServices.changeStatusByID(projectId, newStatus, localStorage.getItem("AUTH_TOKEN"))
             .then((response) => {
                 console.log("Status changed: ", newStatus);
                 setActive(newStatus);
@@ -74,7 +74,7 @@ const ProjectPostRow = ({
 
     const handleRemoveProjPost = () => {
         console.log("Remove ProjPost: ", projectId);
-        projectPostServices.removePostById(projectId)
+        projectPostServices.removePostById(projectId, localStorage.getItem("AUTH_TOKEN"))
             .then((response) => {
                 setRefreshProjPosts((prev) => !prev);
             })

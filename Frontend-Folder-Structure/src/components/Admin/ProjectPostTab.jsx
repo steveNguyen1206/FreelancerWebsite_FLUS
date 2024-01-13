@@ -18,7 +18,7 @@ const ProjectPostTab = () => {
 
     const fetchProjPosts = async () => {
         try {
-            const response = await projectPostServices.findProjPostsByPage(page, 3, searchKey.toString());
+            const response = await projectPostServices.findProjPostsByPage(page, 3, searchKey.toString(), localStorage.getItem("AUTH_TOKEN"));
             console.log("RESPONSE: ", response.data);
             const { proj_posts, totalPages } = response.data;
             console.log("projposts: ", proj_posts);

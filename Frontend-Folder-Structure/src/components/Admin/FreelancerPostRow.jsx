@@ -62,7 +62,7 @@ const FreelancerPostRow = ({
     const [active, setActive] = useState(freepostStatus); // State to trigger refresh
     const handleChangeStatus = () => {
         const newStatus = active == 0 ? 1 : 0; // Change the logic based on your requirements
-        freelancer_post_Service.changeStatusByID(freepostId, newStatus)
+        freelancer_post_Service.changeStatusByID(freepostId, newStatus, localStorage.getItem("AUTH_TOKEN"))
             .then((response) => {
                 console.log("Status changed: ", newStatus);
                 setActive(newStatus);
@@ -75,7 +75,7 @@ const FreelancerPostRow = ({
 
     const handleRemoveProjPost = () => {
         console.log("Remove ProjPost: ", freepostId);
-        freelancer_post_Service.removePostById(freepostId)
+        freelancer_post_Service.removePostById(freepostId, localStorage.getItem("AUTH_TOKEN"))
             .then((response) => {
                 setRefreshFreePosts((prev) => !prev);
             })

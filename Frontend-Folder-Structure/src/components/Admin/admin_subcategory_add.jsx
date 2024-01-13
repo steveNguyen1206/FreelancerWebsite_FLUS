@@ -16,7 +16,7 @@ const AddSubcategory = ({ m_state, m_function, fetchFunction, categoryId }) => {
         };
         console.log(data);
       subcategoryService
-      .create(data)
+      .create(data, localStorage.getItem('AUTH_TOKEN'))
       .then((response) => {
         console.log(response.data);
 
