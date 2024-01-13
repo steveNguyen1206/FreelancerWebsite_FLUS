@@ -370,7 +370,7 @@ exports.findAllPosts = (req, res) => {
     // console.log("Params: ", req.params);
     // console.log("freelancer_id: ", freelancer_id);
    
-    var condition = freelancer_id != 'undefined' ? { freelancer_id: { [Op.eq]: `${freelancer_id}` } } : null;
+    var condition = freelancer_id? { freelancer_id: { [Op.eq]: `${freelancer_id}` } } : null;
 
     Freelancer_post.findAll({
         where: condition,
