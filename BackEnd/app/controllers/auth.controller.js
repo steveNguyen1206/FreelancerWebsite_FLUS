@@ -150,7 +150,7 @@ exports.googleSignup = (req, res) => {
           })
           .catch((err) => {
            
-            console.log("Error create user in db", err);
+            console.log("err: ",err);
             res.status(500).send({
               message:
                 err.message || "Some error occurred while creating the User.",

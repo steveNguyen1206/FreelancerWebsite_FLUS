@@ -1,5 +1,5 @@
 const db = require("../models");
-const reviews = db.review;
+const reviews = db.reviews;
 const Op = db.Sequelize.Op;
 
 
