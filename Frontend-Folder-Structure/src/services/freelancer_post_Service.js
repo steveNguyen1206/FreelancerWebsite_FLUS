@@ -2,7 +2,12 @@ import { media_upload, http } from "./http-common";
 
 const allposts = (freelancer_id) => {
   console.log("allposts");
-  return http.get(`/freelancer_post/allposts`);
+  return http.get(`/freelancer_post/allposts/${freelancer_id}`);
+}
+
+const allAllPosts = (freelancer_id) =>{
+    console.log("allposts");
+    return http.get(`/freelancer_post/allallposts`);
 }
 
 const findOnebyId = id => {
@@ -99,6 +104,7 @@ const freelancer_post_Service = {
   // create,
   // update,
   allposts,
+  allAllPosts,
   sendPost,
   updatePost,
   findOnebyId,
