@@ -8,6 +8,7 @@ import {
   ProjectReportJudging,
   ProjectNotification,
   ProjectComplaint,
+  ProjectReview,
 } from '.';
 import { createContext, useContext, useState } from 'react';
 import { useProjectManageContext } from './ProjectManageProvider';
@@ -17,26 +18,36 @@ import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 
 export const ProjectManageGeneral = () => {
-  const { project, setProject, isOwn, projectTab, setProjectTab, notis, setNotis } =
-    useProjectManageContext();
+  const {
+    project,
+    setProject,
+    isOwn,
+    projectTab,
+    setProjectTab,
+    notis,
+    setNotis,
+  } = useProjectManageContext();
   const [error, setError] = useState(null);
   const [allProject, setAllProject] = useState([]);
+  const [search, setSearch] = useState([]);
+  const [filter, setFilter] = useState(0); // 0: all, 3: completed, 4: canceled
   let navigate = useNavigate();
 
   const getNotis = (projectId) => {
-    console.log("noti: ", projectId);
-    projectService.getALlNotifications(projectId, localStorage.getItem("AUTH_TOKEN"))
-    .then( (notis_data) => {
-      setNotis(notis_data.data)
-    })
-    .catch( (error)=> {
+    console.log('noti: ', projectId);
+    projectService
+      .getALlNotifications(projectId, localStorage.getItem('AUTH_TOKEN'))
+      .then((notis_data) => {
+        setNotis(notis_data.data);
+      })
+      .catch((error) => {
         console.log(error);
         setError(error.response.data.message);
-    })
-  }
+      });
+  };
 
   const getProject = (projectId) => {
-    if(isOwn) {
+    if (isOwn) {
       projectService
         .findOwnerOnebyId(projectId, localStorage.getItem('AUTH_TOKEN'))
         .then((response) => {
@@ -48,29 +59,29 @@ export const ProjectManageGeneral = () => {
           console.log(e);
           setError(e.response.data.message);
         });
-    }
-    else {
+    } else {
       projectService
-      .findMemberOnebyId(projectId, localStorage.getItem('AUTH_TOKEN'))
-      .then((response) => {
-        setProject(response.data);
-        getNotis(projectId);
-        console.log(response.data);
-        // console.log("test", isOwn);
-      })
-      .catch((e) => {
-        setError(e.response.data.message);
-        // console.log(e.response.data.message);
-        console.log(e);
-      });
+        .findMemberOnebyId(projectId, localStorage.getItem('AUTH_TOKEN'))
+        .then((response) => {
+          setProject(response.data);
+          getNotis(projectId);
+          console.log(response.data);
+          // console.log("test", isOwn);
+        })
+        .catch((e) => {
+          setError(e.response.data.message);
+          // console.log(e.response.data.message);
+          console.log(e);
+        });
     }
-  }
+  };
   const getAllProject = () => {
     if (isOwn) {
       projectService
         .getAllOwnProjects(localStorage.getItem('AUTH_TOKEN'))
         .then((response) => {
           setAllProject(response.data);
+          setSearch(response.data);
           console.log(response.data);
         })
         .catch((e) => {
@@ -82,6 +93,7 @@ export const ProjectManageGeneral = () => {
         .getAllMemberProjects(localStorage.getItem('AUTH_TOKEN'))
         .then((response) => {
           setAllProject(response.data);
+          setSearch(response.data);
           console.log(response.data);
         })
         .catch((e) => {
@@ -94,7 +106,8 @@ export const ProjectManageGeneral = () => {
   const navigateToProject = (projectId) => {
     // Use the navigate function
     console.log(projectId);
-    const url = ((isOwn) ? "/my-project-manage/" : "/project-manage/") + projectId;
+    const url =
+      (isOwn ? '/my-project-manage/' : '/project-manage/') + projectId;
     console.log(url);
     getProject(projectId);
     navigate(url);
@@ -102,12 +115,29 @@ export const ProjectManageGeneral = () => {
 
   useEffect(() => {
     if (project.id) {
-      getProject(project.id)
+      getProject(project.id);
     }
     getAllProject();
     console.log(error);
   }, []);
 
+  const handleSearch = (event) => {
+    const { value } = event.target;
+    let filteredProject = [];
+    console.log(value);
+    if (value == 3 || value == 4  || value == 5  || value == 2) {
+      filteredProject = allProject.filter((project) => {
+        return project.status == value;
+      });
+    } else {
+      const search = value.toLowerCase();
+      filteredProject = allProject.filter((project) => {
+        return project.project_name.toLowerCase().includes(search);
+      });
+    }
+    setFilter(value);
+    setSearch(filteredProject);
+  };
 
   return (
     <div className="qun-l-d-n">
@@ -117,7 +147,12 @@ export const ProjectManageGeneral = () => {
         </div>
 
         <form className="gr-search">
-          <input className="label-text" type="text" placeholder="Search" />
+          <input
+            className="label-text"
+            type="text"
+            placeholder="Search"
+            onChange={handleSearch}
+          />
           <img
             className="search-icon"
             src="https://c.animaapp.com/6LZYVBLH/img/search-icon-1.svg"
@@ -125,30 +160,79 @@ export const ProjectManageGeneral = () => {
         </form>
 
         <div className="gr-findskill">
-          <div className="fillter-wrapper --background-green-accent">
-            <div className="value-text--color-green  --color-white --size-16">
+          {/* render class based on search state */}
+          
+            <button
+              className={
+                (filter == "")
+                  ?( ' fillter-wrapper --background-green-accent value-text --color-white --size-16')
+                  : ('fillter-wrapper --background-white value-text --color-green --size-16')
+              }
+              value={""}
+              onClick={handleSearch}
+            >
               All
-            </div>
-          </div>
+            </button>
 
-          <div className="fillter-wrapper --background-white ">
-            <div className="value-text --color-green --size-16">Completed</div>
-          </div>
+          <button
+             className={
+              filter == "3" 
+                ? ' fillter-wrapper --background-green-accent value-text --color-white --size-16'
+                : 'fillter-wrapper --background-white value-text --color-green --size-16'
+            }
+            value={3}
+            onClick={handleSearch}
+          >
+            Completed
+          </button>
 
-          <div className="fillter-wrapper --background-white">
-            <div className="value-text --color-green --size-16">Canceled</div>
-          </div>
+          <button
+             className={
+              filter == "2" 
+                ? ' fillter-wrapper --background-green-accent value-text --color-white --size-16'
+                : 'fillter-wrapper --background-white value-text --color-green --size-16'
+            }
+            value={2}
+            onClick={handleSearch}
+          >
+            Inprogress
+          </button>
+
+          <button
+             className={
+              filter == 4 
+                ? ' fillter-wrapper --background-green-accent value-text --color-white --size-16'
+                : 'fillter-wrapper --background-white value-text --color-green --size-16'
+            }
+            value={4}
+            onClick={handleSearch}
+          >
+            Canceled
+          </button>
+
+
+          <button
+             className={
+              filter == 5
+                ? ' fillter-wrapper --background-green-accent value-text --color-white --size-16'
+                : 'fillter-wrapper --background-white value-text --color-green --size-16'
+            }
+            value={5}
+            onClick={handleSearch}
+          >
+            Closed
+          </button>
         </div>
 
         <div className="all-project-container">
-          {allProject.map((map_project) => (
+          {search.map((map_project) => (
             <div
               className={
                 'all-project-item' +
                 (project.id == map_project.id ? ' --background-gradient' : '')
               }
               style={{ marginTop: '16px' }}
-              onClick={()=> navigateToProject(map_project.id)}
+              onClick={() => navigateToProject(map_project.id)}
             >
               <div className="project-img" />
               <h4 className="title-text --size-16">
@@ -235,13 +319,15 @@ export const ProjectManageGeneral = () => {
           (project.status == 1 ||
             project.status == 2 ||
             project.status == 3 ||
-            project.status == 4) &&
+            project.status == 4 ||
+            project.status == 5) &&
           projectTab == 'general' && <ProjectContent />}
         {error == null &&
           (project.status == 1 ||
             project.status == 2 ||
             project.status == 3 ||
-            project.status == 4) &&
+            project.status == 4 ||
+            project.status == 5) &&
           projectTab == 'report' &&
           (isOwn ? <ProjectReportJudging /> : <ProjectReport />)}
 
@@ -249,11 +335,16 @@ export const ProjectManageGeneral = () => {
           (project.status == 1 ||
             project.status == 2 ||
             project.status == 3 ||
-            project.status == 4) &&
+            project.status == 4 ||
+            project.status == 5) &&
           projectTab == 'complaint' && <ProjectComplaint />}
 
         {error == null && projectTab == 'notification' && (
           <ProjectNotification />
+        )}
+
+        {error == null && projectTab == 'review' && (
+          <ProjectReview />
         )}
       </div>
     </div>

@@ -33,7 +33,7 @@ db.subcategories = require("./subcategory.model.js")(sequelize, Sequelize);
 db.bid = require("./bid.model.js")(sequelize, Sequelize);
 db.comment_proj = require("./comment_proj.model.js")(sequelize, Sequelize);
 db.project_post = require("./project_post.model.js")(sequelize, Sequelize);
-db.review = require("./Review.model.js")(sequelize, Sequelize);
+db.reviews = require("./Review.model.js")(sequelize, Sequelize);
 db.otp = require("./OTP.model.js")(sequelize, Sequelize);
 
 db.transactions = require("./transaction.model.js")(sequelize, Sequelize);
@@ -239,13 +239,13 @@ db.project_post.belongsTo(db.user, {
 //   onUpdate: 'CASCADE'
 // })
 
-db.review.belongsTo(db.user, {
+db.reviews.belongsTo(db.user, {
   foreignKey: "user_review",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
 
-db.review.belongsTo(db.user, {
+db.reviews.belongsTo(db.user, {
   foreignKey: "user_reviewed",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",

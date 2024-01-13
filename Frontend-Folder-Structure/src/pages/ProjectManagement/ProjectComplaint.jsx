@@ -117,6 +117,7 @@ export const ProjectComplaint = () => {
               <button
                 className="my-button --button-green"
                 onClick={handleCreateIssue}
+                disabled={project.status == 3 || project.status == 5}
               >
                 Send Complaint
               </button>

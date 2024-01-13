@@ -8,6 +8,7 @@ const Project = db.projects;
 const ProjectReport = db.projects_reports;
 const projectReportController = require("../controllers/project_report.controller.js");
 const PaymentAccount = db.payment_accounts
+const Issue = db.issues;
 
 
 const generateAccessToken = async () => {
@@ -136,10 +137,11 @@ const captureOrder = async (orderID) => {
 
 const maxRetries = 100;
 const interval = 500;
-function fetchDataWithRetry(url, accessToken) {
+async function fetchDataWithRetry(url, accessToken) {
   return new Promise((resolve, reject) => {
     function waitingForTransactionComplete() {
       let retries = 0;
+      console.log("test promise");
 
       fetch(url, {
         headers: {
@@ -150,15 +152,19 @@ function fetchDataWithRetry(url, accessToken) {
       }).then(
         data => data.json()
       ).then(response => {
+        console.log("test promise response: ", response);
+        console.log("test promise status: ", response.status);
         if (response.batch_header.batch_status == 'SUCCESS') {
           // Request is successful, resolve the promise
           resolve(response);
-        } else if (response.status == 200 && retries < maxRetries) {
+        } else if (retries < maxRetries) {
           // Request is accepted, but not complete yet, retry after the interval
           retries++;
-          setTimeout(fetchData, interval);
+          console.log("reponse retry: ", retries);
+          setTimeout(waitingForTransactionComplete, interval);
         } else {
           // Request failed or exceeded max retries, reject the promise
+          console.log("reponse status fail");
           reject(new Error(`Failed with status: ${response.status}`));
         }
       })
@@ -171,6 +177,24 @@ function fetchDataWithRetry(url, accessToken) {
     waitingForTransactionComplete();
   });
 }
+// create a function to mapping the data passed from frontend to generate items that send moneys to multiple receiver
+const createItems = (data) => {
+  const items = [];
+  for (let i = 0; i < data.receivers.length; i++) {
+    items.push({
+      amount: {
+        value: data.costs[i],
+        currency: data.currency,
+      },
+      sender_item_id: data.sender_item_ids[i],
+      recipient_wallet: "PAYPAL",
+      receiver: data.receivers[i]
+    })
+  }
+  return items;
+}
+
+
 const createPayoutBatch = async (data) => {
   const accessToken = await generateAccessToken();
   const url = `${base}/v1/payments/payouts`;
@@ -181,40 +205,53 @@ const createPayoutBatch = async (data) => {
       email_subject: data.subject,
       email_message: data.message
     },
-    items: [
-      {
-        amount: {
-          value: data.cost,
-          currency: data.currency,
-        },
-        sender_item_id: data.sender_item_id,
-        recipient_wallet: "PAYPAL",
-        receiver: data.receiver
-      }
-    ]
-  };
-  const response = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
-  let jsonResponse;
-  let check;
-  jsonResponse = await response.json();
+  
+    items: createItems(data)
 
-  const batch_detail_url = url + `/${jsonResponse.batch_header.payout_batch_id}`
-  fetchDataWithRetry(batch_detail_url, accessToken)
-  .then(response => {
-    console.log('Data received:', response);
-    return response;
-  })
-  .catch(error => {
-    console.error('Error fetching data:', error.message);
-  });
+  };
+  console.log(payload)
+
+  try
+  {
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+    let jsonResponse;
+    jsonResponse = await response.json();
+    console.log("payout batch: ", jsonResponse);
+    const batch_detail_url = url + `/${jsonResponse.batch_header.payout_batch_id}`
+    
+    try {
+      const response = await fetchDataWithRetry(batch_detail_url, accessToken)
+      console.log('Data received:', response);
+      return {
+        jsonResponse: response,
+        httpStatusCode: 201,
+      };
+    }
+    catch (error) {
+      console.error('Error fetching data:', error.message);
+      return {
+        jsonResponse: error,
+        httpStatusCode: 500,
+      };
+    };
+  }
+  catch (error)
+  {
+    console.error('Error creating bayout batch', error.message);
+        return {
+          jsonResponse: error,
+          httpStatusCode: 500,
+        };
+  };
 }
+
 
 async function handleResponse(response) {
   try {
@@ -229,7 +266,6 @@ async function handleResponse(response) {
     throw new Error(errorMessage);
   }
 }
-
 
 exports.apiCreatePayoutBatch = async (req, res) => {
   try {
@@ -313,23 +349,90 @@ exports.apiCaptureOrder = async (req, res) => {
   }
 };
 
+
 exports.apiAcceptProject = async (req, res) => {
   try {
     const reportId = req.body.report_id;
     ProjectReport.findByPk(reportId, { include: [{ model: Project, as: "project", attributes: ['id', 'status'] }] })
       .then(async (projectReport_data) => {
-        console.log(projectReport_data);
+        // console.log(projectReport_data);
         if (projectReport_data.status == 0 && projectReport_data.project.status == 2) {
-          PaymentAccount.findOne({ where: { user_id: req.body.receiverId } })
+          PaymentAccount.findOne({ where: { user_id: req.body.receiverIds[0] } })
             .then(async (receiver) => {
               if (receiver) {
                 console.log(receiver)
-                req.body.receiver = receiver.account_address;
+                req.body.receivers = [receiver.account_address];
                 const data = req.body;
-                const { httpStatusCode, batchData } = await createPayoutBatch(data);
+                const { jsonResponse, httpStatusCode } = await createPayoutBatch(data);
                 if (httpStatusCode == 201)
-                  projectReportController.accept(req, res);
+                {
+                  req.transactionId = jsonResponse.items[0].transaction_id ; 
+                  // projectReportController.accept(req, res);
+                  transactionController.createTransactionAndAcceptProject(req, res);
+
+                }
                 else res.status(500).json({ error: "Failed to pay prepaid" });
+              }
+              else {
+                res.status(404).json({ error: "User payment account not found." });
+              }
+            })
+            .catch(err => {
+              res.status(500).send({
+                message: "Error retrieving user payment account."
+              });
+            });
+        }
+        else res.status(400).json({ error: "Bad request, the project is not ready to be accepted or the report is invalid." });
+      })
+      .catch(err => {
+        res.status(500).send({
+          message: "Error retrieving Project. Error: " + err
+        });
+      });
+
+  }
+  catch (err) {
+    console.error("Failed to accept project:", err);
+    res.status(500).json({ error: "Failed to accept project:" + err });
+  }
+}
+
+// create a api reject project that first check the status of the project, second check the payment account of both owner and member, then call report controller to reject the project to update the status of report to 4
+
+exports.apiRejectProject = async (req, res) => {
+  try {
+    const reportId = req.body.report_id;
+    ProjectReport.findByPk(reportId, { include: [{ model: Project, as: "project", attributes: ['id', 'status'] }] })
+      .then(async (projectReport_data) => {
+        // console.log(projectReport_data);
+        if (projectReport_data.status == 0 && projectReport_data.project.status == 2) {
+          // find all payment accounts of member and owner
+          console.log(req.body.receiverIds)
+          PaymentAccount.findAll({ where: { user_id: req.body.receiverIds } })
+            .then(async (receivers) => {
+              console.log(receivers);
+              if (receivers) {
+                console.log(receivers)
+                let sorted_receivers = receivers.sort((a, b) => req.body.receiverIds.indexOf(a.user_id) - req.body.receiverIds.indexOf(b.user_id));
+
+                req.body.receivers = [];
+                for (let i = 0; i < sorted_receivers.length; i++) {
+                  req.body.receivers.push(sorted_receivers[i].account_address);
+                }
+                const data = req.body;
+                const { jsonResponse, httpStatusCode } = await createPayoutBatch(data);
+                if (httpStatusCode == 201)
+                {
+                  // res.status(httpStatusCode).json(jsonResponse);
+                  req.transactionIds = [];
+                  for (let i = 0; i < jsonResponse.items.length; i++) {
+                    req.transactionIds.push(jsonResponse.items[i].transaction_id);
+                  }
+                  transactionController.createTransactionAndRejectProject(req, res);
+
+                }
+                else res.status(500).json({ error: "Failed to pay refound on reject report." });
               }
               else {
                 res.status(404).json({ error: "User payment account not found." });
@@ -353,5 +456,76 @@ exports.apiAcceptProject = async (req, res) => {
   catch (error) {
     console.error("Failed to create order:", error);
     res.status(500).json({ error: "Failed to capture order." });
+  }
+}
+
+
+
+exports.apiResolveComplaint = async (req, res) => {
+  try {
+    const issueId = req.params.issueId;
+    Issue.findByPk(issueId,{
+      include: [{ model: Project, as: "project", attributes: ['status'] }]
+    })
+      .then(async (issue_data) => {
+        // console.log(projectReport_data);
+        if (issue_data.status == 0 && issue_data.project.status != 3 && issue_data.project.status != 5) {
+          // find all payment accounts of member and owner
+          // console.log(req.body.receiverIds)
+          PaymentAccount.findOne({ where: { user_id: issue_data.userId } })
+            .then(async (receiver) => {
+              if (receiver) {
+                
+                console.log(receiver)
+                if(req.body.accept)
+                {
+                  req.body.costs = [issue_data.amount];
+                  req.body.receiverIds = [issue_data.userId];
+                  req.body.receivers = [receiver.account_address];
+                  const data = req.body;
+                  console.log(data);
+                  const { jsonResponse, httpStatusCode } = await createPayoutBatch(data);
+                  console.log("test 4");
+                  if (httpStatusCode == 201)
+                  {
+                    // res.status(httpStatusCode).json(jsonResponse);
+                    req.transactionIds = [];
+                    for (let i = 0; i < jsonResponse.items.length; i++) {
+                      req.transactionIds.push(jsonResponse.items[i].transaction_id);
+                    }
+                    transactionController.createTransactionAndResolveComplaint(req, res);
+                  }
+                  else res.status(500).json({ error: "Failed to pay refound on reject report." });
+  
+                }
+                else
+                {
+                  req.body.costs = [issue_data.amount];
+                  req.body.receiverIds = [issue_data.uesrId];
+                  req.body.receivers = [receiver.account_address];
+                }
+              }
+              else {
+                res.status(404).json({ error: "User payment account not found." });
+              }
+            })
+            .catch(err => {
+              res.status(500).send({
+                message: `Error retrieving user payment account. Error: ${err}`
+              });
+            });
+        }
+        else res.status(400).json({ error: "Bad request, the complain is already be solved or the project is out of issue accepted đate." });
+      })
+      .catch(err => {
+        res.status(500).send({
+          message: "Error retrieving issue with error: " + err
+        });
+      });
+
+  }
+  catch (err) {
+    // console.error("Failed to create order:", error);
+    res.status(500).json({ error: "Error resolving issue: " + err });
   }
 }
