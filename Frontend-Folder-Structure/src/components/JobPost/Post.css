@@ -21,6 +21,7 @@
   flex-direction: row;
   justify-content: space-between;
   padding: 10px;
+  margin: 10px;
 }
 
 .post-container .post-profile{
@@ -29,8 +30,8 @@
 
 .post-container .post-profile .img-post{
   margin: 10px;
-  height: 80px;
-  width: 80px;
+  height: 40px;
+  width: 40px;
 }
 
 
@@ -44,7 +45,11 @@
 
 .post-container .post-username {
   margin-top: 12px;
-  font-size: 19px;
+}
+
+.left-post{
+  display: flex;
+  flex-direction: column;
 }
 
 
@@ -53,15 +58,6 @@
   font-size: var(--medium-font-size);
   font-family: Inter-Bold, sans-serif;
   font-weight: 600;
-}
-
-.post-container .post-title{
-  display: flex;
-  margin-left: 110px;
-  margin-top: -57px;
-  font-size: var(--medium-font-size);
-  font-family: Inter-Bold, sans-serif;
-  font-weight: 700;
 }
 
 .post-container .post-tag{
@@ -80,12 +76,10 @@
   margin-right: 0;
 }
 
-.post-container .post-detail {
+.post-detail {
   max-width: 600px;
   max-height: 140px;
-  margin-left: 70px;
   text-align: left;
-
 }
 
 .post-container .post-reviews{
@@ -96,12 +90,13 @@
   margin-top: 30px;
 }
 
-.post-container .post-rating{
+.post-rating{
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
   text-align: center;
   align-items: center;
+  height: 15px;
+  justify-content: space-around;
 }
 
 .post-container .rating-container{
@@ -148,7 +143,7 @@
   width: 15px;
 }
 
-.post-container .post-rating p{
+.post-rating>p{
   margin: 0;
 }
 
@@ -176,4 +171,19 @@
   gap: 3px;
   margin-left: 110px;
   margin-top: 4px!important;
+}
+
+.project-post-container{
+  padding-left: 50px;
+  padding-right: 20px;
+  width: 100%;
+  height: 100%;
+}
+
+.post-title{
+  display: flex;
+  font-size: var(--medium-font-size);
+  font-family: Inter-Bold, sans-serif;
+  font-weight: 700;
+  font-size: 20px;
 }

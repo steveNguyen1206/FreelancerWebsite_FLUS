@@ -24,7 +24,7 @@ const Footer = () => {
                 EXPLORE
                 <br />
               </span>
-              <span className={styles.text_wrapper-2}>
+              <span className={styles.text_wrapper_2}>
                 <br />
               </span>
               <a
@@ -32,7 +32,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <span className={styles.text_wrapper-3}>
+                <span className={styles.text_wrapper_3}>
                   Docs
                   <br />
                   <br />
@@ -43,7 +43,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <span className={styles.text_wrapper-3}>
+                <span className={styles.text_wrapper_3}>
                   Plugin
                   <br />
                   <br />
@@ -54,7 +54,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <span className={styles.text_wrapper-3}>
+                <span className={styles.text_wrapper_3}>
                   Dashboard template
                   <br />
                   <br />
@@ -65,7 +65,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <span className={styles.text_wrapper-3}>
+                <span className={styles.text_wrapper_3}>
                   Blog post <br />
                 </span>
               </a>
@@ -77,7 +77,7 @@ const Footer = () => {
                 LET&#39;S CONNECT
                 <br />
               </span>
-              <span className={styles.text_wrapper-2}>
+              <span className={styles.text_wrapper_2}>
                 <br />
               </span>
               <a
@@ -85,34 +85,34 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <span className={styles.text_wrapper-3}>
+                <span className={styles.text_wrapper_3}>
                   Contact me
                   <br />
                 </span>
               </a>
-              <span className={styles.text_wrapper-2}>
+              <span className={styles.text_wrapper_2}>
                 <br />
               </span>
               <a href="https://www.youtube.com/@juxtopposed" rel="noopener noreferrer" target="_blank">
-                <span className={styles.text_wrapper-3}>
+                <span className={styles.text_wrapper_3}>
                   YouTube
                   <br />
                 </span>
               </a>
-              <span className={styles.text_wrapper-2}>
+              <span className={styles.text_wrapper_2}>
                 <br />
               </span>
               <a href="https://github.com/juxtopposed" rel="noopener noreferrer" target="_blank">
-                <span className={styles.text_wrapper-3}>
+                <span className={styles.text_wrapper_3}>
                   GitHub
                   <br />
                 </span>
               </a>
-              <span className={styles.text_wrapper-2}>
+              <span className={styles.text_wrapper_2}>
                 <br />
               </span>
               <a href="https://codepen.io/Juxtopposed" rel="noopener noreferrer" target="_blank">
-                <span className={styles.text_wrapper-3}>CodePen</span>
+                <span className={styles.text_wrapper_3}>CodePen</span>
               </a>
             </p>
           </div>

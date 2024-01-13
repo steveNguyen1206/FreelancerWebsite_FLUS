@@ -6,7 +6,6 @@ import './newPost.css';
 // import './newPost.css';
 import exitButton from '../../assets/exitButton.png';
 import UploadIcon from '../../assets/UploadIcon.png';
-// import projectServices from '@/services/projectPostServices';
 import freelancer_post_Service from '@/services/freelancer_post_Service';
 import { useParams } from 'react-router';
 

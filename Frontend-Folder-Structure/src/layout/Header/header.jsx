@@ -36,7 +36,7 @@ const Header = () => {
     }
   })
   .catch(err => {
-    console.log(err);
+    // console.log(err);
   })
   
   const navigate = useNavigate();

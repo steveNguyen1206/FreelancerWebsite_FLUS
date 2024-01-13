@@ -8,7 +8,6 @@ import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { AuthProvider, useAuth } from '../../AuthContext';
 
-
 const LogIn = () => {
   const { setSignin } = useAuth();
   const InititalLoginPayload = {
@@ -16,18 +15,17 @@ const LogIn = () => {
     userPassword: '',
   };
 
-  let navigate = useNavigate();
-
+  const [error, setError] = useState('');
   const [loginPayload, setLoginPayload] = useState(InititalLoginPayload);
+
+  let navigate = useNavigate();
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setLoginPayload({ ...loginPayload, [name]: value });
   };
-
-  let error = {
-    username: '',
-    password: '',
+  const handleChangeError = (err) => {
+    setError(err);
   };
 
   const signin = () => {
@@ -41,8 +39,8 @@ const LogIn = () => {
       .then((response) => {
         if (response.status == 200) {
           var id = response.data.id;
-          localStorage.setItem('LOGINID',id);
-          localStorage.setItem('AUTH_TOKEN',response.data.accessToken);
+          localStorage.setItem('LOGINID', id);
+          localStorage.setItem('AUTH_TOKEN', response.data.accessToken);
           localStorage.setItem('AVT', response.data.avt_url);
           console.log("AVATER", localStorage.getItem('AVT'));
           setSignin(true);
@@ -57,26 +55,27 @@ const LogIn = () => {
         console.log(localStorage.getItem('AUTH_TOKEN'));
       })
       .catch((e) => {
+        handleChangeError('Username or password is incorrect!');
         if (e.response && e.response.status === 404) {
-          error.username = 'User Not found.';
+          // error.username = 'User Not found.';
         } else if (e.response && e.response.status === 401) {
-          error.password = 'Invalid Password!';
+          // error.password = 'Invalid Password!';
         } else {
-          console.log(e);
+          // console.log(e);
         }
       });
   };
   const googleLogIn = useGoogleLogin({
-    onSuccess: async(tokenRespond) => {
-        try {
-            const res = await axios.get(
-                'https://www.googleapis.com/oauth2/v3/userinfo',
-                {
-                    headers: {
-                        Authorization: `Bearer ${tokenRespond.access_token}`,
-                    },
-                }
-                )
+    onSuccess: async (tokenRespond) => {
+      try {
+        const res = await axios.get(
+          'https://www.googleapis.com/oauth2/v3/userinfo',
+          {
+            headers: {
+              Authorization: `Bearer ${tokenRespond.access_token}`,
+            },
+          }
+        );
 
         try {
           const server_host = 'http://127.0.0.1:8080';
@@ -105,7 +104,9 @@ const LogIn = () => {
           // console.log("AVATAR GG", result.data.avt_url);
           console.log(result.data);
           localStorage.setItem('AVT', result.data.avt_url);
-          console.log('Token: ' + result.data.accessToken + " " + result.data.id);
+          console.log(
+            'Token: ' + result.data.accessToken + ' ' + result.data.id
+          );
           setSignin(true);
           // navigate('/admin')
           if(result.data.roles.includes("ROLE_ADMIN")){
@@ -148,7 +149,7 @@ const LogIn = () => {
                 onChange={handleInputChange}
               />
 
-              <div className="error-message">{error.username}</div>
+              {/* <div className="error-message">{error.username}</div> */}
             </div>
             <div className="input-container">
               <label for="inputPassword5" class="form-label">
@@ -162,7 +163,8 @@ const LogIn = () => {
                 aria-describedby="passwordHelpBlock"
                 onChange={handleInputChange}
               />
-              <div className="error-message">{error.password}</div>
+              {/* <div className="error-message">{error.password}</div> */}
+              {error && <div className="error-message">{error}</div>}
             </div>
 
             <div className="sign-in-button">

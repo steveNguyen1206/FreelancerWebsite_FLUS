@@ -10,6 +10,7 @@ import avatar_green from "../../assets/avatar_green.png";
 import userDataService from "../../services/userDataServices";
 import projectPostServices from "@/services/projectPostServices";
 import freelancerPostService from "@/services/freelancerPostServices";
+import commentService from "@/services/commentServices";
 
 const UserRow = ({ user, refreshUsers, setRefreshUsers }) => {
     
@@ -57,6 +58,13 @@ const UserRow = ({ user, refreshUsers, setRefreshUsers }) => {
                 freelancerPostService.findAndChangeStatusByUserID(id, newStatus)
                 .then((response) => {
                     console.log("Status changed freelancer post: ", newStatus);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+                commentService.findAndChangeStatusByUserID(id, newStatus)
+                .then((response) => {
+                    console.log("Status changed comment: ", newStatus);
                 })
                 .catch((error) => {
                     console.error(error);
