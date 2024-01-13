@@ -150,6 +150,7 @@ const PostDetail = () => {
       console.error('Error fetching Bid:', error);
     }
   };
+  // console.log('check_type', check_type)
 
   return (
     <>
@@ -293,7 +294,7 @@ const PostDetail = () => {
             <div className="proj-bid-list">
 
               {bidOnes.map((bidOne) => (
-                <BidOffer bidOne={bidOne} />
+                <BidOffer bidOne={bidOne} checkOwner={check_type(userId, login_id)} />
               ))}
 
               {/* <Bid />

@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './bid.css';
-import profileImage from '../../assets/profile_image.png';
+// import './bid.css';
+import './bidOffer.css'
+// import profileImage from '../../assets/profile_image.png';
 import contactService from '@/services/contactServices';
 import projectService from '@/services/projectServices';
 //name, skill, message, price, duration, accept, reject
 
-const BidOffer = ({ bidOne }) => {
+const BidOffer = ({ bidOne, checkOwner }) => {
   const navigate = useNavigate();
   const skill = 'React, NodeJS';
   const initProject = {
@@ -73,31 +74,31 @@ const BidOffer = ({ bidOne }) => {
   };
 
   return (
-    <div className="bid">
-      <div className="bid-header">
+    <div className="offer">
+      <div className="offer-header">
         <div className="image-profile">
           {/* <img src={profileImage} alt="profile" /> */}
           <img src={bidOne.user.avt_url} alt="profile" />
         </div>
-        <div className="bid-username">
+        <div className="offer-username">
           {/* <h5>{uname}</h5> */}
           <h5>{bidOne.user.profile_name}</h5>
           <p style={{ color: 'green' }}>{skill}</p>
         </div>
         <div style={{outerHeight: '8px'}}>
-            <div className="bid-rating">
+            <div className="offer-rating">
             <p>4.5</p>
             </div>
         </div>
 
       </div>
-      <div className="bid-body-detail">
-        <div className="bid-price">
+      <div className="offer-body-detail">
+        <div className="offer-price">
           <p>{bidOne.budget}$</p>
         </div>
       </div>
-
-      <div className="bid-button">
+      {checkOwner === 2 && (
+      <div className="offer-button">
         <button className="reject" onClick={handleReject}>
           Reject
         </button>
@@ -105,6 +106,7 @@ const BidOffer = ({ bidOne }) => {
           Accept
         </button>
       </div>
+      )}
     </div>
   );
 };

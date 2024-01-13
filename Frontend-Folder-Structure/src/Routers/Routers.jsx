@@ -43,10 +43,10 @@ const Routers = () => {
           <Route path="/findFreelancer" element={<FindFreelancer />} />
           <Route path="/findFreelancer/:id" element={<PostDetail />} />
           <Route path="/myprofile/:id"  element={<Profile access_token={localStorage.getItem('AUTH_TOKEN')} />} />
-{/* 
+
           <Route path="/project" element={<Project />} />
           <Route path="/project-manage/:id" element={<ProjectManagement own={false}/>} />
-          <Route path="/my-project-manage/:id" element={<ProjectManagement own={true}/>} /> */}
+          <Route path="/my-project-manage/:id" element={<ProjectManagement own={true}/>} />
 
           {/* <Route path="/createFreelancerPost" element={<CreateFreelancerPost />} /> */}
           {/* <Route path="/updateFreelancerPost/:id" element={<UpdateFreelancerPost />} /> */}
