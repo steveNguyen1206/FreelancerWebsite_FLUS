@@ -162,7 +162,7 @@ const PostDetail = () => {
           onUpdate={() => { setIsChange(!isChange) }}
         />
       )}
-      {showHirePopup && <HireFreelancer setShowHirePopup={setShowHirePopup} />}
+      {showHirePopup && <HireFreelancer setShowHirePopup={setShowHirePopup}  onUpdate={() => { setIsChange(!isChange) }}/>}
       {showOfferPopup && <OfferDetailPopup setPopUpAppear={setShowOfferPopup} />}
       <div className="pproject">
         <div className="left-project">
