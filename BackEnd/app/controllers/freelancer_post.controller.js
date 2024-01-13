@@ -602,4 +602,30 @@ exports.deleteById = (req, res) => {
         });
 };
 
+
+exports.filterOnCategory = (req, res) => {
+    const { category_id } = req.params.categoryId;
+    console.log("category_id: ", category_id);
+    Freelancer_post.findAll({
+        where: {
+            category_id: category_id,
+        },
+        include: [
+            {
+                model: Subcategory,
+                where: {
+                    categoryId: category_id,
+                },            }
+        ],
+    })
+        .then((data) => {
+            res.send(data);
+        })
+        .catch((err) => {
+            console.error("Sequelize Error:", err);
+            res.status(500).send({
+                message: "Could not find Freelancer_post with category_id=" + category_id,
+            });
+        });
+}
   
