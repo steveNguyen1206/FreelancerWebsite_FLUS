@@ -14,18 +14,7 @@ exports.create = (req, res) => {
     });
     return;
   }
-
-  // Thực hiện create project trước với các giá trị mặc định như sau:
-    // project_name: ""
-    // project_description: ""
-    // start_date: ""
-    // end_date: ""
-    // budget: 0
-    // status: 0
-    // client_id: 0
-    // freelancer_id: 0
-  // Thực hiện create Contact và lấy thông tin project_id vừa tạo
-  // Thực hiện update project với thông tin từ bảng Contact
+  console.log(req.body)
 
   // Create a Contact
   const contact = {
@@ -245,13 +234,6 @@ exports.findAllBids = (req, res) => {
 
   })
     .then(data => {
-      // res.send(data);
-      // const bid = {
-      //   client_account_name: data.user.account_name,
-      //   client_profile_name: data.user.profile_name,
-      //   client_avt_url: data.user.avt_url,
-      //   budget: data.budget,
-      // }
 
       return res.json(data)
     })
@@ -311,3 +293,151 @@ exports.getDistinctClientIdsByStatus = (req, res) => {
 }
 
 
+
+
+exports.countBids = (req, res) => {
+  const post_id = req.params.freelancer_post_id;
+  console.log(post_id);
+
+  Contact.findAndCountAll({
+    where: {
+      freelancer_post_id: {
+        [Op.eq]: post_id
+      },
+      status: {
+        [Op.eq]: 0
+      }
+    },
+    include: [
+      {
+        model: User,
+        attributes: ['id', 'account_name', 'profile_name', 'avt_url', 'email'],
+      },
+    ],
+  })
+    .then(data => {
+      const count = data.count; // Số lượng dữ liệu được tìm thấy
+      // const results = data.rows; // Dữ liệu tìm thấy
+      
+      return res.json(count);
+    })
+    .catch(err => {
+      res.status(500).send({
+          message: err.message || "Some error occurred while retrieving countBids data."
+      });
+    });
+}
+
+exports.changeContactStatus = (req, res) => {
+  const contact_id = req.params.contact_id;
+  const status = req.params.status;
+
+  console.log("contact_id: " + contact_id);
+  console.log("status: " + status);
+  Contact.update({ status: status }, { where: { id: contact_id } })
+      .then(data => {
+          res.status(200).send({
+              message: "Update contact status successfully."
+          });
+      })
+      .catch(err => {
+          res.status(500).send({
+              message:
+              err.message || "Some error occurred while updating contact status."
+          });
+      });
+}
+
+
+exports.findAllStatusZeroBids = (req, res) => {
+  const post_id = req.params.freelancer_post_id;
+  console.log(post_id)
+  // var condition = freelancer_post_id ? { freelancer_post_id: { [Op.like]: `${freelancer_post_id}%` } } : null;
+
+  Contact.findAll({
+    where: {
+      freelancer_post_id: {
+        [Op.eq]: post_id
+      },
+      status: {
+        [Op.eq]: 0
+      }
+    },
+    include: [
+      {
+        model: User,
+        attributes: ['id', 'account_name', 'profile_name', 'avt_url', 'email'],
+      },
+    ],
+
+  })
+    .then(data => {
+
+      return res.json(data)
+    })
+    .catch(err => {
+      res.status(500).send({
+          message: err.message || "Some error occurred while retrieving findAllBids data."
+      });
+    });
+}
+
+// exports.findContactByProjectId = (req, res) => {
+//   const project_id = req.params.project_id;
+//   console.log(project_id)
+//   // var condition = freelancer_post_id ? { freelancer_post_id: { [Op.like]: `${freelancer_post_id}%` } } : null;
+
+//   Contact.findAll({
+//     where: {
+//       project_id: {
+//         [Op.eq]: project_id
+//       },
+//     },
+//     include: [
+//       {
+//         model: Freelancer_post,
+//         attributes: ['freelancer_id', 'subcategory_id'],
+//       },
+//     ],
+
+//   })
+//     .then(data => {
+
+//       return res.json(data)
+//     })
+//     .catch(err => {
+//       res.status(500).send({
+//           message: err.message || "Some error occurred while retrieving findAllBids data."
+//       });
+//     });
+// }
+
+exports.showContactByContactId = (req, res) => {
+  const contact_id = req.params.contact_id;
+  console.log(contact_id)
+  // var condition = freelancer_post_id ? { freelancer_post_id: { [Op.like]: `${freelancer_post_id}%` } } : null;
+
+  Contact.findAll({
+    where: {
+      id: {
+        [Op.eq]: contact_id
+      },
+    },
+    include: [
+      {
+        model: Freelancer_post,
+        attributes: ['freelancer_id', 'skill_tag'],
+      },
+    ],
+
+  })
+    .then(data => {
+
+      return res.json(data)
+    })
+    .catch(err => {
+      res.status(500).send({
+          message: err.message || "Some error occurred while retrieving findAllBids data."
+      });
+    });
+}

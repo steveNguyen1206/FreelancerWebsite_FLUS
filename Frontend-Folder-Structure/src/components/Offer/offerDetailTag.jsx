@@ -4,11 +4,31 @@ import flag from "../../assets/vietnam.png";
 import avatar from "../../assets/avatar_green.png";
 import { StarRating } from "@/components";
 import { Collapse } from "react-bootstrap";
+import contactService from "@/services/contactServices";
 
 const OfferDetailTag = ({ contactOne }) => {
     const [expanded, setExpanded] = useState(false);
     const [showSeeMore, setShowSeeMore] = useState(false);
     const textContainerRef = useRef(null);
+
+    const handleAccept = () => {
+        console.log('accept');
+        console.log('bidOne.id: ', contactOne.id);
+        contactService.changeContactStatus(contactOne.id, -1).then((response) => {
+            console.log('response: ', response);
+            // onChangeBid();
+        });
+    };
+
+    const handleReject = () => {
+        console.log('reject');
+        console.log('bidOne.id: ', contactOne.id);
+        contactService.changeContactStatus(contactOne.id, -1).then((response) => {
+            console.log('response: ', response);
+            // onChangeBid();
+        });
+    };
+
 
     useEffect(() => {
         const textContainer = textContainerRef.current;
@@ -134,10 +154,10 @@ const OfferDetailTag = ({ contactOne }) => {
 
                         <div className="btns">
                             <div className="overlap-group-3">
-                                <div className="text-wrapper-7">Accept</div>
+                                <div className="text-wrapper-7" onClick={handleAccept}>Accept</div>
                             </div>
                             <div className="overlap-2">
-                                <div className="text-wrapper-8">Reject</div>
+                                <div className="text-wrapper-8" onClick={handleReject}>Reject</div>
                             </div>
                         </div>
                     </div>

@@ -70,7 +70,7 @@ exports.findOne = (req, res) => {
         });
 }
 
-exports.update = (req, res) => {
+exports.updateNotNull = (req, res) => {
     const id = req.params.id;
 
     Project_post.update(req.body, {
@@ -81,17 +81,17 @@ exports.update = (req, res) => {
         .then(num => {
             if (num == 1) {
                 res.send({
-                    message: "Project_post was updated successfully."
+                    message: "Project was updated successfully."
                 });
             } else {
                 res.send({
-                    message: `Cannot update Project_post with id=${id}. Maybe Project_post was not found or req.body is empty!`
+                    message: `Cannot update Project with id=${id}. Maybe Project_post was not found or req.body is empty!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error updating Project_post with id=" + id
+                message: "Error updating Project with id=" + id
             });
         });
 }

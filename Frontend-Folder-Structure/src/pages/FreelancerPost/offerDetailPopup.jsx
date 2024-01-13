@@ -11,12 +11,14 @@ const OfferDetailPopup = ({setPopUpAppear}) => {
   useEffect(() => {
     fetchContacts();
   }, []);
-
+  const [numberOffer, setNumberOffer] = useState(0);
   const fetchContacts = async () => {
     try {
-      const contactsData = await contactService.findAllBids(id);
+      const contactsData = await contactService.findZeroStatusBids(id);
       setContactOnes(contactsData.data);
       console.log('data', contactsData.data);
+      const countBid = await contactService.countBids(id);
+      setNumberOffer(countBid.data);
     } catch (error) {
       console.error('Error fetching Bid:', error);
     }
@@ -40,7 +42,7 @@ const OfferDetailPopup = ({setPopUpAppear}) => {
             <div className="text-wrapper-title">Applications</div>
           </div>
           <div className="avg">
-            <div className="text-wrapper-2">4 Offer</div>
+            <div className="text-wrapper-2">{numberOffer} Offers</div>
           </div>
           
           <div className="offer-container">
