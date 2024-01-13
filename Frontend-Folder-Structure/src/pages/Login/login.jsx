@@ -44,7 +44,13 @@ const LogIn = () => {
           localStorage.setItem('AVT', response.data.avt_url);
           console.log("AVATER", localStorage.getItem('AVT'));
           setSignin(true);
-          navigate(`/myprofile/${id}`);
+          if(response.data.roles.includes("ROLE_ADMIN")){
+            navigate('/admin');
+            console.log('admin')
+          }
+          else{
+            navigate('/');
+          }
         }
         console.log(localStorage.getItem('AUTH_TOKEN'));
       })
@@ -96,12 +102,20 @@ const LogIn = () => {
           localStorage.setItem('LOGINID',result.data.id);
           localStorage.setItem('AUTH_TOKEN',result.data.accessToken);
           // console.log("AVATAR GG", result.data.avt_url);
+          console.log(result.data);
           localStorage.setItem('AVT', result.data.avt_url);
           console.log(
             'Token: ' + result.data.accessToken + ' ' + result.data.id
           );
           setSignin(true);
-          navigate('/admin')
+          // navigate('/admin')
+          if(result.data.roles.includes("ROLE_ADMIN")){
+            navigate('/admin');
+            // console.log('admin')
+          }
+          else{
+            navigate('/');
+          }
         } catch (error) {
           console.log('Error with GoogleLogin' + error);
         }

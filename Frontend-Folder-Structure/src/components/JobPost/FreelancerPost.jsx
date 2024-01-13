@@ -7,6 +7,7 @@ import eyeLight from '../../assets/eyeLight.png';
 import { useNavigate } from 'react-router';
 
 const FreelancerPost = ({post}) => {
+  console.log('post: ', post);
   const navigate = useNavigate();
   
   const handleClickPost = (postId) => {
