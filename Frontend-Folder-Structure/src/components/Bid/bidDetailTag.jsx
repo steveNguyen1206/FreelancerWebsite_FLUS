@@ -1,11 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './bidDetailTag.css';
 import flag from '../../assets/vietnam.png';
-import avatar from '../../assets/avatar_green.png';
 import { StarRating } from '@/components';
 import bidServices from '@/services/bidServices';
 import gmailService from '@/services/gmailServices';
-import projectPostServices from '@/services/projectPostServices';
 
 const convertStartDate = (date1) => {
   let date = new Date(date1);

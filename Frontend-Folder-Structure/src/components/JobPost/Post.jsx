@@ -12,7 +12,7 @@ const Post = ({ project, handleBidClick }) => {
 
   useEffect(() => {
     projectPostWishlistServices
-      .isExisted(project.id,  localStorage.getItem('AUTH_TOKEN'))
+      .isExisted(project.id, localStorage.getItem('AUTH_TOKEN'))
       .then((response) => {
         if (response.data === true) {
           setIsLiked(heart);
@@ -52,33 +52,30 @@ const Post = ({ project, handleBidClick }) => {
               src={project.user.avt_url}
               alt="profile"
             />
-            <div className="post-name">{project.user.account_name}</div>
-            <div className="post-username">({project.user.profile_name})</div>
+            <div className="post-name">{project.user.profile_name}</div>
+            <div className="post-username">({project.user.account_name})</div>
             <div className="post-location">
               <img src={vietnam} alt="vietnam" />
             </div>
           </div>
-
-          <div className="post-title">{project.title}</div>
-
-          <div className="post-tags">
-            <div className="post-tag">
-              {project.subcategory.subcategory_name}
-            </div>
-          </div>
         </div>
-        <div className="post-detail">{project.detail}</div>
+
+        <div className="project-post-container">
+          <div className="post-title">{project.title}</div>
+          <div className="post-tag">{project.subcategory.subcategory_name}</div>
+          <div className="post-detail">{project.detail}</div>
+        </div>
       </div>
 
       <div className="right-post">
         <div className="post-reviews">
           <div className="post-rating">
-            <p>{project.user.avg_rating}</p>
             <StarRating
               rating={parseFloat(project.user.avg_rating)}
               width={100}
               className="pstars"
             />
+            <p>{project.user.avg_rating}</p>
           </div>
         </div>
         <div className="post-bid">
