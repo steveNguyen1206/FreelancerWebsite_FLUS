@@ -12,7 +12,7 @@
 
 .free-post-container{
   height: 280px;
-  width: 880px;
+  /* width: 880px; */
   border: 3px solid #000;
   border-radius: 12px;
   display: flex;

@@ -1,10 +1,12 @@
+const { verifyToken, isAdmin } = require("../middleware/authJwt.js");
+
 module.exports = app => {
     const subcategory = require("../controllers/subcategory.controller.js");
   
     var router = require("express").Router();
   
     // Create a new Category
-    router.post("/", subcategory.create);
+    router.post("/",[verifyToken, isAdmin], subcategory.create);
   
     // Retrieve all Category
     router.get("/", subcategory.findAll);
@@ -16,10 +18,10 @@ module.exports = app => {
     router.get("/:id", subcategory.findOne);
   
     // Update a Tutorial with id
-    router.put("/", subcategory.update);
+    router.put("/",[verifyToken, isAdmin], subcategory.update);
   
     // Delete a Category with id
-    router.delete("/:id", subcategory.delete);
+    router.delete("/:id",[verifyToken, isAdmin], subcategory.delete);
   
     // // Delete all Tutorials
     // router.delete("/", category.deleteAll);

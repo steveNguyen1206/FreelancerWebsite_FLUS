@@ -1,4 +1,5 @@
 const { authJwt, upload } = require("../middleware");
+const { verifyToken, isAdmin } = require("../middleware/authJwt.js");
 module.exports = (app) => {
   const projectPostController = require("../controllers/project_post.controller.js");
 
@@ -33,14 +34,14 @@ module.exports = (app) => {
   router.put("/:id", upload.single("image_file"), projectPostController.update);
 
   // Route to get project_post by page and size
-  router.get('/getprojposts/:page&:size&:searchKey', projectPostController.findProjPostsByPage);
-  router.get('/getprojposts/:page&:size', projectPostController.findProjPostsByPage);
+  router.get('/getprojposts/:page&:size&:searchKey',[verifyToken, isAdmin], projectPostController.findProjPostsByPage);
+  router.get('/getprojposts/:page&:size',[verifyToken, isAdmin], projectPostController.findProjPostsByPage);
 
   // Update the status of a Projpost by id and status param
-  router.put("/status/:id&:status", projectPostController.changeStatusByID);
+  router.put("/status/:id&:status",[verifyToken, isAdmin], projectPostController.changeStatusByID);
 
   // Delete a Projpost with id
-  router.delete("/deleteprojpost/:id", projectPostController.deleteById);
+  router.delete("/deleteprojpost/:id",[verifyToken, isAdmin], projectPostController.deleteById);
 
   app.use("/api/project_post", router);
 };

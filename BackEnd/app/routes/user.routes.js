@@ -1,6 +1,6 @@
 const { upload } = require("../middleware");
 const user_controller = require("../controllers/user.controller.js");
-const {verifyToken} = require('../middleware/authJwt.js')
+const {verifyToken, isAdmin} = require('../middleware/authJwt.js')
 const {isOwner} = require('../middleware/profile.middleware.js')
 
 
@@ -20,20 +20,20 @@ module.exports = (app) => {
   router.get("/email/:email", user_controller.findOnebyEmail);
 
   // Route to get users by page and size
-  router.get('/getusers/:page&:size&:searchKey', user_controller.findUsersbyPage);
-  router.get('/getusers/:page&:size', user_controller.findUsersbyPage);
+  router.get('/getusers/:page&:size&:searchKey', [verifyToken, isAdmin], user_controller.findUsersbyPage);
+  router.get('/getusers/:page&:size', [verifyToken, isAdmin], user_controller.findUsersbyPage);
 
   // Update avatar of a user
   router.put("/avatar/:id", [verifyToken, isOwner], upload.single("avatar"), user_controller.updateAvatar);
 
   // Delete a User with account_name
-  // router.delete("/deleteuser/:accountName", user_controller.deleteOnebyAccountName);
+  router.delete("/deleteuser/:accountName",[verifyToken, isAdmin], user_controller.deleteOnebyAccountName);
   
   // Delete a User with reportedTimes
   // router.delete("/reported_times", user_controller.deleteOnebyReportedTimes);
   
   // Update the status of a User by id and status param
-  router.put("/status/:id&:status", user_controller.changeStatusByID);
+  router.put("/status/:useridtochange&:status", [verifyToken, isAdmin], user_controller.changeStatusByID);
   
   // Change password of a User by id
   router.put("/change_password", [verifyToken, isOwner], user_controller.changePassword);

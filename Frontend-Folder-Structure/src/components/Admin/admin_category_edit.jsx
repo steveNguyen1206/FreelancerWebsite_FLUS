@@ -19,7 +19,7 @@ const EditCategory = ({ m_state, m_function, fetchFunction, category }) => {
       };
       console.log(data);
       categoryService
-        .update(data)
+        .update(data, localStorage.getItem('AUTH_TOKEN'))
         .then((response) => {
           console.log(response.data);
 
@@ -46,7 +46,7 @@ const EditCategory = ({ m_state, m_function, fetchFunction, category }) => {
 
     // .delete(data)
     categoryService
-      .deleteCategory(category.id)
+      .deleteCategory(category.id, localStorage.getItem('AUTH_TOKEN'))
       .then((response) => {
         console.log(response.data);
 

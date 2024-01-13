@@ -42,18 +42,35 @@ const getProjectbyId = (id) => {
   return http.get(`/project_post/${id}`);
 };
 
-const findProjPostsByPage = (page, size, searchKey) => {
+const findProjPostsByPage = (page, size, searchKey, access_token) => {
   console.log("findProjPostsByPage: ", page, size, searchKey);
-  return http.get(`/project_post/getprojposts/${page}&${size}&${searchKey}`);
+  return http.get(`/project_post/getprojposts/${page}&${size}&${searchKey}`, {headers: {
+    "Content-type": "application/json",
+    "x-access-token": access_token,
+  }});
 };
 
-const changeStatusByID = (id, status) => {
-  return http.put(`/project_post/status/${id}&${status}`);
+const changeStatusByID = (id, status, access_token) => {
+  const data = {
+    id: id,
+    status: status,
+  };
+  return http.put(`/project_post/status/${id}&${status}`,data, {headers: {
+    "Content-type": "application/json",
+    "x-access-token": access_token,
+  }});
 };
 
-const removePostById = (id) => {
+const removePostById = (id, access_token) => {
   console.log("removeUserByAccName: ", id);
-  return http.delete(`/project_post/deleteprojpost/${id}`);
+  return http.delete(`/project_post/deleteprojpost/${id}`, {headers: {
+    "Content-type": "application/json",
+    "x-access-token": access_token,
+  }});
+};
+
+const findAndChangeStatusByUserID = (user_id, status) => {
+  return http.put("/project_post/findAndChangeStatus/" + user_id + "&" + status);
 };
 
 const projectPostServices = {
@@ -65,6 +82,7 @@ const projectPostServices = {
   findProjPostsByPage,
   changeStatusByID,
   removePostById,
+  findAndChangeStatusByUserID,
 };
 
 export default projectPostServices;

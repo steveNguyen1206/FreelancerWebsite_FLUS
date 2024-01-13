@@ -94,6 +94,7 @@
     justify-content: center;
     display: flex;
     flex-wrap: wrap;
+    cursor: pointer;
   }
   
   .BannerSection .text-wrapper-3 {
@@ -106,6 +107,7 @@
     position: absolute;
     text-align: center;
     width: 237px;
+    cursor: pointer;
   }
 
   .BannerSection .button-wrapper-2 {
@@ -121,6 +123,7 @@
     display: flex;
     flex-wrap: wrap;
     margin-left: 30px;
+    cursor: pointer;
   }
   
   .BannerSection .text-wrapper-4 {
@@ -133,14 +136,15 @@
     position: absolute;
     text-align: center;
     width: 237px;
+    cursor: pointer;
     
   }
   
   .CategorySection{
     background-color: white;
     position: relative;
-    min-height: 600px;
-    width: 100%;
+    min-height: 300px;
+    /* width: 100%; */
     align-items: center;
     justify-content: center;
     display: flex;
@@ -166,7 +170,7 @@
   .homepage .txt-category {
     color: var(--collection-1-dark-text);
     font-family: "Inter-Bold", Helvetica;
-    font-size: 40px;
+    font-size: 30px;
     font-weight: 700;
     letter-spacing: 0;
     line-height: normal;
@@ -185,18 +189,19 @@
   } */
   
   .homepage .group-3 {
-    height: 165px;
+    height: 125px;
     position: relative;
     width: 138px;
     display: flex;
     justify-content: center;
     flex-direction: column;
+    cursor: pointer;
   }
   
   .homepage .text-wrapper-5 {
     color: #000000;
     font-family: "Inter-Regular", Helvetica;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 400;
     letter-spacing: 0;
     line-height: normal;
@@ -206,11 +211,11 @@
 
   }
   
-  .homepage .image {
-    height: 129px;
-    object-fit: cover;
+  .homepage .group-3>.image {
+    height: 60px;
+    object-fit: contain;
 
-    width: 129px;
+    /* width: 129px; */
   }
   .col{
     display: flex;

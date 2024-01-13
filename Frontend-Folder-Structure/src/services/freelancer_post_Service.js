@@ -73,26 +73,32 @@ const updatePost = async (data) => {
 const findFreelancerEmail = id => {
   return http.get(`/freelancer_post/email/${id}`);
 }
-const findFreePostsByPage = (page, size, searchKey) => {
+const findFreePostsByPage = (page, size, searchKey, access_token) => {
   console.log("findFreePostsByPage: ", page, size, searchKey);
-  return http.get(`/freelancer_post/getfreeposts/${page}&${size}&${searchKey}`);
+  return http.get(`/freelancer_post/getfreeposts/${page}&${size}&${searchKey}`, {headers: {
+    "Content-type": "application/json",
+    "x-access-token": access_token,
+  }});
 };
 
 
-const changeStatusByID = (id, status) => {
-  const access_token = localStorage.getItem('AUTH_TOKEN');
-
-  return http.put(`/freelancer_post/status/${id}&${status}`, {
-    headers: {
-      "Content-type": "application/json",
-      "x-access-token": access_token,
-    },
-  });
+const changeStatusByID = (id, status, access_token) => {
+  const data = {
+    id: id,
+    status: status,
+  };
+  return http.put(`/freelancer_post/status/${id}&${status}`,data, {headers: {
+    "Content-type": "application/json",
+    "x-access-token": access_token,
+  }});
 };
 
-const removePostById = (id) => {
+const removePostById = (id, access_token) => {
   console.log("removeUserByAccName: ", id);
-  return http.delete(`/freelancer_post/deletefreepost/${id}`);
+  return http.delete(`/freelancer_post/deletefreepost/${id}`, {headers: {
+    "Content-type": "application/json",
+    "x-access-token": access_token,
+  }});
 };
 
 const freelancer_post_Service = {
