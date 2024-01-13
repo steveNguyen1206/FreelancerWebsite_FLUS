@@ -7,10 +7,13 @@ import { useNavigate } from 'react-router';
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { AuthProvider, useAuth } from '../../AuthContext';
+import userDataService from '@/services/userDataServices';
+
 
 
 const LogIn = () => {
   const { setSignin } = useAuth();
+
   const InititalLoginPayload = {
     userName: '',
     userPassword: '',
@@ -25,18 +28,38 @@ const LogIn = () => {
     setLoginPayload({ ...loginPayload, [name]: value });
   };
 
-  let error = {
+  const [error, setError] = useState({
     username: '',
     password: '',
-  };
+  });
 
-  const signin = () => {
+
+  const signin = async () => {
     var data = {
       account_name: loginPayload.userName,
       password: loginPayload.userPassword,
     };
+    let hasError = false;
+    await userDataService
+      .findOnebyAccountName(data.account_name)
+      .then((response) => {
+        if (response.status == 200) {
+          console.log(response.data.status);
+          if (response.data.status == 0) {
+            // error.password = 'Invalid username or password, or the user has been banned.'
+            // setError(error);
+            setError(prevState => ({ ...prevState, password: 'Invalid username or password, or the user has been banned.' }));
+            // navigate('/home');
+            hasError = true;
+          }
+        }
+      })
 
-    authServices
+    if (hasError) {
+      return;
+    }
+
+     authServices
       .signin(data)
       .then((response) => {
         if (response.status == 200) {
@@ -50,14 +73,17 @@ const LogIn = () => {
         }
         console.log(localStorage.getItem('AUTH_TOKEN'));
       })
-      .catch((e) => {
-        if (e.response && e.response.status === 404) {
-          error.username = 'User Not found.';
-        } else if (e.response && e.response.status === 401) {
-          error.password = 'Invalid Password!';
-        } else {
-          console.log(e);
-        }
+      .catch((error) => {
+        // if (e.response && e.response.status === 404) {
+        //   error.username = 'User Not found.';
+        // } else if (e.response && e.response.status === 401) {
+        //   error.password = 'Invalid Password!';
+        // } else {
+        //   console.log(e);
+        // }
+
+        // error.password = 'Invalid username or password, or the user has been banned.'
+        setError(prevState => ({ ...prevState, password: 'Invalid username or password, or the user has been banned.' }));
       });
   };
   const googleLogIn = useGoogleLogin({

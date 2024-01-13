@@ -6,18 +6,50 @@ import { StarRating } from "@/components";
 import { Collapse } from "react-bootstrap";
 import contactService from "@/services/contactServices";
 
-const OfferDetailTag = ({ contactOne }) => {
+const OfferDetailTag = ({ contactOne, checkOwner }) => {
     const [expanded, setExpanded] = useState(false);
     const [showSeeMore, setShowSeeMore] = useState(false);
     const textContainerRef = useRef(null);
 
-    const handleAccept = () => {
+    const handleAccept = async () => {
         console.log('accept');
         console.log('bidOne.id: ', contactOne.id);
         contactService.changeContactStatus(contactOne.id, -1).then((response) => {
             console.log('response: ', response);
             // onChangeBid();
         });
+
+        await contactService.showContactByContactId(bidOne.id).then((response) => {
+            console.log('response: ', response);
+            const contact = response.data[0];
+            console.log('contact: ', contact);
+            console.log("Freelancer Post:", contact.budget);
+      
+            const project = initProject;
+            const projectId = contact.project_id;
+            console.log('projectId: ', projectId);
+            project.name = contact.job_name;
+            project.description = contact.job_description;
+            project.startDate = contact.start_date;
+            project.endDate = contact.end_date;
+            project.budget = contact.budget;
+            project.tag_id = contact.freelancer_post.skill_tag;
+            project.contact_id = contact.id;
+            project.owner = contact.client_id;
+            project.member = contact.freelancer_post.freelancer_id;
+            console.log('project: ', project);
+            projectService.createProject(project).then((response) => {
+              console.log('response: ', response);
+              console.log('project: ', project);
+              navigate(`/project-manage/${response.data.id}`)
+      
+            });
+      
+            // <Route path="/project-manage/:id" element={<ProjectManagement own={false}/>} />
+            // copilot :3 code navigate to project-manage/response.data.id
+            // window.location.href = `/project-manage/${response.data.id}`;
+            
+          });
     };
 
     const handleReject = () => {
@@ -152,6 +184,7 @@ const OfferDetailTag = ({ contactOne }) => {
                             ${contactOne.budget}
                         </div>
 
+                        {checkOwner === 2 && (
                         <div className="btns">
                             <div className="overlap-group-3">
                                 <div className="text-wrapper-7" onClick={handleAccept}>Accept</div>
@@ -160,6 +193,7 @@ const OfferDetailTag = ({ contactOne }) => {
                                 <div className="text-wrapper-8" onClick={handleReject}>Reject</div>
                             </div>
                         </div>
+                        )}
                     </div>
                 </div>
             </div>

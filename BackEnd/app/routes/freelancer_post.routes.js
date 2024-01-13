@@ -18,6 +18,8 @@ module.exports = app => {
     // router.get("/allposts/", freelancer_post.findAllPosts);
     router.get("/allallposts/", freelancer_post.findAllAll);
   
+    router.get("/activeposts", freelancer_post.findAllActivePosts);
+
     // Retrieve a single freelancer_post with id
     router.get("/:id", freelancer_post.findOne);
 
@@ -36,6 +38,8 @@ module.exports = app => {
 
     // Delete a Projpost with id
     router.delete("/deletefreepost/:id", freelancer_post.deleteById);
+
+    // Get active posts
 
 
     app.use('/api/freelancer_post', router);

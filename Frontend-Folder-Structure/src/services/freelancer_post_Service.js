@@ -10,6 +10,10 @@ const allAllPosts = (freelancer_id) =>{
     return http.get(`/freelancer_post/allallposts`);
 }
 
+const activePosts = (freelancer_id) =>{
+   return http.get(`/freelancer_post/activeposts`);
+}
+
 const findOnebyId = id => {
   return http.get(`/freelancer_post/${id}`);
 };
@@ -105,6 +109,7 @@ const freelancer_post_Service = {
   // update,
   allposts,
   allAllPosts,
+  activePosts,
   sendPost,
   updatePost,
   findOnebyId,
