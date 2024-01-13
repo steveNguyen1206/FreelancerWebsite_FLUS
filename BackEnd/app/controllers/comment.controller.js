@@ -4,43 +4,7 @@ const Op = db.Sequelize.Op;
 const user = db.user;
 const review = db.reviews;
 
-const getRatingClient = (user_id) => {
-  return review
-    .findAll({
-      where: {
-        user_reviewed: user_id,
-        type: 1, // freelancer rating client
-      },
-    })
-    .then((data) => {
-      let sum = 0;
-      let count = 0;
-      data.forEach((element) => {
-        sum += element.rating;
-        count++;
-      });
-      return count === 0 ? 0 : sum / count;
-    });
-};
 
-const getRatingFreelancer = (user_id) => {
-  return review
-    .findAll({
-      where: {
-        user_reviewed: user_id,
-        type: 1, // client rating freelancer
-      },
-    })
-    .then((data) => {
-      let sum = 0;
-      let count = 0;
-      data.forEach((element) => {
-        sum += element.rating;
-        count++;
-      });
-      return count === 0 ? 0 : sum / count;
-    });
-};
 
 exports.create = (req, res) => {
   if (!req.body.comment) {
