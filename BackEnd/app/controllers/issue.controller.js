@@ -159,7 +159,7 @@ exports.findIssuesByPage = (req, res) => {
     const { limit, offset } = getPagination(parseInt(page), parseInt(size));
 
     // Find all users with condition by page
-    Issue.findAndCountAll({ where: condition, limit, offset })
+    Issue.findAndCountAll({ where: condition, limit, offset , include: [{ model: Project, as: "project" }]})
         .then((data) => {
             // console.log(data)
             const { rows: m_issues, count: totalItems } = data;
@@ -216,6 +216,63 @@ exports.acceptIssue = (req, res) => {
                                 res.status(500).send({
                                     message:
                                         err.message || "Some error occurred while resoling issue."
+                                });
+                            });
+                    } else {
+                        res.send({
+                            message: `Cannot update project`
+                        });
+                    }
+                })
+                .catch(err => {
+                    res.status(500).send({
+                        message: "Error updating Project with error=" + err
+                    });
+                });
+        } else {
+            res.send({
+                message: `Cannot update Issue with id=${id}`
+            });
+        }
+    })
+    .catch(err => {
+        res.status(500).send({
+            message: "Error updating Issue with id=" + id
+        });
+    });
+}
+
+exports.rejectIssue = (req, res) => {
+    const id = req.params.issueId;
+    Issue.update({ status: 2 }, {
+        where: { id: id }
+    })
+    .then(num => {
+        if (num == 1) {
+            const upadte = { status: 5 }
+            Project.update(upadte, {
+                where: { id: req.body.projectId }
+            })
+                .then(num => {
+                    if (num == 1) {
+                        const notification = {
+                            title: req.body.subject,
+                            content: req.body.message,
+                            creator_id: req.userId,
+                            project_id: req.body.projectId
+                        }
+
+                        ProjectNoti.create(notification)
+                            .then(noti_data => {
+                                // res.send(project_data);
+                                res.send({
+                                    message: "Issue resolved!"
+                                });
+                            })
+                            .catch(err => {
+                                res.status(500).send({
+                                    message:
+                                        err.message || "Some error occurred while resolving issue."
                                 });
                             });
                     } else {

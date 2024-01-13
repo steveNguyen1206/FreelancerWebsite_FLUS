@@ -9,6 +9,7 @@ import eyeLight from "../../assets/eyeLight.png";
 import avatar_green from "../../assets/avatar_green.png";
 import userDataService from "@/services/userDataServices";
 import paymentServices from '@/services/paymentServices';
+import issueServices from "@/services/issueServices";
 import { getCurrentDateTime } from '@/helper/helper';
 
 
@@ -44,13 +45,25 @@ const IssueRow = ({ issue, refreshIssues, setRefreshIssues }) => {
             currency: "USD",
             sender_item_ids: [issue.id  + getCurrentDateTime()],
         }
-        try {
-            const response = await paymentServices.resolveComplaint(issue.id, payload, localStorage.getItem('AUTH_TOKEN'));
-            console.log("RESPONSE: ", response.data);
-            setRefreshIssues(!refreshIssues);
-        } catch (error) {
-            console.error(error);
-        }   
+        if(isAccept) {
+            try {
+                const response = await paymentServices.resolveComplaint(issue.id, payload, localStorage.getItem('AUTH_TOKEN'));
+                console.log("RESPONSE: ", response.data);
+                setRefreshIssues(!refreshIssues);
+            } catch (error) {
+                console.error(error);
+            }   
+        }
+        else {
+            try {
+                const response = await issueServices.rejectIssue(issue.id, payload, localStorage.getItem('AUTH_TOKEN'));
+                console.log("RESPONSE: ", response.data);
+                setRefreshIssues(!refreshIssues);
+            } catch (error) {
+                console.error(error);
+            }   
+        }
+        
     };
 
     return (
@@ -78,7 +91,7 @@ const IssueRow = ({ issue, refreshIssues, setRefreshIssues }) => {
                 </div>
             </div>
 
-            {issue.status == 0 && (
+            {issue.status == 0 && (issue.project.status != 5 && issue.project.status != 3) && (
                 <div className="right-post">
                 <div className="pbid">
                     <div class="bid-button">
@@ -93,9 +106,22 @@ const IssueRow = ({ issue, refreshIssues, setRefreshIssues }) => {
             </div>
             )}
 
+            {issue.status == 0 && (issue.project.status == 5 || issue.project.status == 3) && (
+                
+                <div className="right-post">
+                    Out of date
+                </div>
+            )}
+
             {issue.status == 1 && (
                 <div className="right-post">
                     Accepted
+                </div>    
+            )}
+
+            {issue.status == 2 && (
+                <div className="right-post">
+                    Rejected
                 </div>    
             )}
         </div>

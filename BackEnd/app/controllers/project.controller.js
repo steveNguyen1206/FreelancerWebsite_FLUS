@@ -4,6 +4,7 @@ const Op = db.Sequelize.Op;
 const User = db.Sequelize.user;
 const Transaction = db.transactions;
 const ProjectNoti = db.projects_notis;
+const Review = db.reviews;
 
 const { createTransaction } = require('../controllers/transaction.controller.js')
 
@@ -382,3 +383,42 @@ exports.createNull = (req, res) => {
       });
     });
 };
+
+exports.createReview = (req, res) => {
+  // Create a Project
+  const review = {
+    project_id: req.params.projectId,
+    user_review: req.body.reviewer_id,
+    user_reviewed: req.body.reviewee_id,
+    star: req.body.rating,
+    comment: req.body.message,
+    type: req.body.type,
+  };
+
+  console.log(review)
+
+  // Save Project in the database
+  if (review.user_review == review.user_reviewed) {
+    return res.status(400).send({
+      message: "Cannot review yourself",
+    });
+  }
+  else if(req.userId != review.user_review){
+    return res.status(400).send({
+      message: "Cannot review as another user",
+    });
+  }
+  else
+  {
+    Review.create(review)
+      .then((data) => {
+        return res.json(data.id);
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while creating the Tutorial.",
+        });
+      });
+  }
+}

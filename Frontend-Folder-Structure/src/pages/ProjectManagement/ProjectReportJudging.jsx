@@ -275,7 +275,7 @@ export const ProjectReportJudging = () => {
         </div>
       )}
 
-      {(project.status == 2 || project.status == 3 || project.status == 4) &&
+      {(project.status == 2 || project.status == 3 || project.status == 4 || project.status == 5) &&
         (error ? (
           <>{error}</>
         ) : (
