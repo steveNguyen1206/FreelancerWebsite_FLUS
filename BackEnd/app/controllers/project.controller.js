@@ -32,13 +32,13 @@ exports.create = (req, res) => {
     status: 0,
     owner_id: req.body.owner,
     member_id: req.body.member,
-    created_bid_id: req.body.bid_id,
+    // created_bid_id: req.body.bid_id,
     created_contact_id: req.body.contact_id,
     tag_id: req.body.tag_id,
   };
 
-  console.log(req.body);
-
+  console.log("req.body: ",req.body);
+  console.log("project: ",project);
   // Save Tutorial in the database
   Project.create(project)
     .then((project_data) => {
@@ -51,18 +51,18 @@ exports.create = (req, res) => {
 
       ProjectNoti.create(notification)
         .then(noti_data => {
-          res.send(project_data);
+          return res.json(project_data);
         })
-        .catch((err) => {
-          res.status(500).send({
+        .catch(err => {
+          return res.status(500).json({
             message:
               err.message ||
               "Some error occurred while creating project notification.",
           });
         });
     })
-    .catch((err) => {
-      res.status(500).send({
+    .catch(err => {
+      return res.status(500).json({
         message:
           err.message || "Some error occurred while creating the Project.",
       });
@@ -382,3 +382,30 @@ exports.createNull = (req, res) => {
       });
     });
 };
+
+exports.updateNotNull = (req, res) => {
+  const id = req.params.id;
+  console.log("update not null: ", req.body)
+
+  Project_post.update(req.body, {
+      where: {
+          id: id
+      }
+  })
+      .then(num => {
+          if (num == 1) {
+              return res.json({
+                  message: "Project was updated successfully."
+              });
+          } else {
+              return res.json({
+                  message: `Cannot update Project with id=${id}. Maybe Project_post was not found or req.body is empty!`
+              });
+          }
+      })
+      .catch(err => {
+          return res.status(500).json({
+              message: "Error updating Project with id=" + id
+          });
+      });
+}

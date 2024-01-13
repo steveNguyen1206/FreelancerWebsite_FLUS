@@ -113,7 +113,7 @@ export const ProjectConfigure = () => {
         "noti_title": "The project is now ready.",
         "noti_content": "The project was successfully be prepaid and completed all the configuration process. Project is now already in progress. Happy kicking off!",
     }
-      const response = await paymentServices.paidAndUpdateProject(payload, localStorage.getItem("AUTH_TOKEN"));
+      const response = await paymentServices.paidAndUpdateProject(project.id, payload, localStorage.getItem("AUTH_TOKEN"));
       console.log("Payment successful", response.data); // Log the response data
 
         window.location.reload();

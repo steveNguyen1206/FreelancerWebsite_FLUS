@@ -57,13 +57,16 @@ const FindFreelancer = () => {
     setSearchTitle(event.target.value);
   };
 
- 
+  // const [selectedTags, setSelectedTags] = useState([]);
+  // const handleFilterChange = (newSelectedTags) => {
+  //   setSelectedTags(newSelectedTags);
+  // };
 
   const [selectedRange, setSelectedRange] = useState([0, 10000]);
   const handleRangeChange = (newSelectedRange) => {
     setSelectedRange(newSelectedRange);
   };
-  // console.log('posts', posts);
+  console.log('posts', posts);
   const filteredPosts = posts.filter(
     (post) =>
       post.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
@@ -72,10 +75,10 @@ const FindFreelancer = () => {
       post.lowset_price >= selectedRange[0] &&
       post.lowset_price <= selectedRange[1]
   );
-  // console.log('selectedRange', selectedRange);
+  console.log('selectedRange', selectedRange);
 
   const subcategory_ids = posts.map((post) => post.subcategory_id);
-  // console.log('subcategory_ids', subcategory_ids);
+  console.log('subcategory_ids', subcategory_ids);
   const sortPosts = (posts) => {
     switch (sortOption) {
       case 'price-asc':

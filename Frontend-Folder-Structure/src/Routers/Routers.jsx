@@ -50,7 +50,7 @@ const Routers = () => {
 
           {/* <Route path="/createFreelancerPost" element={<CreateFreelancerPost />} /> */}
           {/* <Route path="/updateFreelancerPost/:id" element={<UpdateFreelancerPost />} /> */}
-          <Route path="/job" element={<Job />} />
+          {/* <Route path="/job" element={<Job />} /> */}
           <Route path='/aboutUs'  element={<AboutUs />} />
         </Routes>
         <Footer />
