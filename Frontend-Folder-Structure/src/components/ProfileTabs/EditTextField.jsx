@@ -1,9 +1,7 @@
 import React from 'react';
 import './EditTextField.css';
-import { useState } from 'react';
 
 const EditTextField = ({ field_name, is_password = false, onChange }) => {
-  const [errorMessage, setErrorMessage] = useState('');
   const type = is_password ? 'password' : 'text';
 
   return (

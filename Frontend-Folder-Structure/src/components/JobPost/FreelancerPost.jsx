@@ -29,7 +29,7 @@ const FreelancerPost = ({post}) => {
         
       </div>
       <div className='content-container'>
-        <div className="ptitle">Detail text here everyone.</div>
+        <div className="ptitle">{post.title}</div>
         <div className="post-tag">{post.subcategory.subcategory_name}</div>
         <div className="details">
           <div className="detail-content">

@@ -6,7 +6,7 @@ const Op = db.Sequelize.Op;
 // add a subcategory to a user by user id and subcategory id
 exports.create = async (req, res) => {
   console.log("======== ADD A SUBCATEGORY TO A USER =========");
-  const userId = req.body.userId;
+  const userId = req.body.id;
   const subcategoryId = req.body.subcategoryId;
 
   console.log("USER: " + userId);
@@ -94,7 +94,7 @@ exports.findAll = (req, res) => {
 // delete a subcategory of a user by user id and subcategory id
 exports.delete = async (req, res) => {
   console.log("======== DELETE A SUBCATEGORY OF A USER =========");
-  const userId = req.params.userId;
+  const userId = req.params.id;
   const subcategoryId = req.params.subcategoryId;
 
   console.log("USER: " + userId);

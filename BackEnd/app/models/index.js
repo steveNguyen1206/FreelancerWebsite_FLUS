@@ -171,7 +171,7 @@ db.projects.belongsTo(db.subcategories, {
   onUpdate: "CASCADE",
 });
 
-db.projects.belongsTo(db.freelancer_post, {
+db.projects.belongsTo(db.contact, {
   foreignKey: {
     name: "created_contact_id",
     allowNull: true,

@@ -34,7 +34,8 @@ const UpdateTags = ({ user_id }) => {
         setRefresh();
       })
       .catch((e) => {
-        setErrorMessage(e.message);
+        const message = e.response.data.message;
+        setErrorMessage(message);
       });
   };
 
@@ -54,7 +55,8 @@ const UpdateTags = ({ user_id }) => {
         setSkills(filteredSkills);
       })
       .catch((e) => {
-        setErrorMessage(e.message);
+        const message = e.response.data.message;
+        setErrorMessage(message);
       });
   };
 
@@ -72,7 +74,7 @@ const UpdateTags = ({ user_id }) => {
     }
 
     const data = {
-      userId: user_id,
+      id: user_id,
       subcategoryId: selectingSkill,
     };
 
@@ -83,7 +85,8 @@ const UpdateTags = ({ user_id }) => {
         setSuccessMessage('Tag added successfully');
       })
       .catch((e) => {
-        setErrorMessage(e.message);
+        const message = e.response.data.message;
+        setErrorMessage(message);
       });
   };
 

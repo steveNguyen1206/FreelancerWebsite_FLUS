@@ -1,7 +1,7 @@
 import { http } from "./http-common";
 
-const sendEmail = (email) => {
-  return http.post("/gmail/send-email", email);
+const sendEmail = (data) => {
+  return http.post("/gmail/send-email", data);
 };
 
 const gmailService = {

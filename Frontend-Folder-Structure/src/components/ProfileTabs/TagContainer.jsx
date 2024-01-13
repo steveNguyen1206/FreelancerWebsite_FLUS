@@ -1,6 +1,5 @@
 import React from 'react';
 import './TagContainer.css';
-import { useState } from 'react';
 import { EditTag } from '..';
 
 const TagContainer = ({

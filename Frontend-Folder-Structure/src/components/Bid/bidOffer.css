@@ -6,7 +6,7 @@
     box-sizing: border-box;
 }
 
-.bid{
+.offer{
     height: 200px;
     width: 300px;
     border-radius: 12px;
@@ -17,12 +17,12 @@
     justify-content: space-between;
 }
 
-.bid-rating{
+.offer-rating{
     align-items: center;
     color: #D9C301;
 }
 
-.bid-cont{
+.offer-cont{
     width: 300px;
     border-radius: 12px;
     border: 3px solid #15A919;
@@ -32,52 +32,52 @@
     justify-content: space-between;
 }
 
-.bid-cont .bid-header{
+.offer-header{
     display: flex;
     align-items: center;
     margin-top: 10px;
     margin-left: 10px;
 }
 
-.bid-cont .bid-contimage-profile img{
+.image-profile img{
     height: 50px;
     width: 50px;
     border-radius: 10px;
     margin-right: 20px;
 }
 
-.bid-cont .bid-contbid-username{
+.offer-username{
     align-items: center;
     justify-self: center;
     margin-right: 20px;
 }
-.bid-cont .bid-username p{
+.offer-username p{
     margin-bottom: 0;
 }
 
-.bid-cont .bid-username h5{
+.offer-username h5{
     margin-bottom: 0px;
 }
 
 
-.bid-cont .bid-rating{
+.offer-rating{
     align-items: center;
     color: #D9C301;
 }
 
-.bid-cont .bid-message {
+.offer-message {
     margin-left: 20px;
     max-width: 200px;
     max-height: 140px;
 }
 
 
-.bid-cont .bid-message p{
+.offer-message p{
     margin-bottom: 0;
 }
 
 
-.bid-cont .bid-price p{
+.offer-price p{
     display: flex;
     font-size: 30px;
     color: var(--primary);
@@ -88,13 +88,13 @@
     font-weight: 800;
 }
 
-.bid-cont .bid-body-detail{
+.offer-body-detail{
     display: flex;
     flex-direction: row;
     justify-content: center;
 }
 
-.bid-cont .bid-button .accept, .reject{
+.offer-button .accept, .reject{
     width: 104px;
     height: 25px;
     border-radius: 8px;
@@ -102,7 +102,7 @@
     
 }
 
-.bid-cont .bid-button{
+.offer-button{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -111,11 +111,11 @@
     margin-bottom: 15px;
 }
 
-.bid-cont .accept{
+.accept{
     background-color: #15A919;
 }
 
-.bid-cont .reject{
+.reject{
     background-color: #A91E15;
     
 }

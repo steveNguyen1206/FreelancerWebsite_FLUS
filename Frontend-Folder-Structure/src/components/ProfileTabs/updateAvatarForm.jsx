@@ -4,8 +4,7 @@ import { useParams } from 'react-router-dom';
 import { UpdateButton } from '@/components';
 import './updateAvatarForm.css';
 
-const UpdateAvatarForm = () => {
-  const { userId } = useParams();
+const UpdateAvatarForm = ({userId}) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -25,9 +24,10 @@ const UpdateAvatarForm = () => {
           // Handle the response data
           setSuccessMessage('Upload successfully');
         })
-        .catch((error) => {
+        .catch((e) => {
           // Handle any errors
-          setErrorMessage(error.message);
+          const message = e.response.data.message;
+        setErrorMessage(message);
         });
     }
     else {

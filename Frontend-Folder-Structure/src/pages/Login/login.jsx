@@ -44,6 +44,7 @@ const LogIn = () => {
           localStorage.setItem('LOGINID',id);
           localStorage.setItem('AUTH_TOKEN',response.data.accessToken);
           localStorage.setItem('AVT', response.data.avt_url);
+          console.log("AVATER", localStorage.getItem('AVT'));
           setSignin(true);
           navigate(`/myprofile/${id}`);
         }
@@ -95,9 +96,11 @@ const LogIn = () => {
           );
           localStorage.setItem('LOGINID',result.data.id);
           localStorage.setItem('AUTH_TOKEN',result.data.accessToken);
+          // console.log("AVATAR GG", result.data.avt_url);
           localStorage.setItem('AVT', result.data.avt_url);
           console.log('Token: ' + result.data.accessToken + " " + result.data.id);
           setSignin(true);
+          navigate('/admin')
         } catch (error) {
           console.log('Error with GoogleLogin' + error);
         }

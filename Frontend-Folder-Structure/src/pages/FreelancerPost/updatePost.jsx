@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import subcategoryService from '@/services/subcategoryService';
 import { WhiteButton } from '@/components';
-import './updatePost.css';
+import './newPost.css';
+// import './newPost.css';
 import exitButton from '../../assets/exitButton.png';
 import UploadIcon from '../../assets/UploadIcon.png';
-import projectServices from '@/services/projectPostServices';
+// import projectServices from '@/services/projectPostServices';
+import freelancer_post_Service from '@/services/freelancer_post_Service';
+import { useParams } from 'react-router';
 
 const isValidTitle = (title) => {
   if (!title) return true;
@@ -33,25 +38,59 @@ const isValidImage = (image) => {
   return true;
 };
 
-const UpdatePost = ({ isOpen, onClose, projectId, onUpdate}) => {
+const UpdatePost = ({ isOpen, onClose, onUpdate }) => {
+  const userId = localStorage.getItem('LOGINID');
+
   const [showOverlay, setShowOverlay] = useState(isOpen);
   const [error, setError] = useState({
-    title: '',
-    image: '',
-    detail: '',
-    budgetMin: '',
-    budgetMax: '',
-    tag: '',
+
   });
+  const currentURL = window.location.href;
+  const postId = currentURL.split("/").pop();
 
   const initState = {
+    freelancer_id: userId,
     title: '',
-    image: '',
-    detail: '',
-    budgetMin: '',
-    budgetMax: '',
-    tag: '',
+    delivery_description: '',
+    about_me: '',
+    skill_description: '',
+    lowset_price: '',
+    delivery_due: '',
+    imgage_post_urls: '',
+    skill_tag: '',
+    revision_number: '',
+    image_file: null, // Lấy file ảnh luôn
+    id: postId
   };
+
+  console.log("initState: ", initState);
+
+  const validateForm = () => {
+    let isValid = true;
+    return isValid;
+  };
+  const initialSkills = [
+    {
+      'id': '',
+      'subcategory_name': ''
+    }
+  ];
+  const [skills, setSkills] = useState(initialSkills);
+  useEffect(() => {
+    getSkills();
+  }, []);
+
+  const getSkills = () => {
+    subcategoryService
+      .findAll()
+      .then((response) => {
+        setSkills(response.data);
+        console.log(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
 
   const [fileName, setFileName] = useState('');
   const [updatePost, setUpdatePost] = useState(initState);
@@ -64,141 +103,85 @@ const UpdatePost = ({ isOpen, onClose, projectId, onUpdate}) => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setFileName(file.name);
-    setUpdatePost({ ...updatePost, image: file });
+    setUpdatePost({ ...updatePost, image_file: file });
   };
 
-  const validateForm = () => {
-    const newErrors = { ...error };
+  
 
-    // Reset errors
-    newErrors.title = '';
-    newErrors.image = '';
-    newErrors.detail = '';
-    newErrors.budgetMin = '';
-    newErrors.budgetMax = '';
-    newErrors.tag = '';
+  // const data = {
+  //   title: updatePost.title,
+  //   delivery_description: updatePost.delivery_description,
+  //   about_me: updatePost.about_me,
+  //   image_file: updatePost.image_file,
+  //   lowset_price: updatePost.lowset_price,
+  //   skill_tag: updatePost.skill_tag,
+  //   delivery_due: updatePost.delivery_due,
+  //   skill_description: updatePost.skill_description,
+  //   id: postId,
+  // };
+  // console.log("postId ------------------->", postId);
+  // console.log("data ------------------->", data);
+  
 
-    let isValid = true;
-
-    if (!isValidTitle(updatePost.projectTitle)) {
-      newErrors.title =
-        'Invalid title. Title must be alphanumeric and not empty.';
-      isValid = false;
-    }
-
-    if (!isValidImage(updatePost.image)) {
-      newErrors.image = 'Please select an image.';
-      isValid = false;
-    }
-
-    if (!isValidDetail(updatePost.detail)) {
-      newErrors.detail = 'Project detail must have at least 10 characters.';
-      isValid = false;
-    }
-
-    if (!isValidTag(updatePost.tag)) {
-      newErrors.tag = 'Project tag must be a string.';
-      isValid = false;
-    }
-
-    if (Number(updatePost.budgetMin) > Number(updatePost.budgetMax)) {
-      newErrors.budgetMin =
-        'Minimum budget must be less than or equal to maximum budget.';
-      newErrors.budgetMax =
-        'Minimum budget must be less than or equal to maximum budget.';
-      isValid = false;
-    }
-
-    if (!isValidBudget(updatePost.budgetMin)) {
-      isValid = false;
-      newErrors.budgetMin =
-        'Invalid budget. Please enter a valid number greater than or equal to 0.';
-    }
-
-    if (!isValidBudget(updatePost.budgetMax)) {
-      isValid = false;
-      newErrors.budgetMax =
-        'Invalid budget. Please enter a valid number greater than or equal to 0.';
-    }
-
-    if (
-      (updatePost.budgetMin || updatePost.budgetMax) &&
-      (!updatePost.budgetMin || !updatePost.budgetMax)
-    ) {
-      newErrors.budgetMin =
-        'Both minimum and maximum budget must be updated together.';
-      newErrors.budgetMax =
-        'Both minimum and maximum budget must be updated together.';
-      isValid = false;
-    }
-
-    // if all fields are valid, isValid will be false
-    let allFieldsEmpty = true;
-    Object.keys(updatePost).forEach((key) => {
-      if (updatePost[key]) allFieldsEmpty = false;
-    });
-
-    if (allFieldsEmpty) {
-      newErrors.title = 'Please fill in at least one field.';
-      isValid = false;
-    }
-    setError(newErrors);
-    return isValid;
-  };
-
-  const data = {
-    title: updatePost.title,
-    image: updatePost.image,
-    detail: updatePost.detail,
-    budgetMin: updatePost.budgetMin,
-    budgetMax: updatePost.budgetMax,
-    tag: updatePost.tag,
-    id: projectId,
-  };
-
-  const handleUpdateClick = () => {
+  const handleUpdateClick = async () => {
     if (validateForm()) {
-      console.log(data);
-      projectServices
-        .updatePost(data)
-        .then(() => {
-          console.log('Form is valid. Project submitted successfully.');
-          setShowOverlay(false);
-          onUpdate();
-          if (onClose) {
-            onClose();
-          }
-        })
-        .catch((error) => {
-          console.error('Error submitting project:', error.message);
-        });
+      console.log('Done clicked.');
+      updatePost.skill_tag = document.getElementById("filter").value;
+      try {      
+        console.log("From validated successfully.")
+        console.log("Update Post: ", updatePost)
+        await freelancer_post_Service
+          .updatePost(updatePost)
+        // .then(() => {
+        console.log('Form is valid. Post updated successfully.');
+        setShowOverlay(false);
+        onUpdate();
+        if (onClose) {
+          await onClose();
+        }
+      }
+      // )
+      catch (error) {
+        console.error('Error submitting project:', error.message);
+      };
     } else {
       console.log('Form has errors. Please fix them.');
     }
-  };
+  }
+  // };
+
+  
 
   return (
     <>
       {showOverlay && <div className="overlay" />}
-      <div className="update-project-form">
-        <button onClick={onClose} className="exit-button">
+      <div className="new-project-form">
+        <button
+          onClick={() => {
+            setShowOverlay(false);
+            onClose();
+          }}
+          className="exit-button"
+        >
           <img src={exitButton} alt="Exit" />
         </button>
-        <div className="update-project-header">
-          <p>UPDATE JOB POST</p>
+        <div className="new-project-header">
+          <p>UPDATE FREELANCER POST</p>
         </div>
 
-        <div className="update-project-body">
+        <div className="new-post-body">
           <div className="project-title-input">
-            <label htmlFor="projectTitle">Job Title</label>
-            <input
-              type="text"
-              id="projectTitle"
-              name="title"
-              placeholder="Enter project title ..."
-              value={updatePost.title}
-              onChange={handleInputChange}
-            />
+            <label htmlFor="skillTag">Skill tag *</label>
+            <select className="filter" id="filter" style={{ width: '650px' }}>
+              <option value="" disabled defaultValue>
+                Add skills
+              </option>
+              {skills.map(skill => (
+                <option key={skill.id} value={skill.id}>
+                  {skill.subcategory_name}
+                </option>
+              ))}
+            </select>
             <div className="error-message">{error.title}</div>
           </div>
 
@@ -236,60 +219,98 @@ const UpdatePost = ({ isOpen, onClose, projectId, onUpdate}) => {
             <div className="error-message">{error.image}</div>
           </div>
 
-          <div className="project-tag-input">
-            <label htmlFor="projectTag">Job Tag</label>
+          <div className="project-title-input">
+            <label htmlFor="projectTitle">Post's Title *</label>
             <input
               type="text"
-              id="projectTag"
-              name="tag"
-              placeholder="Enter project tag ..."
-              value={updatePost.tag}
+              id="projectTitle"
+              name="title"
+              placeholder="Post's title"
+              defaultValue={updatePost.title}
               onChange={handleInputChange}
             />
-            <div className="error-message">{error.tag}</div>
+            <div className="error-message">{error.title}</div>
+          </div>
+
+          <div className="project-title-input">
+            <label htmlFor="projectAboutMe">About Me *</label>
+            <input
+              type="text"
+              id="projectAboutMe"
+              name="about_me"
+              placeholder="Describe yourself here..."
+              defaultValue={updatePost.about_me}
+              onChange={handleInputChange}
+            />
+            <div className="error-message">{error.title}</div>
           </div>
 
           <div className="project-detail-input">
-            <label htmlFor="projectDetail">Job Detail</label>
+            <label htmlFor="projectDetail">About My Skill *</label>
             <textarea
               type="text"
               id="projectDetail"
-              name="detail"
-              placeholder="Enter project details ..."
+              name="skill_description"
+              placeholder="Describe your skill here..."
+              defaultValue={updatePost.skill_description}
               onChange={handleInputChange}
-              value={updatePost.detail}
             />
             <div className="error-message">{error.detail}</div>
           </div>
 
           <div className="project-range-budget">
-            <div className="budget-min-input">
-              <label htmlFor="budgetMin">Budget Min</label>
+            <div className="post-budget-min-input">
+              <label htmlFor="budgetMin">Lowest Price *</label>
               <input
                 type="text"
                 id="budgetMin"
-                name="budgetMin"
-                placeholder="Enter minimum budget ..."
+                name="lowset_price"
+                placeholder="Enter lowest price ..."
+                defaultValue={updatePost.lowset_price}
                 onChange={handleInputChange}
-                value={updatePost.budgetMin}
               />
               <div className="error-message">{error.budgetMin}</div>
             </div>
 
-            <div className="budget-max-input">
-              <label htmlFor="budgetMax">Budget Max</label>
+            <div className="post-budget-min-input">
+              <label htmlFor="deliveryDue">Delivery due *</label>
               <input
                 type="text"
-                id="budgetMax"
-                name="budgetMax"
-                placeholder="Enter maximum budget ..."
+                id="deliveryDue"
+                name="delivery_due"
+                placeholder="Enter delivery due ..."
+                defaultValue={updatePost.delivery_due}
                 onChange={handleInputChange}
-                value={updatePost.budgetMax}
               />
-              <div className="error-message">{error.budgetMax}</div>
+              <div className="error-message">{error.delivery_due}</div>
+            </div>
+
+            <div className="post-budget-min-input">
+              <label htmlFor="revisionNum">Revision Number</label>
+              <input
+                type="numeric"
+                id="revisionNum"
+                name="revision_number"
+                placeholder="Enter revision number ..."
+                defaultValue={updatePost.revision_number}
+                onChange={handleInputChange}
+              />
+              <div className="error-message">{error.revision_number}</div>
             </div>
           </div>
+          <div className="project-title-input">
+            <label htmlFor="projectDeliverDescript">Delivery Description</label>
 
+            <textarea
+              type="text"
+              id="projectDeliverDescript"
+              name="delivery_description"
+              placeholder="Write more about how your products come to the client. Each line will be a list's item."
+              defaultValue={updatePost.delivery_description}
+              onChange={handleInputChange}
+            />
+            <div className="error-message">{error.delivery_description}</div>
+          </div>
           <WhiteButton text="Update Project" onClick={handleUpdateClick} />
         </div>
       </div>

@@ -17,9 +17,21 @@ import admin_category_white from '../../assets/Admin/admin_category_white.png';
 import { ComplainTab, FreelancerPostTab, ProjectPostTab, UserTab } from '@/components';
 import { CategoryTab } from '@/components';
 import { useAuth } from '../../AuthContext';
+import authServices from '@/services/authServices';
 
 
 const Admin = () => {
+    const navigate = useNavigate();
+
+    authServices.checkIsAdmin(localStorage.getItem('AUTH_TOKEN')).then(res => {
+        if (res.status != 200) {
+          navigate('/');
+        }
+      })
+      .catch(err => {
+        navigate('/');
+        console.log(err);
+      })
     
     const [activeGroup, setActiveGroup] = useState(null);
 
@@ -27,7 +39,7 @@ const Admin = () => {
         console.log(group);
         setActiveGroup(group);
     };
-    const navigate = useNavigate();
+    
     const { setSignin } = useAuth();
     const handleSignOut = () => {
         localStorage.removeItem('AUTH_TOKEN');
@@ -36,6 +48,8 @@ const Admin = () => {
         setSignin(false);
         navigate('/');
     }
+
+    
 
     return (
         <div className="user-management">

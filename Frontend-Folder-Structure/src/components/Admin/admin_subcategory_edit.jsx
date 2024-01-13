@@ -21,7 +21,7 @@ const EditSubcategory = ({
     };
     console.log(data);
     subcategoryService
-      .update(data)
+      .update(data, localStorage.getItem('AUTH_TOKEN'))
       .then((response) => {
         console.log(response.data);
 
@@ -45,7 +45,7 @@ const EditSubcategory = ({
     //   };
     //   console.log(data);
     subcategoryService
-      .deleteSubcategory(subcategory.id)
+      .deleteSubcategory(subcategory.id, localStorage.getItem('AUTH_TOKEN'))
       .then((response) => {
         console.log(response.data);
 

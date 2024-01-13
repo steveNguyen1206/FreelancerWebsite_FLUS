@@ -181,7 +181,8 @@ exports.update = (req, res) => {
 
 exports.updateAvatar = async (req, res) => {
   const id = 1;
-  console.log(req.params);
+  console.log("######### UPDATE AVATAR #########");
+  console.log(req);
 
   // đoạn code này để test upload hình ảnh lên cloud mà ko cập nhật lại bảng user, do chấn chưa đăng ký bằng sms đượt :>>
   // cái này chạy được thì cái trên chạy đc, it should work :))
@@ -312,16 +313,18 @@ exports.deleteOnebyReportedTimes = (req, res) => {
 
 // Change user status by user id and status param
 exports.changeStatusByID = (req, res) => {
-  const { id, status } = req.params;
+  console.log("REQUEST: ", req.params);
+  const { useridtochange, status } = req.params;
+  console.log("userid: ", useridtochange, "status: ", status);
 
-  if (!id || parseInt(status) < 0 || parseInt(status) > 2) {
+  if (!useridtochange || parseInt(status) < 0 || parseInt(status) > 2) {
     res.status(400).send({
       message: "Invalid user id or status!",
     });
     return;
   }
 
-  User.update({ status }, { where: { id } })
+  User.update({ status }, { where: { id : useridtochange } })
     .then((num) => {
       if (num[0] === 1) {
         res.send({
@@ -329,14 +332,14 @@ exports.changeStatusByID = (req, res) => {
         });
       } else {
         res.send({
-          message: `Cannot update User with id=${id}. Maybe User was not found!`,
+          message: `Cannot update User with id=${useridtochange}. Maybe User was not found!`,
         });
       }
     })
     .catch((err) => {
       console.error("Sequelize Error:", err);
       res.status(500).send({
-        message: "Could not update User with id=" + id,
+        message: "Could not update User with id=" + useridtochange,
       });
     });
 };

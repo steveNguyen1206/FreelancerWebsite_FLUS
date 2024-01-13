@@ -4,6 +4,7 @@ import subcategoryService from '@/services/subcategoryService';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 import exitButton from '../../assets/exitButton.png';
+import { useLocation } from 'react-router';
 
 function valuetext(value) {
   return `${value} $`;
@@ -18,11 +19,6 @@ const Filter = ({ selectedTags, onSelectedTagsChange, onSelectedRangeChange }) =
   ];
 
   const [skills, setSkills] = useState(initialSkills);
-
-  useEffect(() => {
-    getSkills();
-  }, []);
-
   const getSkills = () => {
     subcategoryService
       .findAll()
@@ -34,6 +30,48 @@ const Filter = ({ selectedTags, onSelectedTagsChange, onSelectedRangeChange }) =
         console.log(e);
       });
   };
+
+  useEffect(() => {
+    getSkills();
+  }, []);
+
+  const getIdbyName = (name) => {
+    for (let i = 0; i < skills.length; i++) {
+      if (skills[i].subcategory_name == name) {
+        console.log("a", skills[i].id)
+        return skills[i].id;
+      }
+    }
+  };
+
+  const location = useLocation();
+  useEffect(() => {
+    // Read the category from the query parameter
+    const params = new URLSearchParams(location.search);
+    const category = params.get('category');
+
+    if (category) {
+      subcategoryService
+      .findAll()
+      .then((response) => {
+        setSkills(response.data);
+        // Set the selected category in the filter
+        setSelectedSkills([category]);
+        // Apply the filter logic as needed
+        console.log('response.data tag before get id', response.data);
+        console.log('skills tag before get id', skills);
+        const categoryId = getIdbyName(category);
+        onSelectedTagsChange([categoryId]);
+        console.log('selectedTags in filter', categoryId);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+      
+    }
+  }, [location.search]);
+
+  
 
   const [value, setValue] = useState([0, 10000]);
   const [selectedSkills, setSelectedSkills] = useState([]);
@@ -57,15 +95,6 @@ const Filter = ({ selectedTags, onSelectedTagsChange, onSelectedRangeChange }) =
     onSelectedRangeChange([lower, upper]);
   };
 
-
-  const getIdbyName = (name) => {
-    for (let i = 0; i < skills.length; i++) {
-      if (skills[i].subcategory_name === name) {
-        console.log("a", skills[i].id)
-        return skills[i].id;
-      }
-    }
-  };
 
   const handleFilterChange = (event) => {
     const selectedOption = event.target.value;

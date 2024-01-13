@@ -10,6 +10,7 @@ const FreelancerPostsTab = ({ userId }) => {
   }, []);
 
   const fetchPosts = async () => {
+    if (!userId) return;
     try {
       const postsData = await freelancer_post_Service.allposts(userId);
       setPosts(postsData.data);

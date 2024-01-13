@@ -52,7 +52,8 @@ const UpdatePassword = ({ user_id }) => {
         setSuccessMessage('Password updated successfully');
       })
       .catch((e) => {
-        setErrorMessage(e.message);
+        const message = e.response.data.message;
+        setErrorMessage(message);
       });
   };
 

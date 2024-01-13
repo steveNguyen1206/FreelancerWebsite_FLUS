@@ -1,6 +1,5 @@
 import React from 'react';
 import './EditTag.css';
-import { useState } from 'react';
 import { DeleteButton } from '@/components';
 import userSubcategoryService from '@/services/userSubcategoryServices';
 

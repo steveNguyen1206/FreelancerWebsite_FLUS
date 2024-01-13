@@ -1,8 +1,13 @@
 import http from "./http-common";
 
 const create = (data) => {
+    const access_token = localStorage.getItem('AUTH_TOKEN');
+
     console.log("======== ADD A TAG TO A USER =========");
-    return http.post("/user_subcategory", data);
+    return http.post("/user_subcategory", data, {headers: {
+        "Content-type": "application/json",
+        "x-access-token": access_token,
+      }});
 };
 
 const findAll = (id) => {
@@ -11,12 +16,17 @@ const findAll = (id) => {
 };
 
 const deleteSubcategory = (data) => {
+    const access_token = localStorage.getItem('AUTH_TOKEN');
+
     console.log("DELETE SUBCATEGORY OF A USER");
     console.log("data", data);
-    const userId = data.userId;
+    const id = data.userId;
     const subcategoryId = data.subcategoryId;
     
-    return http.delete(`/user_subcategory/${userId}/${subcategoryId}`, data);
+    return http.delete(`/user_subcategory/${id}/${subcategoryId}`, {headers: {
+        "Content-type": "application/json",
+        "x-access-token": access_token,
+      }});
 };
 
 const userSubcategoryService = {

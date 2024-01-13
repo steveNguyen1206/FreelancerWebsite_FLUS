@@ -99,8 +99,12 @@ exports.findAndChangeStatus = (req, res) => {
 
 // Retrieve all Project_posts from the database.
 exports.findAllProjectPosts = (req, res) => {
-    const {userId} = req.params;
-    const condition = userId ? { user_id: { [Op.eq]: `${userId}` } } : null;
+    const {user_id} = req.params;
+    console.log("#############################\n");
+    console.log("FIND ALL PROJECTS POSTS");
+    console.log("userId: ", user_id);
+    console.log("Params: ", req.params);
+    const condition = user_id ? { user_id: { [Op.eq]: `${user_id}` } } : null;
 
     project_post.findAll({ where: condition })
         .then(data => {

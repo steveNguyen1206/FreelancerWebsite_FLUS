@@ -11,6 +11,7 @@ import banUser from '../../assets/banUser.png';
 import banUserActive from '../../assets/banUser_active.png';
 import recycleBin from '../../assets/recycleBin.png';
 import freelancer_post_Service from '@/services/freelancer_post_Service';
+import avatar_green from '../../assets/avatar_green.png';
 
 
 const FreelancerPostRow = ({
@@ -20,6 +21,7 @@ const FreelancerPostRow = ({
     freepostTagsId,
     freepostDescription,
     freepostBudget,
+    freepostStatus,
     userID, 
     handleViewClick,
     setRefreshFreePosts,
@@ -57,10 +59,10 @@ const FreelancerPostRow = ({
       // console.log('freepost tag: ', freepostTagsData.data.subcategory_name);
     };
 
-    const [active, setActive] = useState(status); // State to trigger refresh
+    const [active, setActive] = useState(freepostStatus); // State to trigger refresh
     const handleChangeStatus = () => {
-        const newStatus = active === 0 ? 1 : 0; // Change the logic based on your requirements
-        freelancer_post_Service.changeStatusByID(freepostId, newStatus)
+        const newStatus = active == 0 ? 1 : 0; // Change the logic based on your requirements
+        freelancer_post_Service.changeStatusByID(freepostId, newStatus, localStorage.getItem("AUTH_TOKEN"))
             .then((response) => {
                 console.log("Status changed: ", newStatus);
                 setActive(newStatus);
@@ -73,7 +75,7 @@ const FreelancerPostRow = ({
 
     const handleRemoveProjPost = () => {
         console.log("Remove ProjPost: ", freepostId);
-        freelancer_post_Service.removePostById(freepostId)
+        freelancer_post_Service.removePostById(freepostId, localStorage.getItem("AUTH_TOKEN"))
             .then((response) => {
                 setRefreshFreePosts((prev) => !prev);
             })
@@ -88,7 +90,7 @@ const FreelancerPostRow = ({
             <div className="left-post">
             <div className="pheader">
                 <div className="pprofile">
-                <img src={ownerProject.avt_url} alt="profile" />
+                <img src={ownerProject.avt_url != "https://imgur.com/gallery/ApNKGxs" ? ownerProject.avt_url : avatar_green} alt="profile" />
                 <div className="pname">{ownerProject.profile_name} </div>
                 <div className="pusername">({ownerProject.account_name})</div>
                 <div className="plocation">
@@ -135,7 +137,7 @@ const FreelancerPostRow = ({
                 <div className="btn-row">
                     <div class="col">
                         <img class="recycle-bin" alt="Recycle bin" src={recycleBin} onClick={handleRemoveProjPost}/>
-                        <img className="ban-icon" src={active === 0 ? banUserActive : banUser} onClick={handleChangeStatus} />
+                        <img className="ban-icon" src={active == 0 ? banUserActive : banUser} onClick={handleChangeStatus} />
                         <img class="eye-light" onClick={handleViewClick} src={eyeLight}/>
 
                     </div>

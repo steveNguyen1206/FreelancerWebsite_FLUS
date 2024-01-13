@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './profile.css';
 import profileCover from '../../assets/profile_cover.jpg';
-import avatar from '../../assets/avatar_green.png';
-import facebookicon from '../../assets/SocialIcon/facebook.png';
-import instaicon from '../../assets/SocialIcon/insta.png';
 import linkedinicon from '../../assets/SocialIcon/linkedin.png';
 import editIcon from '../../assets/editProfileIcon.png';
 import {
-  BankTab,
-  EmptyTab,
   StarRating,
   Tag,
   PopupUpdateProfile,
@@ -17,6 +12,7 @@ import {
 import { SignUp } from '@/pages';
 import { useParams, useNavigate } from 'react-router';
 import userDataService from '@/services/userDataServices';
+import userSubcategoryService from '@/services/userSubcategoryServices';
 import { Link } from 'react-router-dom';
 import {
   ProjectPostsTab,
@@ -26,12 +22,15 @@ import {
   PaymentAccountTab,
 } from '@/components';
 
-const profile = ({ access_token }) => {
-  console.log('ACCESS TOKEN: ', access_token);
-
+const profile = () => {
+  const this_id = localStorage.getItem('LOGINID');
   const { id } = useParams();
+  
+  const isOwnProfile = (this_id === id);
+
   let navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
+  const [refresh, setRefresh] = useState(0);
 
   const initialProfileState = {
     id: '',
@@ -47,9 +46,15 @@ const profile = ({ access_token }) => {
 
   const [userProfile, setUserProfile] = useState(initialProfileState);
   const [showUpdateProfile, setShowUpdateProfile] = useState(false);
+  const [userSkills, setUserSkills] = useState([]);
 
   const handleUpdateProfile = () => {
     setShowUpdateProfile(true);
+  };
+
+  const handleClosePopupUpdateProfile = () => {
+    setShowUpdateProfile(false);
+    setRefresh(1- refresh);
   };
 
   const getUserProfile = (id) => {
@@ -63,10 +68,27 @@ const profile = ({ access_token }) => {
         console.log(e);
       });
   };
+  
+  // get all skills of an user
+  const getUserSkills = (id) => {
+    userSubcategoryService
+      .findAll(id)
+      .then((response) => {
+        setUserSkills(response.data);
+        setRefresh();
+      })
+      .catch((e) => {
+        const message = e.response.data.message;
+        setErrorMessage(message);
+      });
+  };
 
   useEffect(() => {
-    if (id) getUserProfile(id);
-  }, [id]);
+    if (id) {
+      getUserProfile(id);
+      getUserSkills(id);
+    }
+  }, [id, refresh]);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -85,9 +107,10 @@ const profile = ({ access_token }) => {
       {/* Update Profile Popup */}
       {showUpdateProfile && (
         <PopupUpdateProfile
-          m_state={showUpdateProfile}
-          m_function={setShowUpdateProfile}
+          // m_state={showUpdateProfile}
+          // m_function={setShowUpdateProfile}
           user_profile={userProfile}
+          handleCloseIconClick={handleClosePopupUpdateProfile}
         />
       )}
 
@@ -100,7 +123,7 @@ const profile = ({ access_token }) => {
                 <div className="avatar-container">
                   <img
                     className="ellipse"
-                    alt="Ellipse"
+                    alt="Avatar"
                     src={userProfile.avt_url}
                   />
                 </div>
@@ -112,18 +135,21 @@ const profile = ({ access_token }) => {
                       {userProfile.profile_name}{' '}
                     </span>
                     <span className="span">({userProfile.account_name})</span>
-                    <div
-                      className="edit-container"
-                      style={{ display: 'flex', alignItems: 'center' }}
-                    >
-                      {/* <span style={{fontSize:"16px", marginRight:"10px"}}>Edit</span> */}
-                      <img
-                        className="image"
-                        alt="edit profile"
-                        src={editIcon}
-                        onClick={handleUpdateProfile}
-                      />
-                    </div>
+
+                    {isOwnProfile && (
+                      <div
+                        className="edit-container"
+                        style={{ display: 'flex', alignItems: 'center' }}
+                      >
+                        {/* <span style={{fontSize:"16px", marginRight:"10px"}}>Edit</span> */}
+                        <img
+                          className="image"
+                          alt="edit profile"
+                          src={editIcon}
+                          onClick={handleUpdateProfile}
+                        />
+                      </div>
+                    )}
                   </p>
                   <div className="text-wrapper-2">
                     Junior FullStack Developer
@@ -141,20 +167,22 @@ const profile = ({ access_token }) => {
                     </Link>
                   </div>
 
-                  <div className="to-projects-manager">
-                    <div className="navigate-button">
-                    <UpdateButton
-                      button_name={'Projects Created'}
-                      onClick={goToProjectsCreated}
-                      />
+                  {isOwnProfile && (
+                    <div className="to-projects-manager">
+                      <div className="navigate-button">
+                        <UpdateButton
+                          button_name={'Projects Created'}
+                          onClick={goToProjectsCreated}
+                        />
                       </div>
                       <div className="navigate-button">
-                    <UpdateButton
-                      button_name={'Projects Joined'}
-                      onClick={goToProjectsJoined}
-                      />
+                        <UpdateButton
+                          button_name={'Projects Joined'}
+                          onClick={goToProjectsJoined}
+                        />
                       </div>
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="rating-bar">
@@ -171,12 +199,9 @@ const profile = ({ access_token }) => {
                   <div className="text-wrapper-7">My Job Tags:</div>
                   <div className="tag-box">
                     <div className="tag-box-inner">
-                      <Tag string={'Web Developer'} />
-                      <Tag string={'Web'} />
-                      <Tag string={'Web Design'} />
-                      <Tag string={'Chief of Technology'} />
-                      <Tag string={'Chief of Technology'} />
-                      <Tag string={'Chief of Technology'} />
+                      {userSkills.map((skill) => (
+                        <Tag string={skill.subcategory_name} />
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -189,7 +214,7 @@ const profile = ({ access_token }) => {
                       }`}
                       onClick={() => handleTabClick(0)}
                     >
-                      <div className="text-wrapper-11">My Project Post</div>
+                      <div className="text-wrapper-11">Project Post</div>
                     </div>
                     <div
                       className={`${
@@ -197,24 +222,38 @@ const profile = ({ access_token }) => {
                       }`}
                       onClick={() => handleTabClick(1)}
                     >
-                      <div className="text-wrapper-11">My Freelancer Post</div>
+                      <div className="text-wrapper-11">Freelancer Post</div>
                     </div>
-                    <div
-                      className={`${
-                        activeTab === 2 ? ' group-6 active' : 'group-6'
-                      }`}
-                      onClick={() => handleTabClick(2)}
-                    >
-                      <div className="text-wrapper-11">My Wishlist</div>
-                    </div>
-                    {/* <div className={`${activeTab === 3 ? 'group-6 active' : 'group-6'}`}
-                    onClick={() => handleTabClick(3)}>
-                      <div className="text-wrapper-11">My Calendar</div>
-                    </div> */}
-                    <div className={`${activeTab === 4 ? 'active group-6' : 'group-6'}`}
-                    onClick={() => handleTabClick(4)}>
-                      <div className="text-wrapper-11">My Payment Account</div>
-                    </div>
+                    {isOwnProfile && (
+                      <div
+                        className={`${
+                          activeTab === 2 ? ' group-6 active' : 'group-6'
+                        }`}
+                        onClick={() => handleTabClick(2)}
+                      >
+                        <div className="text-wrapper-11">Wishlist</div>
+                      </div>
+                    )}
+                    {isOwnProfile && (
+                      <div
+                        className={`${
+                          activeTab === 3 ? 'group-6 active' : 'group-6'
+                        }`}
+                        onClick={() => handleTabClick(3)}
+                      >
+                        <div className="text-wrapper-11">Calendar</div>
+                      </div>
+                    )}
+                    {isOwnProfile && (
+                      <div
+                        className={`${
+                          activeTab === 4 ? 'active group-6' : 'group-6'
+                        }`}
+                        onClick={() => handleTabClick(4)}
+                      >
+                        <div className="text-wrapper-11">Payment Account</div>
+                      </div>
+                    )}
                   </div>
                   <div className="main-tab-container">
                     {activeTab === 0 && (
@@ -223,9 +262,13 @@ const profile = ({ access_token }) => {
                     {activeTab === 1 && (
                       <FreelancerPostsTab userId={userProfile.id} />
                     )}
-                    {activeTab === 2 && <WishlistTab userId={userProfile.id} />}
-                    {activeTab === 3 && <CalendarTab userId={userProfile.id} />}
-                    {activeTab === 4 && (
+                    {isOwnProfile && activeTab === 2 && (
+                      <WishlistTab userId={userProfile.id} />
+                    )}
+                    {isOwnProfile && activeTab === 3 && (
+                      <CalendarTab userId={userProfile.id} />
+                    )}
+                    {isOwnProfile && activeTab === 4 && (
                       <PaymentAccountTab userId={userProfile.id} />
                     )}
                   </div>

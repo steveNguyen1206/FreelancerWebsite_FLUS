@@ -7,12 +7,18 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 const ProjectPostsTab = ({ userId }) => {
+  // console.log('ProjectPostsTab userId: ', userId);
   const navigate = useNavigate();
 
   const [projects, setProjects] = useState([]);
 
-  const fetchProjects = async () => {
+  const fetchProjects = async (userId) => {
+    // console.log('fetching projects: ' + userId);
+
+    if (!userId) return;
+    
     try {
+      // console.log('userId', userId);
       const projectsData = await projectPostServices.getAllProjects(userId);
 
       console.log('projectsData', projectsData);
@@ -37,8 +43,8 @@ const ProjectPostsTab = ({ userId }) => {
   };
 
   useEffect(() => {
-    fetchProjects();
-  }, []);
+    fetchProjects(userId);
+  }, [userId]);
 
   return (
     <div className='project-posts-container'>

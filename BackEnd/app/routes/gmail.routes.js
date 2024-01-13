@@ -3,7 +3,7 @@ module.exports = (app) => {
 
     var router = require("express").Router();
 
-    router.post("/send-email", gmailController.sendEmail);
+    router.post("/send-email", gmailController.sendEmailToFreelancer);
 
     app.use("/api/gmail", router);
 }
