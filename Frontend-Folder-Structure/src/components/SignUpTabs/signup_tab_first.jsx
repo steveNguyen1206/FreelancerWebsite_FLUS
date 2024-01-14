@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import userDataService from '@/services/userDataServices';
+import { useNavigate } from 'react-router';
 
 const isValidPassword = (password) => {
   return password.length >= 8;
@@ -46,6 +47,8 @@ const signUpTabFirst = ({ setTab, signUpPayload, setSignUpPayload }) => {
       [event.target.name]: event.target.value,
     });
   };
+
+  let navigate = useNavigate();
 
   const [error, setError] = useState({
     userName: '',
@@ -116,6 +119,7 @@ const signUpTabFirst = ({ setTab, signUpPayload, setSignUpPayload }) => {
           );
 
           console.log('Token: ' + result.data.accessToken);
+          navigate(`/login`)
         } catch (error) {
           console.log('Error with GoogleSignup' + error);
         }
