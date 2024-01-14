@@ -163,7 +163,7 @@ const PostDetail = () => {
         />
       )}
       {showHirePopup && <HireFreelancer setShowHirePopup={setShowHirePopup}  onUpdate={() => { setIsChange(!isChange) }}/>}
-      {showOfferPopup && <OfferDetailPopup setPopUpAppear={setShowOfferPopup} />}
+      {showOfferPopup && <OfferDetailPopup setPopUpAppear={setShowOfferPopup} checkOwner={check_type(userId, login_id)}/>}
       <div className="pproject">
         <div className="left-project">
           <div className="main-post">

@@ -16,10 +16,10 @@ const getRatingClient = (user_id) => {
       let sum = 0;
       let count = 0;
       data.forEach((element) => {
-        sum += element.rating;
+        sum += parseFloat(element.rating);
         count++;
       });
-      return count === 0 ? 0 : sum / count;
+      return count === 0 ? 0 : sum.toFixed(1) / count;
     });
 };
 
@@ -35,10 +35,10 @@ const getRatingFreelancer = (user_id) => {
       let sum = 0;
       let count = 0;
       data.forEach((element) => {
-        sum += element.rating;
+        sum += parseFloat(element.rating);
         count++;
       });
-      return count === 0 ? 0 : sum / count;
+      return count === 0 ? 0 : sum.toFixed(1) / count;
     });
 };
 
@@ -110,8 +110,6 @@ exports.findCommentByProjectId = (req, res) => {
     })
     .then((data) => {
       if (data.length > 0) {
-        // loại bỏ các comment có parent_id != id
-        // data = data.filter((comment) => comment.parent_id === comment.id);
         Promise.all(
           data.map((parentComment) => {
             return Promise.all([

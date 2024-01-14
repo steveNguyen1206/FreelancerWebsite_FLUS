@@ -16,18 +16,19 @@ exports.getRatingClient = (req, res) => {
         res.send({ averageStar: 0, count });
       } else {
         // Calculate the average star rating
-        const averageStar =
-          data.reduce((total, review) => total + review.star, 0) / count;
+        const averageStar = parseFloat(
+          (
+            data.reduce((total, review) => total + parseFloat(review.star), 0) /
+            count
+          ).toFixed(1)
+        );
         res.send({ averageStar, count });
       }
     })
     .catch((err) => {
-      res
-        .status(500)
-        .send({
-          message:
-            err.message || "Some error occurred while retrieving reviews.",
-        });
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving reviews.",
+      });
     });
 };
 
@@ -45,17 +46,18 @@ exports.getRatingFreelancer = (req, res) => {
         res.send({ averageStar: 0, count });
       } else {
         // Calculate the average star rating
-        const averageStar =
-          data.reduce((total, review) => total + review.star, 0) / count;
+        const averageStar = parseFloat(
+          (
+            data.reduce((total, review) => total + parseFloat(review.star), 0) /
+            count
+          ).toFixed(1)
+        );
         res.send({ averageStar, count });
       }
     })
     .catch((err) => {
-      res
-        .status(500)
-        .send({
-          message:
-            err.message || "Some error occurred while retrieving reviews.",
-        });
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving reviews.",
+      });
     });
 };

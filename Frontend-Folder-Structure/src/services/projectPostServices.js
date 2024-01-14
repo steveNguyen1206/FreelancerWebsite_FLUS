@@ -45,7 +45,7 @@ const getAllByUserId = (user_id) => {
 };
 
 const getAll = () => {
-  return http.get('/project_post/findAll');
+  return http.get('/project_post/findAllProjectPosts');
 };
 
 const getOnebyId = (id) => {
