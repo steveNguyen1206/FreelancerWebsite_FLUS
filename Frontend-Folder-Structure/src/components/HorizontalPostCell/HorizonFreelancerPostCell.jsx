@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './HorizonFreelancerPostCell.css';
 import vietnam from '../../assets/vietnam.png';
 import profileimage from '../../assets/profile_image.png';
-import { StarRating } from '..';
 import eyeLight from '../../assets/eyeLight.png';
 import { useNavigate } from 'react-router';
 

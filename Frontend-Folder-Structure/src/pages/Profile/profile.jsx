@@ -13,6 +13,7 @@ import { SignUp } from '@/pages';
 import { useParams, useNavigate } from 'react-router';
 import userDataService from '@/services/userDataServices';
 import userSubcategoryService from '@/services/userSubcategoryServices';
+import reviewService from '@/services/reviewServices';
 import { Link } from 'react-router-dom';
 import {
   ProjectPostsTab,
@@ -22,15 +23,21 @@ import {
   PaymentAccountTab,
 } from '@/components';
 
+const calAverage = (num1, count1, num2, count2) => {
+  if (count1 + count2 === 0) return 0;
+  return (num1 * count1 + num2 * count2) / (count1 + count2);
+};
+
 const profile = () => {
   const this_id = localStorage.getItem('LOGINID');
   const { id } = useParams();
-  
-  const isOwnProfile = (this_id === id);
+
+  const isOwnProfile = this_id === id;
 
   let navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
   const [refresh, setRefresh] = useState(0);
+  const [review, setReview] = useState([]);
 
   const initialProfileState = {
     id: '',
@@ -54,7 +61,7 @@ const profile = () => {
 
   const handleClosePopupUpdateProfile = () => {
     setShowUpdateProfile(false);
-    setRefresh(1- refresh);
+    setRefresh(1 - refresh);
   };
 
   const getUserProfile = (id) => {
@@ -68,7 +75,7 @@ const profile = () => {
         console.log(e);
       });
   };
-  
+
   // get all skills of an user
   const getUserSkills = (id) => {
     userSubcategoryService
@@ -101,6 +108,30 @@ const profile = () => {
   const goToProjectsJoined = () => {
     navigate(`/project-manage`);
   };
+
+  let avg_rating = 0;
+
+  useEffect(() => {
+    let obj = {};
+    reviewService
+      .getRatingFreelancer(id)
+      .then((res) => {
+        obj.freelancer = res.data;
+        reviewService.getRatingClient(id).then((res) => {
+          obj.client = res.data;
+          setReview(obj);
+          calAverage(
+            review.freelancer.rating,
+            review.freelancer.count,
+            review.client.rating,
+            review.client.count
+          );
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
 
   return (
     <div>
@@ -186,9 +217,9 @@ const profile = () => {
                 </div>
               </div>
               <div className="rating-bar">
-                <StarRating rating={4.6} width={160} />
+                <StarRating rating={avg_rating} width={160} />
 
-                <div className="text-wrapper-6">{4.6}</div>
+                <div className="text-wrapper-6">{avg_rating}</div>
               </div>
             </div>
           </div>

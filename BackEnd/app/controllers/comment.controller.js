@@ -4,7 +4,43 @@ const Op = db.Sequelize.Op;
 const user = db.user;
 const review = db.reviews;
 
+const getRatingClient = (user_id) => {
+  return review
+    .findAll({
+      where: {
+        user_reviewed: user_id,
+        type: 1, // freelancer rating client
+      },
+    })
+    .then((data) => {
+      let sum = 0;
+      let count = 0;
+      data.forEach((element) => {
+        sum += parseFloat(element.rating);
+        count++;
+      });
+      return count === 0 ? 0 : sum.toFixed(1) / count;
+    });
+};
 
+const getRatingFreelancer = (user_id) => {
+  return review
+    .findAll({
+      where: {
+        user_reviewed: user_id,
+        type: 1, // client rating freelancer
+      },
+    })
+    .then((data) => {
+      let sum = 0;
+      let count = 0;
+      data.forEach((element) => {
+        sum += parseFloat(element.rating);
+        count++;
+      });
+      return count === 0 ? 0 : sum.toFixed(1) / count;
+    });
+};
 
 exports.create = (req, res) => {
   if (!req.body.comment) {
@@ -72,8 +108,6 @@ exports.findCommentByProjectId = (req, res) => {
     })
     .then((data) => {
       if (data.length > 0) {
-        // loại bỏ các comment có parent_id != id
-        // data = data.filter((comment) => comment.parent_id === comment.id);
         Promise.all(
           data.map((parentComment) => {
             return Promise.all([

@@ -40,7 +40,7 @@ const update = async (data, access_token) => {
 };
 
 const getAll = () => {
-  return http.get('/project_post/findAll');
+  return http.get('/project_post/findAllProjectPosts');
 };
 
 const getOnebyId = (id) => {

@@ -25,6 +25,8 @@ const Post = ({ project, handleBidClick }) => {
       });
   }, [project.user.id, project.id]);
 
+  console.log(project);
+
   const handleLikeClick = () => {
     if (isLiked === unactiveHeart) {
       projectPostWishlistServices
