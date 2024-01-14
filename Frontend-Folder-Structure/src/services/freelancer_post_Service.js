@@ -106,6 +106,11 @@ const removePostById = (id, access_token) => {
   }});
 };
 
+
+const filterOnCategory = (category_id) => {
+  return http.get("/freelancer_post/getPostByCategory/" + category_id);
+};
+
 const freelancer_post_Service = {
   // create,
   // update,
@@ -118,6 +123,7 @@ const freelancer_post_Service = {
   findFreePostsByPage,
   changeStatusByID,
   removePostById,
+  filterOnCategory
 };
 
 export default freelancer_post_Service;

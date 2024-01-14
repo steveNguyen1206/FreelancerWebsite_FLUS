@@ -10,7 +10,12 @@ function valuetext(value) {
   return `${value} $`;
 }
 
-const Filter = ({ selectedTags, onSelectedTagsChange, onSelectedRangeChange }) => {
+const Filter = ({
+  selectedTags,
+  onSelectedTagsChange,
+  onSelectedRangeChange,
+  onCategoryChange,
+}) => {
   const initialSkills = [
     {
       id: '',
@@ -38,43 +43,27 @@ const Filter = ({ selectedTags, onSelectedTagsChange, onSelectedRangeChange }) =
   const getIdbyName = (name) => {
     for (let i = 0; i < skills.length; i++) {
       if (skills[i].subcategory_name == name) {
-        console.log("a", skills[i].id)
+        console.log('a', skills[i].id);
         return skills[i].id;
       }
     }
   };
 
-  const location = useLocation();
-  useEffect(() => {
-    // Read the category from the query parameter
-    const params = new URLSearchParams(location.search);
-    const category = params.get('category');
-
-    if (category) {
-      subcategoryService
-      .findAll()
-      .then((response) => {
-        setSkills(response.data);
-        // Set the selected category in the filter
-        setSelectedSkills([category]);
-        // Apply the filter logic as needed
-        console.log('response.data tag before get id', response.data);
-        console.log('skills tag before get id', skills);
-        const categoryId = getIdbyName(category);
-        onSelectedTagsChange([categoryId]);
-        console.log('selectedTags in filter', categoryId);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-      
-    }
-  }, [location.search]);
-
-  
-
   const [value, setValue] = useState([0, 10000]);
   const [selectedSkills, setSelectedSkills] = useState([]);
+
+  const [selectedCategory, setSeletedCategory] = useState();
+  const location = useLocation();
+  // Read the category from the query parameter
+  const params = new URLSearchParams(location.search);
+  const category = params.get('category');
+  useEffect(() => {
+    if (category) {
+      setSeletedCategory([category]);
+      // Apply the filter logic as needed
+      onCategoryChange(category);
+    }
+  }, [location.search]);
 
   const handleInputLowerChange = (event) => {
     setValue([
@@ -95,7 +84,6 @@ const Filter = ({ selectedTags, onSelectedTagsChange, onSelectedRangeChange }) =
     onSelectedRangeChange([lower, upper]);
   };
 
-
   const handleFilterChange = (event) => {
     const selectedOption = event.target.value;
     if (selectedOption) {
@@ -105,6 +93,11 @@ const Filter = ({ selectedTags, onSelectedTagsChange, onSelectedRangeChange }) =
     }
   };
 
+  const removeCategory = () => {
+    setSeletedCategory(null);
+    onCategoryChange(null);
+  };
+
   const handleRemoveSkill = (index) => {
     const removedTag = selectedSkills[index];
     setSelectedSkills((prevSkills) => prevSkills.filter((_, i) => i !== index));
@@ -112,7 +105,6 @@ const Filter = ({ selectedTags, onSelectedTagsChange, onSelectedRangeChange }) =
     onSelectedTagsChange(
       selectedTags.filter((tagId) => tagId !== removedTagId)
     );
-
   };
 
   return (
@@ -132,7 +124,6 @@ const Filter = ({ selectedTags, onSelectedTagsChange, onSelectedRangeChange }) =
       </select>
       <div className="overlay-container">
         <div className="skill-container">
-          
           {selectedSkills.map((skill, index) => (
             <div className="skill" key={index}>
               <p className="skill-name">{skill}</p>
@@ -144,6 +135,19 @@ const Filter = ({ selectedTags, onSelectedTagsChange, onSelectedRangeChange }) =
               />
             </div>
           ))}
+
+          {selectedCategory
+          && (
+            <div className="skill" key={'cate'}>
+              <p className="skill-name">{selectedCategory}</p>
+              <img
+                src={exitButton}
+                alt="exit"
+                className="exit-button-range"
+                onClick={removeCategory}
+              />
+            </div>
+          )}
         </div>
       </div>
 

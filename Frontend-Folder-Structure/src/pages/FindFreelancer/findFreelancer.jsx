@@ -17,24 +17,51 @@ const FindFreelancer = () => {
   const userId = localStorage.getItem('LOGINID');
   console.log('userId', userId);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState();
+
   const handleFilterChange = (newSelectedTags) => {
     setSelectedTags(newSelectedTags);
     console.log('newSelectedTags', newSelectedTags);
   };
+
+  const handleCategoryChange = (newSelectedCategory) => {
+    setSelectedCategory(newSelectedCategory);
+    console.log('newSelectedCategory', newSelectedCategory);
+  };
+
+  const params = new URLSearchParams(location.search);
+  // const [categoryId, setCategoriId] = useState(params.get('categoryId'));
+  // console.log('categoryId', categoryId)
+
+
   const [posts, setPosts] = useState([]);
   
 
   const fetchPosts = async () => {
     try {
-      const postsData = await freelancer_post_Service.allAllPosts();
-      setPosts(postsData.data);
-      // console.log('data', postsData.data);
+      // if(categoryId){
+      //   const CatetoryPosts = await freelancer_post_Service.filterOnCategory(categoryId);
+      //   setPosts(CatetoryPosts.data);
+      //   console.log('query post', CatetoryPosts.data)
+      //   console.log('searchTitle', searchTitle)
+      //   console.log('selectEdTag', selectedTags)
+      //   console.log('filteredPosts', filteredPosts)
+      // }
+      // else 
+      // {
+        const postsData = await freelancer_post_Service.allAllPosts();
+        setPosts(postsData.data);
+        console.log('data', postsData.data);
+      // }
     } catch (error) {
       console.error('Error fetching projects:', error);
     }
   };
+
+
   useEffect(() => {
     fetchPosts();
+
   }, []);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -66,19 +93,28 @@ const FindFreelancer = () => {
   const handleRangeChange = (newSelectedRange) => {
     setSelectedRange(newSelectedRange);
   };
-  console.log('posts', posts);
+  // console.log('posts', posts);
+
+  console.log('selected Tags:', selectedTags);
+
   const filteredPosts = posts.filter(
     (post) =>
-      post.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
+      // post.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
       // if selectedTags is empty, ignore the tag filter
-      (selectedTags.length === 0 || selectedTags.includes(post.subcategory.id)) &&
+      (selectedTags.length == 0 && selectedCategory == null ) ||
+
+      (  ( selectedTags.includes(post.subcategory.id) ) ||
+        ( post.subcategory.category.name == selectedCategory) ) &&
+        // (categoryId == null || post.subcategory.categoryId == categoryId) && 
+      // (categoryId == null || true) &&
       post.lowset_price >= selectedRange[0] &&
-      post.lowset_price <= selectedRange[1]
+      post.lowset_price <= selectedRange[1] 
+  
   );
-  console.log('selectedRange', selectedRange);
+  // console.log('selectedRange', selectedRange);
 
   const subcategory_ids = posts.map((post) => post.subcategory_id);
-  console.log('subcategory_ids', subcategory_ids);
+  // console.log('subcategory_ids', subcategory_ids);
   const sortPosts = (posts) => {
     switch (sortOption) {
       case 'price-asc':
@@ -133,6 +169,7 @@ const FindFreelancer = () => {
               selectedTags={selectedTags}
               onSelectedTagsChange={handleFilterChange}
               onSelectedRangeChange={handleRangeChange}
+              onCategoryChange={handleCategoryChange}
             />
           </div>
           <div className="right-job">

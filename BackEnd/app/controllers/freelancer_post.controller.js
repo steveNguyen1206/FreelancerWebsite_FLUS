@@ -3,6 +3,7 @@ const cloudinary = require("../config/cloudinary.config");
 const Freelancer_post = db.freelancer_post;
 const User = db.user;
 const Subcategory = db.subcategories;
+const Category = db.categories;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Freelancer_post
@@ -381,7 +382,13 @@ exports.findAllAll = (req, res) => {
             },
             {
                 model: Subcategory,
-                attributes: ['id', 'subcategory_name'],
+                attributes: ['id', 'subcategory_name', 'categoryId'],
+                include: [
+                    {
+                        model: Category,
+                        attributes: ['id', 'name'],
+                    }
+                ]
             },
         ],
 
@@ -604,18 +611,24 @@ exports.deleteById = (req, res) => {
 
 
 exports.filterOnCategory = (req, res) => {
-    const { category_id } = req.params.categoryId;
+    const category_id = req.params.categoryId;
+    console.log("filter on category")
     console.log("category_id: ", category_id);
     Freelancer_post.findAll({
-        where: {
-            category_id: category_id,
-        },
         include: [
-            {
+            {   
                 model: Subcategory,
+                as: 'subcategory',
+                attributes: ['id', 'subcategory_name'],
                 where: {
-                    categoryId: category_id,
-                },            }
+                    categoryId: category_id
+                },
+                required: true
+            },
+            {
+                model: User,
+                attributes: ['id', 'account_name', 'profile_name', 'avt_url', 'email'],
+            }
         ],
     })
         .then((data) => {

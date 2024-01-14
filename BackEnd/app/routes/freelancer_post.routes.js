@@ -42,6 +42,8 @@ module.exports = app => {
     //Update post status by user id
     router.put("/findAndChangeStatus/:userId&:status", freelancer_post.findAndChangeStatus);
 
+    router.get("/getPostByCategory/:categoryId", freelancer_post.filterOnCategory);
+
     app.use('/api/freelancer_post', router);
   };
   
