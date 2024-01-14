@@ -26,7 +26,7 @@ const FindFreelancer = () => {
 
   const fetchPosts = async () => {
     try {
-      const postsData = await freelancer_post_Service.allAllPosts();
+      const postsData = await freelancer_post_Service.activePosts();
       setPosts(postsData.data);
       // console.log('data', postsData.data);
     } catch (error) {

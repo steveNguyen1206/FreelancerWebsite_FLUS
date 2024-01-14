@@ -10,6 +10,8 @@ module.exports = (app) => {
   // Retrieve all Users
   router.get("/", user_controller.findAll);
 
+
+
   // Retrieve a single User with id
   router.get("/:id", user_controller.findOnebyId);
 
