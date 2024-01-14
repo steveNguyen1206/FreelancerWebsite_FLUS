@@ -19,7 +19,7 @@ const ProjectPostsTab = ({ userId }) => {
     
     try {
       // console.log('userId', userId);
-      const projectsData = await projectPostServices.getAllProjects(userId);
+      const projectsData = await projectPostServices.getAllByUserId(userId);
 
       console.log('projectsData', projectsData);
 

@@ -28,6 +28,12 @@ module.exports = (app) => {
   router.get("/findOne/:id", projectPostController.findOne);
 
   // Retrieve all Project_posts (belongs to a user) from the database
+  router.get(
+    "/findAllByUserId/:user_id",
+    projectPostController.findAllProjectPostsbyUserID
+  );
+
+  // Retrieve all Project_posts (belongs to a user) from the database
   // router.get("/findAll/:user_id", projectPostController.findAllProjectPosts);
 
   // change status of many project_posts by list of project_post_id
