@@ -5,14 +5,6 @@ import exitButton from '../../assets/exitButton.png';
 import bidServices from '@/services/bidServices';
 import subcategoryService from '@/services/subcategoryService';
 
-const isValidName = (name) => {
-  console.log('name: ', name);
-  if (name === '') return false;
-  // name is not empty and contains only Unicode letters and spaces
-  const nameRegex = /^[\p{L}\s]*$/u;
-  return nameRegex.test(name);
-};
-
 const isValidSkill = (skill) => {
   if (skill === '') return false;
   return true;
@@ -48,11 +40,10 @@ const isValidDuration = (duration) => {
   return durationRegex.test(duration);
 };
 
-const BidPopup = ({ isOpen, isClose, projectPostId, onChange }) => {
+const BidPopup = ({ isOpen, isClose, projectPostId, onChange, budgetMin, budgetMax }) => {
   const [showOverlay, setShowOverlay] = useState(isOpen);
 
   const initError = {
-    name: '',
     skill: '',
     email: '',
     message: '',
@@ -61,19 +52,18 @@ const BidPopup = ({ isOpen, isClose, projectPostId, onChange }) => {
   };
 
   const initState = {
-    name: '',
     skill: '',
     email: '',
     message: '',
     price: '',
     duration: '',
     proj_post_id: projectPostId,
-    user_id: 1,
   };
 
   const [bid, setBid] = useState(initState);
   const [error, setError] = useState(initError);
   const [tags, setTags] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     getTags();
@@ -100,12 +90,6 @@ const BidPopup = ({ isOpen, isClose, projectPostId, onChange }) => {
     let isValid = true;
     let errors = { ...initError };
 
-    if (!isValidName(bid.name)) {
-      isValid = false;
-      // name is not empty and only have unicode and spaces
-      errors.name = 'Invalid name. Name must be characters and not empty.';
-    }
-
     if (!isValidSkill(bid.skill)) {
       isValid = false;
       errors.skill = 'Invalid skill. Skill must be not empty.';
@@ -118,13 +102,20 @@ const BidPopup = ({ isOpen, isClose, projectPostId, onChange }) => {
 
     if (!isValidMessage(bid.message)) {
       isValid = false;
-      errors.message = 'Invalid message. Message must have at least 10 letters.';
+      errors.message =
+        'Invalid message. Message must have at least 10 letters.';
     }
 
     if (!isValidPrice(bid.price)) {
       isValid = false;
       errors.price =
         'Invalid price. Price must be not empty and only have numbers.';
+    }
+
+    if (Number(bid.price) < budgetMin || Number(bid.price) > budgetMax) {
+      isValid = false;
+      errors.price =
+        'Invalid price. Price must be in range of budget min and budget max.';
     }
 
     if (!isValidDuration(bid.duration)) {
@@ -139,9 +130,8 @@ const BidPopup = ({ isOpen, isClose, projectPostId, onChange }) => {
 
   const handleDoneClick = () => {
     if (validateForm()) {
-      console.log('bid: ', bid);
       bidServices
-        .bidProject(bid)
+        .bidProject(bid, localStorage.getItem('AUTH_TOKEN'))
         .then(() => {
           console.log('Form is valid. Project submitted successfully.');
           setShowOverlay(false);
@@ -149,13 +139,13 @@ const BidPopup = ({ isOpen, isClose, projectPostId, onChange }) => {
           onChange();
         })
         .catch((error) => {
+          setErrorMessage(error.message);
           console.error('Error submitting project:', error.message);
         });
     } else {
       console.log('Form has errors. Please fix them.');
     }
   };
-
 
   return (
     <>
@@ -176,18 +166,6 @@ const BidPopup = ({ isOpen, isClose, projectPostId, onChange }) => {
         </div>
 
         <div className="bid-popup-body">
-          <div className="freelancerNameInput">
-            <label htmlFor="freelancerName">Freelancer's Name *</label>
-            <input
-              type="text"
-              id="freelancerName"
-              name="name"
-              placeholder="Enter name ..."
-              onChange={handleInputChange}
-              value={bid.name}
-            />
-            <div className="error-message">{error.name}</div>
-          </div>
           <div className="freelancer-skill-input">
             <label htmlFor="freelancerSkill">Skill *</label>
             <select
@@ -259,7 +237,9 @@ const BidPopup = ({ isOpen, isClose, projectPostId, onChange }) => {
             <div className="error-message">{error.duration}</div>
           </div>
 
-          <WhiteButton name="Send" onClick={handleDoneClick} />
+          <div className="error-message">{errorMessage}</div>
+
+          <WhiteButton text="Send" onClick={handleDoneClick} />
         </div>
       </div>
     </>

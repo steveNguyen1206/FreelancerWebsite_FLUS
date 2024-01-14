@@ -4,10 +4,9 @@ import Search from '@/components/Search';
 import Post from '@/components/JobPost/Post';
 import Filter from '@/components/Filter';
 import projectPostServices from '@/services/projectPostServices';
-import reviewServices from '@/services/reviewServices';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { NewProject } from '../Project/';
+import { NewProject } from '../ProjectPost';
 
 const Job = () => {
   const navigate = useNavigate();
@@ -19,27 +18,20 @@ const Job = () => {
   const [sortOption, setSortOption] = useState('');
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedRange, setSelectedRange] = useState([0, 10000]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('AUTH_TOKEN');
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   const fetchProjects = async () => {
     try {
-      const projectsData = await projectPostServices.getAllProjects();
-
-      console.log('projectsData', projectsData);
-
-      const projectsWithRating = await Promise.all(
-        projectsData.data.map(async (project) => {
-          const ownerRatingData = await reviewServices.getRatingClient(
-            project.user_id
-          );
-          return {
-            ...project,
-            owner: {
-              averageStar: ownerRatingData.data.averageStar,
-            },
-          };
-        })
-      );
-      setProjects(projectsWithRating);
+      const projectsData = await projectPostServices.getAll();
+      // console.log('projectsData', projectsData);
+      setProjects(projectsData.data);
     } catch (error) {
       console.error('Error fetching projects:', error);
     }
@@ -48,8 +40,6 @@ const Job = () => {
   useEffect(() => {
     fetchProjects();
   }, []);
-
-  console.log('projects', projects);
 
   const handleNewProject = () => {
     setIsOpen(true);
@@ -86,9 +76,9 @@ const Job = () => {
       case 'max-desc':
         return projects.sort((a, b) => b.budget_max - a.budget_max);
       case 'review-asc':
-        return projects.sort((a, b) => a.ownerRating - b.ownerRating);
+        return projects.sort((a, b) => a.user.avg_rating - b.user.avg_rating);
       case 'review-desc':
-        return projects.sort((a, b) => b.ownerRating - a.ownerRating);
+        return projects.sort((a, b) => b.user.avg_rating - a.user.avg_rating);
       default:
         return projects;
     }
@@ -119,9 +109,11 @@ const Job = () => {
           <div className="containerp">
             <div className="topbar">
               <div className="button">
-                <button className="btn-new-post" onClick={handleNewProject}>
-                  + New Post
-                </button>
+                {isLoggedIn && (
+                  <button className="btn-new-post" onClick={handleNewProject}>
+                    + New Post
+                  </button>
+                )}
               </div>
               <Search onSearchChange={handleSearchChange} />
               <select
@@ -155,16 +147,9 @@ const Job = () => {
             {sortProjects(filteredProjects).map((project) => (
               <Post
                 key={project.id}
-                projectId={project.id}
-                projectTitle={project.title}
-                projectTagsId={project.tag_id}
-                projectDetail={project.detail}
-                ownerRating={project.owner.averageStar}
-                projectBudget={[project.budget_min, project.budget_max]}
-                userID={project.user_id}
+                project={project}
                 handleBidClick={() => {
                   console.log('navigate to project detail page');
-
                   navigate(`/project/${project.id}`);
                 }}
               />

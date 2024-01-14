@@ -112,8 +112,12 @@ const Filter = ({
       <div className="header">
         <h2>Filter</h2>
       </div>
-      <select className="filter" onChange={handleFilterChange}>
-        <option value="Add skills" disabled selected>
+      <select
+        className="filter"
+        onChange={handleFilterChange}
+        defaultValue="Add skills"
+      >
+        <option value="Add skills" disabled>
           Add skills
         </option>
         {skills.map((skill) => (
@@ -152,7 +156,7 @@ const Filter = ({
       </div>
 
       <div className="salary-range">
-        <label for="inputRange" class="form-label">
+        <label htmlFor="inputRange" className="form-label">
           Salary Range
         </label>
         <Box sx={{ width: 250 }}>

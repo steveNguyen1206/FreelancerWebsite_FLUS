@@ -215,6 +215,12 @@ db.bid.belongsTo(db.project_post, {
   onUpdate: "CASCADE",
 });
 
+db.bid.belongsTo(db.subcategories, {
+  foreignKey: "skill_tag",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
 db.comment_proj.belongsTo(db.project_post, {
   foreignKey: "proj_post_id",
   onDelete: "CASCADE",
@@ -223,6 +229,16 @@ db.comment_proj.belongsTo(db.project_post, {
 
 db.comment_proj.belongsTo(db.user, {
   foreignKey: "user_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+db.comment_proj.belongsTo(db.comment_proj, {
+  foreignKey: {
+    name: "parent_id",
+    allowNull: true,
+    defaultValue: null,
+  },
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
@@ -246,6 +262,18 @@ db.reviews.belongsTo(db.user, {
 });
 
 db.reviews.belongsTo(db.user, {
+  foreignKey: "user_reviewed",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+db.user.hasMany(db.reviews, {
+  foreignKey: "user_review",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+db.user.hasMany(db.reviews, {
   foreignKey: "user_reviewed",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",

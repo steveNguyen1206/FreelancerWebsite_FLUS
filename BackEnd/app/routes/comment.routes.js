@@ -1,18 +1,19 @@
+const { verifyToken } = require("../middleware/authJwt.js");
+
 module.exports = (app) => {
-    const comment = require("../controllers/comment.controller.js");
-    let router = require("express").Router();
+  const comment = require("../controllers/comment.controller.js");
+  let router = require("express").Router();
 
-    // Create a new Comment
-    router.post("/", comment.create);
+  // Create a new Comment
+  router.post("/", [verifyToken], comment.create);
 
-    // Retrieve all Comments
-    router.get("/", comment.findAll);
+  // Retrieve all Comments by Project ID
+  router.get(
+    "/findCommentByProjectId/:project_id",
+    comment.findCommentByProjectId
+  );
 
-    // Retrieve a single Comment with id
-    router.get("/:id", comment.findOne);
+  router.post("/findAndChangeStatusByUserID/:user_id&:status", comment.findAndChangeStatusByUserID);
 
-    // Retrieve all Comments by Project ID
-    router.get("/findCommentByProjectId/:project_id", comment.findCommentByProjectId);
-
-    app.use("/api/comment", router);
-  };
+  app.use("/api/comment", router);
+};

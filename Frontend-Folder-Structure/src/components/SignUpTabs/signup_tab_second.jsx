@@ -140,11 +140,11 @@ const SignUpTabSecond = ({ setTab, signUpPayload, setSignUpPayload }) => {
         <div className="error-message">{error.nationality}</div>
       </div>
 
-      <button onClick={handleVerifyClick} className="sign-up-button">
+      <div onClick={handleVerifyClick} className="sign-up-button">
         <div className="div-wrapper">
           <div className="text-wrapper-2">Verify</div>
         </div>
-      </button>
+      </div>
     </div>
   );
 };

@@ -5,7 +5,7 @@ import "./offerDetailPopup.css";
 import contactService from '@/services/contactServices';
 import OfferDetailTag from "@/components/Offer/offerDetailTag";
 
-const OfferDetailPopup = ({setPopUpAppear}) => {
+const OfferDetailPopup = ({setPopUpAppear, checkOwner}) => {
   const { id } = useParams();
   const [contactOnes, setContactOnes] = useState([]);
   useEffect(() => {
@@ -51,7 +51,7 @@ const OfferDetailPopup = ({setPopUpAppear}) => {
             <OfferDetailTag/>
             <OfferDetailTag/> */}
             {contactOnes.map((contactOne) => (
-              <OfferDetailTag contactOne={contactOne}/>
+              <OfferDetailTag contactOne={contactOne} checkOwner={checkOwner}/>
             ))}
           </div>
       </div>

@@ -3,7 +3,6 @@ import { WhiteButton } from '@/components';
 import './newPost.css';
 import exitButton from '../../assets/exitButton.png';
 import UploadIcon from '../../assets/UploadIcon.png';
-import projectServices from '@/services/projectPostServices';
 import freelancer_post_Service from '@/services/freelancer_post_Service';
 import subcategoryService from '@/services/subcategoryService';
 import userDataService from '@/services/userDataServices';
@@ -22,7 +21,7 @@ const isValidAboutMe = (about_me) => {
 };
 
 const isValidDeliveryDescription = (delivery_description) => {
-  const descriptionRegex = /^[a-zA-Z0-9]{1,511}$/;
+  const descriptionRegex = /^[a-zA-Z0-9\s]{1,511}$/;
   return descriptionRegex.test(delivery_description);
 };
 

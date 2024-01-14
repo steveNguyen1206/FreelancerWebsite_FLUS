@@ -3,7 +3,6 @@ import { WhiteButton } from '@/components';
 import './hireFreelancer.css';
 import exitButton from '../../assets/exitButton.png';
 import UploadIcon from '../../assets/UploadIcon.png';
-// import projectServices from '@/services/projectPostServices';
 import subcategoryService from '@/services/subcategoryService';
 import userDataService from '@/services/userDataServices';
 import freelancer_post_Service from '@/services/freelancer_post_Service';
@@ -21,7 +20,7 @@ const isValidClientName = (client_name) => {
 const isValidClientCompany = (client_company) => {
     // if client_company is empty return true
     // if client_company is not empty, make sure it's at least 2 characters long and maximum 50 characters long
-    return (client_company.length >= 2 && client_company.length <= 50 && /^[a-zA-Z0-9 .,\\-_]+$/.test(client_name));
+    return (client_company.length >= 2 && client_company.length <= 50 && /^[a-zA-Z0-9 .,\\-_]+$/.test(client_company));
 };
 
 const isValidJobName = (job_name) => {

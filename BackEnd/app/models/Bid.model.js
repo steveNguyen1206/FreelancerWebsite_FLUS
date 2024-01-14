@@ -16,7 +16,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     status: {
       type: Sequelize.TINYINT
-    }
+    },
     //   user_id: Reference to USER - OK
     //   proj_post_id: Reference to PROJECT_POST - OK
   });

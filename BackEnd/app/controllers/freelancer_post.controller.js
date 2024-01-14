@@ -609,6 +609,42 @@ exports.deleteById = (req, res) => {
         });
 };
 
+// Sử dụng phương thức findAllAll nhưng chỉ lấy status = 1
+exports.findAllActivePosts = (req, res) => {
+    const freelancer_id = req.params.freelancer_id;
+
+    // console.log("#############################\n");
+    // console.log("FIND ALL FREELANCER POSTS");
+    // console.log("Params: ", req.params);
+    // console.log("freelancer_id: ", freelancer_id);
+   
+    // var condition = freelancer_id ? { freelancer_id: { [Op.eq]: `${freelancer_id}` }, status: 1 } : null;
+    var condition = { status: 1 };
+
+    Freelancer_post.findAll({
+        where: condition,
+        include: [
+            {
+                model: User,
+                attributes: ['id', 'account_name', 'profile_name', 'avt_url', 'email'],
+            },
+            {
+                model: Subcategory,
+                attributes: ['id', 'subcategory_name'],
+            },
+        ],
+
+    })
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "Some error occurred while retrieving data."
+            });
+        });
+};
+
 
 exports.filterOnCategory = (req, res) => {
     const category_id = req.params.categoryId;
