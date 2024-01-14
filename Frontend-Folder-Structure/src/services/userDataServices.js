@@ -104,7 +104,7 @@ const updateAvatar = (user_id, selectedFile) => {
   console.log(selectedFile);
 
   return media_upload.put(`/user/avatar/${user_id}`, formData, {headers: {
-    "Content-type": "application/json",
+    "Content-type": "multipart/form-data",
     "x-access-token": access_token,
   }});
 }

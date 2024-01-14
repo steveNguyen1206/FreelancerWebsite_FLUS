@@ -4,7 +4,7 @@ import './WhiteButton.css';
 const WhiteButton = ({text, onClick}) => {
   return (
     <button onClick={onClick}
-    class="white-button">
+    className="white-button">
       {text}
     </button>
   );

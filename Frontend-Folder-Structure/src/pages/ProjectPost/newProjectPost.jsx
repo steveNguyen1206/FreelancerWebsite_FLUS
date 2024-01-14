@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { WhiteButton } from '@/components';
-import './newproject.css';
+import './newProjectPost.css';
 import exitButton from '../../assets/exitButton.png';
 import UploadIcon from '../../assets/UploadIcon.png';
 import projectPostServices from '@/services/projectPostServices';
@@ -13,7 +13,7 @@ const isValidTitle = (title) => {
 };
 
 const isValidDetail = (detail) => {
-  const detailRegex = /^.{10,}$/;
+  const detailRegex = /^[\p{P}\p{L}\s]{10,}$/gu;
   return detailRegex.test(detail);
 };
 
@@ -28,7 +28,16 @@ const isValidTag = (tag) => {
   return true;
 };
 
-const NewProject = ({ isOpen, onClose, onUpdate }) => {
+const isValidDate = (date) => {
+  if (date == '') return false;
+  const dateRegex = /^\d{4}\/\d{1,2}\/\d{1,2}$/;
+  const currentDate = new Date();
+  //input date is yyyy/mm/dd
+  const inputDate = new Date(date);
+  return currentDate.getTime() <= inputDate.getTime() && dateRegex.test(date);
+};
+
+const NewProjectPost = ({ isOpen, onClose, onUpdate }) => {
   const [showOverlay, setShowOverlay] = useState(isOpen);
   const [tags, setTags] = useState([]);
 
@@ -55,6 +64,7 @@ const NewProject = ({ isOpen, onClose, onUpdate }) => {
     budgetMin: '',
     budgetMax: '',
     tag_id: '',
+    startDate: '',
   });
 
   const initState = {
@@ -64,6 +74,7 @@ const NewProject = ({ isOpen, onClose, onUpdate }) => {
     budgetMin: '',
     budgetMax: '',
     tag_id: '',
+    startDate: '',
   };
 
   const validateForm = () => {
@@ -93,6 +104,13 @@ const NewProject = ({ isOpen, onClose, onUpdate }) => {
       isValid = false;
     } else {
       newErrors.tag_id = '';
+    }
+
+    if (!isValidDate(newProject.startDate)) {
+      newErrors.startDate = 'Date must be in the future.';
+      isValid = false;
+    } else {
+      newErrors.startDate = '';
     }
 
     // Validate detail
@@ -128,6 +146,7 @@ const NewProject = ({ isOpen, onClose, onUpdate }) => {
 
   const [fileName, setFileName] = useState('');
   const [newProject, setNewProject] = useState(initState);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -143,7 +162,7 @@ const NewProject = ({ isOpen, onClose, onUpdate }) => {
   const handleDoneClick = () => {
     if (validateForm()) {
       projectPostServices
-        .sendProject(newProject)
+        .create(newProject, localStorage.getItem('AUTH_TOKEN'))
         .then(() => {
           console.log('Form is valid. Project submitted successfully.');
           setShowOverlay(false);
@@ -153,18 +172,24 @@ const NewProject = ({ isOpen, onClose, onUpdate }) => {
           }
         })
         .catch((error) => {
-          console.error('Error submitting project:', error.message);
+          // if status code is 401 or 403, display error message
+          if (error.response.status === 401 || error.response.status === 403) {
+            setErrorMessage("Please login to create a project post");
+          } else {
+            setErrorMessage(
+              'Error submitting project. Please try again later.'
+            );
+          }
         });
     } else {
       console.log('Form has errors. Please fix them.');
     }
   };
-  console.log(newProject);
 
   return (
     <>
       {showOverlay && <div className="overlay" />}
-      <div className="new-project-form">
+      <div className="new-project-form-1">
         <button
           onClick={() => {
             setShowOverlay(false);
@@ -174,12 +199,12 @@ const NewProject = ({ isOpen, onClose, onUpdate }) => {
         >
           <img src={exitButton} alt="Exit" />
         </button>
-        <div className="new-project-header">
-          <p>NEW PROJECT</p>
+        <div className="new-project-header-1">
+          <p>NEW PROJECT POST</p>
         </div>
 
-        <div className="new-project-body">
-          <div className="project-title-input">
+        <div className="new-project-body-1">
+          <div className="project-title-input-1">
             <label htmlFor="projectTitle">Project Title *</label>
             <input
               type="text"
@@ -191,19 +216,19 @@ const NewProject = ({ isOpen, onClose, onUpdate }) => {
             />
             <div className="error-message">{error.title}</div>
           </div>
-          <div className="add-image-input">
+          <div className="add-image-input-1">
             <label htmlFor="addImage">Add Image *</label>
-            <div className="add-image-container">
-              <div className="file-input-container">
+            <div className="add-image-container-1">
+              <div className="file-input-container-1">
                 <img
                   className="upload-icon"
                   src={UploadIcon}
                   alt="Upload Icon"
                 />
-                <div className="file-input-text">
+                <div className="file-input-text-1">
                   <p>
-                    Drag & drop files <span className="browse-text">or</span>
-                    <label htmlFor="fileInput" className="browse-label">
+                    Drag & drop files <span className="browse-text-1">or</span>
+                    <label htmlFor="fileInput" className="browse-label-1">
                       Browse
                     </label>
                   </p>
@@ -215,16 +240,16 @@ const NewProject = ({ isOpen, onClose, onUpdate }) => {
                     style={{ display: 'none' }}
                     onChange={handleFileChange}
                   />
-                  {fileName && <p className="file-name">{fileName}</p>}
+                  {fileName && <p className="file-name-1">{fileName}</p>}
                 </div>
               </div>
-              <p className="supported-formats">
+              <p className="supported-formats-1">
                 Supported formats: JPEG, PNG, JPG
               </p>
             </div>
             <div className="error-message">{error.image}</div>
           </div>
-          <div className="project-detail-input">
+          <div className="project-detail-input-1">
             <label htmlFor="projectDetail">Project Detail *</label>
             <textarea
               type="text"
@@ -236,25 +261,42 @@ const NewProject = ({ isOpen, onClose, onUpdate }) => {
             />
             <div className="error-message">{error.detail}</div>
           </div>
-          <div className="project-tag-input">
-            <label htmlFor="projectTag">Project Tag *</label>
-            <select
-              id="projectTag"
-              name="tag_id"
-              value={newProject.tag_id}
-              onChange={handleInputChange}
-            >
-              <option value="">Select a tag</option>
-              {tags.map((tag) => (
-                <option key={tag.id} value={tag.id}>
-                  {tag.subcategory_name}
-                </option>
-              ))}
-            </select>
-            <div className="error-message">{error.tag_id}</div>
+
+          <div id="project-tag-and-date">
+            <div className="project-tag-input-1">
+              <label htmlFor="projectTag">Project Tag *</label>
+              <select
+                id="projectTag"
+                name="tag_id"
+                value={newProject.tag_id}
+                onChange={handleInputChange}
+              >
+                <option value="">Select a tag</option>
+                {tags.map((tag) => (
+                  <option key={tag.id} value={tag.id}>
+                    {tag.subcategory_name}
+                  </option>
+                ))}
+              </select>
+              <div className="error-message">{error.tag_id}</div>
+            </div>
+
+            <div id="start-date-project">
+              <label htmlFor="startDate">Start Date *</label>
+              <input
+                type="text"
+                id="startDate"
+                name="startDate"
+                placeholder="Start date: yyyy/mm/dd"
+                value={newProject.startDate}
+                onChange={handleInputChange}
+              />
+              <div className="error-message">{error.startDate}</div>
+            </div>
           </div>
-          <div className="project-range-budget">
-            <div className="budget-min-input">
+
+          <div className="project-range-budget-1">
+            <div className="budget-min-input-1">
               <label htmlFor="budgetMin">Budget Min *</label>
               <input
                 type="text"
@@ -267,7 +309,7 @@ const NewProject = ({ isOpen, onClose, onUpdate }) => {
               <div className="error-message">{error.budgetMin}</div>
             </div>
 
-            <div className="budget-max-input">
+            <div className="budget-max-input-1">
               <label htmlFor="budgetMax">Budget Max *</label>
               <input
                 type="text"
@@ -280,6 +322,8 @@ const NewProject = ({ isOpen, onClose, onUpdate }) => {
               <div className="error-message">{error.budgetMax}</div>
             </div>
           </div>
+
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
           <WhiteButton text="Done" onClick={handleDoneClick} />
         </div>
       </div>
@@ -287,4 +331,4 @@ const NewProject = ({ isOpen, onClose, onUpdate }) => {
   );
 };
 
-export default NewProject;
+export default NewProjectPost;

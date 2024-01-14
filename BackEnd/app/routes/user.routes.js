@@ -24,7 +24,7 @@ module.exports = (app) => {
   router.get('/getusers/:page&:size', [verifyToken, isAdmin], user_controller.findUsersbyPage);
 
   // Update avatar of a user
-  router.put("/avatar/:id", [verifyToken, isOwner], upload.single("avatar"), user_controller.updateAvatar);
+  router.put("/avatar/:id", [verifyToken, isOwner, upload.single("avatar")], user_controller.updateAvatar);
 
   // Delete a User with account_name
   router.delete("/deleteuser/:accountName",[verifyToken, isAdmin], user_controller.deleteOnebyAccountName);

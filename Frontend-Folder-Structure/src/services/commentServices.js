@@ -1,30 +1,26 @@
-import { http } from "./http-common";
+import { http } from './http-common';
 
-const create = (data) => {
-    return http.post("/comment", data);
+const create = (data, access_token) => {
+  return http.post('/comment', data, {
+    headers: {
+      'Content-Type': 'application/json',
+      'x-access-token': access_token,
+    },
+  });
 };
 
-const findAll = () => {
-    return http.get("/comment");
-    }
+const findCommentByProjectId = (project_id) => {
+  return http.get(`/comment/findCommentByProjectId/${project_id}`);
+};
 
-const findOne = id => {
-    return http.get(`/comment/${id}`);
-    }
-
-const findCommentByProjectId = project_id => {
-    return http.get(`/comment/findCommentByProjectId/${project_id}`);
-    }
-
-
+const findAndChangeStatusByUserID = (user_id, status) => {
+  return http.post(`/comment/findAndChangeStatusByUserID/${user_id}&${status}`);
+};
 
 export const commentService = {
-    create,
-    findAll,
-    findOne,
-    findCommentByProjectId,
+  create,
+  findCommentByProjectId,
+  findAndChangeStatusByUserID,
 };
-
-
 
 export default commentService;

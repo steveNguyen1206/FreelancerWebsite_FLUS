@@ -1,24 +1,43 @@
-const { authJwt, upload } = require("../middleware");
-const { verifyToken, isAdmin } = require("../middleware/authJwt.js");
+const { upload } = require("../middleware");
+const { verifyToken } = require("../middleware/authJwt.js");
+const {
+  isOwnerProjectPost,
+} = require("../middleware/project_post.middleware.js");
 module.exports = (app) => {
   const projectPostController = require("../controllers/project_post.controller.js");
 
   var router = require("express").Router();
 
-  // Create a new Project_post
-  router.post("/", upload.single("image_file"), projectPostController.create);
+  // create
+  router.post(
+    "/",
+    upload.single("image_file"),
+    [verifyToken],
+    projectPostController.create
+  );
+
+  // update
+  router.put(
+    "/:project_post_id",
+    upload.single("image_file"),
+    [verifyToken, isOwnerProjectPost],
+    projectPostController.update
+  );
+
+  // Retrieve a single Project_post with id
+  router.get("/findOne/:id", projectPostController.findOne);
 
   // Retrieve all Project_posts (belongs to a user) from the database
-  router.get("/findAll/:user_id", projectPostController.findAllProjectPosts);
-  router.get("/findAll/", projectPostController.findAllProjectPosts);
+  // router.get("/findAll/:user_id", projectPostController.findAllProjectPosts);
 
   // change status of many project_posts by list of project_post_id
   router.put("/changeStatus", projectPostController.changeStatus);
 
-  // Find and change status of project_posts by some criteria
+  // Change status of project_post
   router.put(
-    "/findAndChangeStatus/:userId&:status",
-    projectPostController.findAndChangeStatus
+    "/changeStatus/:project_post_id/:status",
+    [verifyToken, isOwner],
+    projectPostController.changeStatus
   );
 
   // Retrieve all Project_posts from the database
@@ -34,14 +53,30 @@ module.exports = (app) => {
   router.put("/:id", upload.single("image_file"), projectPostController.update);
 
   // Route to get project_post by page and size
-  router.get('/getprojposts/:page&:size&:searchKey',[verifyToken, isAdmin], projectPostController.findProjPostsByPage);
-  router.get('/getprojposts/:page&:size',[verifyToken, isAdmin], projectPostController.findProjPostsByPage);
+  router.get(
+    "/getprojposts/:page&:size&:searchKey",
+    [verifyToken, isAdmin],
+    projectPostController.findProjPostsByPage
+  );
+  router.get(
+    "/getprojposts/:page&:size",
+    [verifyToken, isAdmin],
+    projectPostController.findProjPostsByPage
+  );
 
   // Update the status of a Projpost by id and status param
-  router.put("/status/:id&:status",[verifyToken, isAdmin], projectPostController.changeStatusByID);
+  router.put(
+    "/status/:id&:status",
+    [verifyToken, isAdmin],
+    projectPostController.changeStatusByID
+  );
 
   // Delete a Projpost with id
-  router.delete("/deleteprojpost/:id",[verifyToken, isAdmin], projectPostController.deleteById);
+  router.delete(
+    "/deleteprojpost/:id",
+    [verifyToken, isAdmin],
+    projectPostController.deleteById
+  );
 
   app.use("/api/project_post", router);
 };
