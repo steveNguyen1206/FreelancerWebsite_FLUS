@@ -21,7 +21,7 @@ const isValidAboutMe = (about_me) => {
 };
 
 const isValidDeliveryDescription = (delivery_description) => {
-  const descriptionRegex = /^[a-zA-Z0-9]{1,511}$/;
+  const descriptionRegex = /^[a-zA-Z0-9\s]{1,511}$/;
   return descriptionRegex.test(delivery_description);
 };
 
