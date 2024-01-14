@@ -16,27 +16,14 @@ const ProjectPostsTab = ({ userId }) => {
     // console.log('fetching projects: ' + userId);
 
     if (!userId) return;
-    
+
     try {
       // console.log('userId', userId);
       const projectsData = await projectPostServices.getAllByUserId(userId);
 
       console.log('projectsData', projectsData);
 
-      const projectsWithRating = await Promise.all(
-        projectsData.data.map(async (project) => {
-          const ownerRatingData = await reviewServices.getRatingClient(
-            project.user_id
-          );
-          return {
-            ...project,
-            owner: {
-              averageStar: ownerRatingData.data.averageStar,
-            },
-          };
-        })
-      );
-      setProjects(projectsWithRating);
+      setProjects(projectsData.data);
     } catch (error) {
       console.error('Error fetching projects:', error);
     }
@@ -47,20 +34,13 @@ const ProjectPostsTab = ({ userId }) => {
   }, [userId]);
 
   return (
-    <div className='project-posts-container'>
+    <div className="project-posts-container">
       {projects.map((project) => (
         <Post
           key={project.id}
-          projectId={project.id}
-          projectTitle={project.title}
-          projectTagsId={project.tag_id}
-          projectDetail={project.detail}
-          ownerRating={project.owner.averageStar}
-          projectBudget={[project.budget_min, project.budget_max]}
-          userID={project.user_id}
+          project={project}
           handleBidClick={() => {
             console.log('navigate to project detail page');
-
             navigate(`/project/${project.id}`);
           }}
         />
