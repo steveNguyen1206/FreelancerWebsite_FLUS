@@ -39,8 +39,13 @@ const update = async (data, access_token) => {
   });
 };
 
+const getAllByUserId = (user_id) => {
+  console.log('getAllProjectPostsByUserId: ', user_id);
+  return http.get(`/project_post/findAllByUserId/${user_id}`);
+};
+
 const getAll = () => {
-  return http.get('/project_post/findAll');
+  return http.get('/project_post/findAllProjectPosts');
 };
 
 const getOnebyId = (id) => {
@@ -105,6 +110,7 @@ const projectPostServices = {
   changeStatusByID,
   removePostById,
   findAndChangeStatusByUserID,
+  getAllByUserId,
 };
 
 export default projectPostServices;

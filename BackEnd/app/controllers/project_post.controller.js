@@ -111,10 +111,65 @@ exports.findAndChangeStatus = (req, res) => {
 };
 
 // Retrieve all Project_posts from the database.
-exports.findAllProjectPosts = (req, res) => {
+exports.findAll = (req, res) => {
+  project_post
+    .findAll({
+      where: { status: 1 },
+      include: [
+        {
+          model: user,
+          attributes: [
+            "id",
+            "account_name",
+            "profile_name",
+            "email",
+            "avt_url",
+          ],
+        },
+        {
+          model: subcategories,
+          foreignKey: "tag_id",
+          attributes: ["id", "subcategory_name"],
+        },
+      ],
+    })
+    .then((data) => {
+      return Promise.all(
+        data.map((project_post) => {
+          return review
+            .findAll({
+              where: { user_reviewed: project_post.user_id, type: 1 },
+            })
+            .then((reviews) => {
+              let sum = 0;
+              reviews.forEach((review) => {
+                sum += review.star;
+              });
+              project_post.user.dataValues.avg_rating =
+                sum / reviews.length || 0;
+              return project_post;
+            });
+        })
+      );
+    })
+    .then((projectPosts) => {
+      res.send(projectPosts);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving reviews.",
+      });
+    });
+};
+
+
+// Retrieve all Project_posts of a user.
+exports.findAllProjectPostsbyUserID = (req, res) => {
+  const user_id = req.params.user_id;
   // for each project post, check expired startDate, if expired, set status = 0
   project_post
-    .findAll({ where: { status: 1 } })
+    .findAll({ where: { status: 1, user_id: user_id} })
     .then((data) => {
       data.forEach((projectPost) => {
         const startDate = new Date(projectPost.start_date);
@@ -130,7 +185,7 @@ exports.findAllProjectPosts = (req, res) => {
 
   project_post
     .findAll({
-      where: { status: 1 },
+      where: { status: 1, user_id: user_id },
       include: [
         {
           model: user,

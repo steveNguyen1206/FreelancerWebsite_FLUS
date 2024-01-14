@@ -2,6 +2,7 @@ const { upload } = require("../middleware");
 const { verifyToken } = require("../middleware/authJwt.js");
 const {
   isOwnerProjectPost,
+  isExpiredProjectPost,
 } = require("../middleware/project_post.middleware.js");
 module.exports = (app) => {
   const projectPostController = require("../controllers/project_post.controller.js");
@@ -28,6 +29,12 @@ module.exports = (app) => {
   router.get("/findOne/:id", projectPostController.findOne);
 
   // Retrieve all Project_posts (belongs to a user) from the database
+  router.get(
+    "/findAllByUserId/:user_id",
+    projectPostController.findAllProjectPostsbyUserID
+  );
+
+  // Retrieve all Project_posts (belongs to a user) from the database
   // router.get("/findAll/:user_id", projectPostController.findAllProjectPosts);
 
   // change status of many project_posts by list of project_post_id
@@ -41,7 +48,11 @@ module.exports = (app) => {
   );
 
   // Retrieve all Project_posts from the database
-  router.get("/findAll", projectPostController.findAllProjectPosts);
+  router.get(
+    "/findAllProjectPosts",
+    [isExpiredProjectPost],
+    projectPostController.findAll
+  );
 
   // get owner project `/project_post/owner/${id}`
   router.get("/owner/:id", projectPostController.findOwnerProject);

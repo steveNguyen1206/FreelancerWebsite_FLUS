@@ -1,6 +1,5 @@
 import React from 'react';
 import './CommentProjectPost.css';
-import { StarRating } from '..';
 import { useEffect, useState } from 'react';
 import commentService from '@/services/commentServices';
 import Commentator from './Commentator';
