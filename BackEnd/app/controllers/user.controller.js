@@ -433,3 +433,27 @@ exports.updateNameAndSocialLink = (req, res) => {
       });
     });
 };
+
+// Kiểm tra 1 account có bị ban hay không
+// exports.findOnebyAccountNameNotActive = (req, res) => {
+//   const account_name = req.params.account_name;
+//   var condition = (account_name
+//     ? { account_name: { [Op.eq]: `${account_name}` } }
+//     : null && { status: { [Op.eq]: 0 } });
+
+//   User.findOne({ where: condition })
+//     .then((data) => {
+//       if (data) {
+//         res.send(data);
+//       } else {
+//         res.status(404).send({
+//           message: `Cannot find User with account_name=${account_name}.`,
+//         });
+//       }
+//     })
+//     .catch((err) => {
+//       res.status(500).send({
+//         message: "Error retrieving User with account_name=" + account_name,
+//       });
+//     });
+// };

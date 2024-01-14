@@ -54,6 +54,7 @@ exports.create = (req, res) => {
     proj_post_id: req.body.proj_post_id,
     user_id: req.userId,
     parent_id: req.body.parent_id,
+    status:1,
   };
 
   // Save comment in the database
@@ -84,7 +85,7 @@ exports.findCommentByProjectId = (req, res) => {
   let owner_id = 0;
   db.project_post
     .findOne({
-      where: { id: project_id },
+      where: { id: project_id},
     })
     .then((data) => {
       owner_id = data.user_id;
@@ -98,6 +99,7 @@ exports.findCommentByProjectId = (req, res) => {
       where: {
         proj_post_id: project_id,
         parent_id: null,
+        status: 1,
       },
       include: [
         {
@@ -176,3 +178,27 @@ exports.findCommentByProjectId = (req, res) => {
       });
     });
 };
+
+exports.findAndChangeStatusByUserID = (req, res) => {
+  const user_id = req.params.user_id;
+  const status = req.params.status;
+
+  comment
+    .findAll({
+      where: {
+        user_id: user_id,
+      },
+    })
+    .then((data) => {
+      data.forEach((element) => {
+        element.update({ status: status });
+      });
+      res.send(data);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send({
+        message: "Error retrieving comment with user_id=" + user_id,
+      });
+    });
+}

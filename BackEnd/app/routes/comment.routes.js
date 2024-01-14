@@ -13,5 +13,7 @@ module.exports = (app) => {
     comment.findCommentByProjectId
   );
 
+  router.post("/findAndChangeStatusByUserID/:user_id&:status", comment.findAndChangeStatusByUserID);
+
   app.use("/api/comment", router);
 };

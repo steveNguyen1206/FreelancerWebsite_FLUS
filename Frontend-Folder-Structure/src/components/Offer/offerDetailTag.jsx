@@ -7,19 +7,51 @@ import { Collapse } from 'react-bootstrap';
 import contactService from '@/services/contactServices';
 import reviewService from '@/services/reviewServices';
 
-const OfferDetailTag = ({ contactOne }) => {
+const OfferDetailTag = ({ contactOne, checkOwner }) => {
   const [expanded, setExpanded] = useState(false);
   const [showSeeMore, setShowSeeMore] = useState(false);
   const textContainerRef = useRef(null);
   const [review, setReview] = useState([]);
 
-  const handleAccept = () => {
+  const handleAccept = async () => {
     console.log('accept');
     console.log('bidOne.id: ', contactOne.id);
     contactService.changeContactStatus(contactOne.id, -1).then((response) => {
       console.log('response: ', response);
       // onChangeBid();
-    });
+        });
+
+        await contactService.showContactByContactId(bidOne.id).then((response) => {
+            console.log('response: ', response);
+            const contact = response.data[0];
+            console.log('contact: ', contact);
+            console.log("Freelancer Post:", contact.budget);
+      
+            const project = initProject;
+            const projectId = contact.project_id;
+            console.log('projectId: ', projectId);
+            project.name = contact.job_name;
+            project.description = contact.job_description;
+            project.startDate = contact.start_date;
+            project.endDate = contact.end_date;
+            project.budget = contact.budget;
+            project.tag_id = contact.freelancer_post.skill_tag;
+            project.contact_id = contact.id;
+            project.owner = contact.client_id;
+            project.member = contact.freelancer_post.freelancer_id;
+            console.log('project: ', project);
+            projectService.createProject(project).then((response) => {
+              console.log('response: ', response);
+              console.log('project: ', project);
+              navigate(`/project-manage/${response.data.id}`)
+      
+            });
+      
+            // <Route path="/project-manage/:id" element={<ProjectManagement own={false}/>} />
+            // copilot :3 code navigate to project-manage/response.data.id
+            // window.location.href = `/project-manage/${response.data.id}`;
+            
+      });
   };
 
   const handleReject = () => {
@@ -56,13 +88,14 @@ const OfferDetailTag = ({ contactOne }) => {
     setExpanded(!expanded);
   };
 
-  const textContainerStyle = {
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    display: '-webkit-box',
-    WebkitLineClamp: expanded ? 'unset' : 5,
-    WebkitBoxOrient: 'vertical',
-  };
+    const textContainerStyle = {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        WebkitLineClamp: expanded ? 'unset' : 5,
+        WebkitBoxOrient: 'vertical',
+        marginBottom: "1%"
+    };
 
   // const contactOne = {
   //     "id": 2,
@@ -147,56 +180,56 @@ const OfferDetailTag = ({ contactOne }) => {
                                     tailored to your brand. Make a great first impression with a professional, high-end design. With 20+
                                     years of design and branding experience, I can make you and your brand look good.... No logo? Bad logo?
                                     Ugly logo? Don’t stress! I’ve got you covered with high-quality, unique logos tailored to your brand.. */}
-                  {contactOne.job_description}
-                </span>
-                <div className="row" style={{ marginTop: '12px' }}>
-                  <div className="col date-offer">Start Date: </div>
-                  <div className="col date-text">
-                    {/* 11/12/2023 CONTACT.START  */}
-                    {contactOne.start_date}
-                  </div>
-                  <div className="col date-offer">End Date: </div>
-                  <div className="col date-text">
-                    {/* 22/3/2232 CONTACT.END  */}
-                    {contactOne.end_date}
-                  </div>
-                </div>
-              </div>
-              {/* </Collapse> */}
-            </div>
-            {showSeeMore && (
-              <a
-                className="text-wrapper-3"
-                role="button"
-                aria-expanded={expanded}
-                onClick={handleSeeMoreClick}
-              >
-                {expanded ? 'See Less' : 'See More'}
-              </a>
-            )}
-          </div>
-          <div className="col-3">
-            <div className="budget-wrapper">
-              {/* $600 */}${contactOne.budget}
-            </div>
+                                    {contactOne.job_description}
+                                </span>
+                                <div className="row" style={{ marginTop: "12px" }}>
+                                    <div className="col date-offer">Start Date: </div>
+                                    <div className="col date-text">
+                                        {/* 11/12/2023 CONTACT.START  */}
+                                        {contactOne.start_date}
+                                    </div>
+                                    <div className="col date-offer">End Date: </div>
+                                    <div className="col date-text">
+                                        {/* 22/3/2232 CONTACT.END  */}
+                                        {contactOne.end_date}
+                                    </div>
+                                </div>
+                            </div>
+                            {/* </Collapse> */}
 
-            <div className="btns">
-              <div className="overlap-group-3">
-                <div className="text-wrapper-7" onClick={handleAccept}>
-                  Accept
+                        </div>
+                        {showSeeMore && (
+                            <a
+                                className="text-wrapper-3"
+                                role="button"
+                                aria-expanded={expanded}
+                                onClick={handleSeeMoreClick}
+                            >
+                                {expanded ? 'See Less' : 'See More'}
+                            </a>
+                        )}
+                    </div>
+                    <div className="col-3" style={{height:"100%", display:"flex", flexDirection:"column", justifyContent:"center"}}>
+                        <div className="budget-wrapper">
+                            {/* $600 */}
+                            ${contactOne.budget}
+                        </div>
+
+                        {checkOwner === 2 && (
+                        <div className="btns">
+                            <div className="overlap-group-3">
+                                <div className="text-wrapper-7" onClick={handleAccept}>Accept</div>
+                            </div>
+                            <div className="overlap-2">
+                                <div className="text-wrapper-8" onClick={handleReject}>Reject</div>
+                            </div>
+                        </div>
+                        )}
+                    </div>
                 </div>
-              </div>
-              <div className="overlap-2">
-                <div className="text-wrapper-8" onClick={handleReject}>
-                  Reject
-                </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default OfferDetailTag;

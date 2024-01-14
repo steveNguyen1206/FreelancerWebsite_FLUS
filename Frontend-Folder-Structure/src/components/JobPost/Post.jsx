@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import projectPostWishlistServices from '../../services/projectPostWishlistServices';
 
 const Post = ({ project, handleBidClick }) => {
+  console.log('project', project);
   const [isLiked, setIsLiked] = useState('');
 
   useEffect(() => {

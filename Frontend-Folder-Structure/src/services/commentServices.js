@@ -13,9 +13,14 @@ const findCommentByProjectId = (project_id) => {
   return http.get(`/comment/findCommentByProjectId/${project_id}`);
 };
 
+const findAndChangeStatusByUserID = (user_id, status) => {
+  return http.post(`/comment/findAndChangeStatusByUserID/${user_id}&${status}`);
+};
+
 export const commentService = {
   create,
   findCommentByProjectId,
+  findAndChangeStatusByUserID,
 };
 
 export default commentService;

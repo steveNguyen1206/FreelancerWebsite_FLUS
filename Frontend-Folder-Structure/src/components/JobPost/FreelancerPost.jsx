@@ -7,7 +7,8 @@ import eyeLight from '../../assets/eyeLight.png';
 import { useNavigate } from 'react-router';
 import reviewService from '@/services/reviewServices';
 
-const FreelancerPost = ({ post }) => {
+const FreelancerPost = ({post}) => {
+  console.log('post: ', post);
   const navigate = useNavigate();
 
   const handleClickPost = (postId) => {

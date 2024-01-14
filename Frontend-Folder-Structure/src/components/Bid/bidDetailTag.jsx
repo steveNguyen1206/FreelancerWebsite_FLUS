@@ -87,6 +87,7 @@ const BidDetailTag = ({ project, bid, onChangeBid, isOwnerProjectPost ,onChangeP
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'flex-start',
+              marginLeft: '1%',
             }}
           >
             <div className="group row">
@@ -103,13 +104,14 @@ const BidDetailTag = ({ project, bid, onChangeBid, isOwnerProjectPost ,onChangeP
               <div className="name-container col">
                 <div className="first-line-container">
                   <div className="text-wrapper-5">{bid.user.account_name}</div>
+                  <span className="text-wrapper-6">
+                    ({bid.user.profile_name})
+                  </span>
                   <div className="flag-container">
                     <img className="rectangle-2" alt="Rectangle" src={flag} />
                   </div>
                 </div>
-                <span className="text-wrapper-6">
-                  ({bid.user.profile_name})
-                </span>
+                
 
                 <div className="group-2">
                   <StarRating rating={bid.user.avg_rating} width={140} />
