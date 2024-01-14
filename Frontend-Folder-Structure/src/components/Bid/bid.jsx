@@ -1,55 +1,67 @@
-import { useState } from 'react';
 import './bid.css';
-import profileImage from '../../assets/profile_image.png';
-//name, skill, message, price, duration, accept, reject
+import bidServices from '@/services/bidServices';
+import gmailService from '@/services/gmailServices';
 
-const Bid = ({}) => {
-  const uname = 'Nguyen Thi Truc';
-  const userName = 'cogai20';
-  const price = '100$';
-  const skill = 'React, NodeJS';
-  const message = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit iyrey ifhiu ewuyriu odfiuh o.';
-  const duration = '5 days';
+const Bid = ({ bid, onChangeBid, onChangeProjectId, isOwnerProjectPost }) => {
+  let projectId = 0;
 
-  const accept = () => {
-    console.log('accept');
+  const handleAccept = () => {
+    bidServices
+      .acceptBid(bid.id, localStorage.getItem('AUTH_TOKEN'))
+      .then((response) => {
+        console.log('response: ', response);
+        onChangeProjectId(response.data.projectId);
+        projectId = response.data.projectId;
+      });
+
+    onChangeBid();
+    const emailData = {
+      email: bid.email,
+      url: 'http://localhost:8081/project-manage/' + projectId,
+    };
+    gmailService.sendEmail(emailData).then((response) => {
+      console.log('response: ', response);
+    });
   };
 
-  const reject = () => {
-    console.log('reject');
+  const handleReject = () => {
+    bidServices
+      .rejectBid(bid.id, localStorage.getItem('AUTH_TOKEN'))
+      .then((response) => {
+        console.log('response: ', response);
+        onChangeBid();
+      });
   };
 
   return (
-    <div className="bid">
+    <div className="bid-cont">
       <div className="bid-header">
         <div className="image-profile">
-          <img src={profileImage} alt="profile" />
+          <img src={bid.user.avt_url} alt="profile" />
         </div>
         <div className="bid-username">
-          <h5>{uname}</h5>
-          <p style={{ color: 'green' }}>{skill}</p>
+          <h5>{bid.user.account_name}</h5>
+          <p style={{ color: 'green' }}>{bid.subcategory.subcategory_name}</p>
         </div>
         <div className="bid-rating">
-          <p>4.5</p>
+          <p>{bid.user.avg_rating}</p>
         </div>
       </div>
       <div className="bid-body-detail">
-        <div className="bid-message">
-          <p>{message}</p>
-        </div>
         <div className="bid-price">
-          <p>{price}</p>
+          <p>{bid.price + '$'}</p>
         </div>
       </div>
-
-      <div className="bid-button">
-        <button className="reject" onClick={reject}>
-          Reject
-        </button>
-        <button className="accept" onClick={accept}>
-          Accept
-        </button>
-      </div>
+      {isOwnerProjectPost && (
+        <div className="bid-button">
+          <button className="reject" onClick={handleReject}>
+            Reject
+          </button>
+          <button className="accept" onClick={handleAccept}>
+            Accept
+          </button>
+        </div>
+      )}
     </div>
   );
 };

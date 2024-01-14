@@ -16,6 +16,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.DOUBLE,
         allowNull: false
       },
+      start_date: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
       status: {
         type: Sequelize.TINYINT,
         default: 1 // 1: active, 0: deactive

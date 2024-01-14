@@ -1,0 +1,18 @@
+@import url('../../assets/variables.css');
+
+.edit-tag-container {
+    background-color: var(--secondary);
+    display: flex;
+    flex-direction: row;
+    padding: 2px;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: space-between;
+    margin: 3px;
+}
+
+.tag-name {
+    color: var(--black);
+    font-size: small;
+    padding: 5px;
+}

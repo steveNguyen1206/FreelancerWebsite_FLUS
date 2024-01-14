@@ -63,16 +63,16 @@ const SignUpTabSecond = ({ setTab, signUpPayload, setSignUpPayload }) => {
         phone_number: convertPhone(signUpPayload.phone),
       };
       setTab(3);
-      // smsAuthenService
-      //   .sendCode(phoneNum)
-      //   .then((response) => {
-      //     if (response.status == 200) {
-      //       setTab(3);
-      //     }
-      //   })
-      //   .catch((e) => {
-      //     console.log('SmsAuthenService error (client): ', e);
-      //   });
+      smsAuthenService
+        .sendCode(phoneNum)
+        .then((response) => {
+          if (response.status == 200) {
+            setTab(3);
+          }
+        })
+        .catch((e) => {
+          console.log('SmsAuthenService error (client): ', e);
+        });
     } else {
       console.log('Form is not valid. Please check the errors.');
     }
@@ -140,11 +140,11 @@ const SignUpTabSecond = ({ setTab, signUpPayload, setSignUpPayload }) => {
         <div className="error-message">{error.nationality}</div>
       </div>
 
-      <button onClick={handleVerifyClick} className="sign-up-button">
+      <div onClick={handleVerifyClick} className="sign-up-button">
         <div className="div-wrapper">
           <div className="text-wrapper-2">Verify</div>
         </div>
-      </button>
+      </div>
     </div>
   );
 };

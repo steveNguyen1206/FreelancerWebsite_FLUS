@@ -1,0 +1,177 @@
+@import url("../../assets/variables.css");
+
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.post-cell-container{
+  height: 300px;
+  min-width: 380px;
+  border: 3px solid #000;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 10px;
+}
+
+.post-cell-container .pheader{
+    margin-top: 2%;
+    padding-left: 2%;
+    padding-right: 2%;
+    width: 100%;
+}
+
+.post-cell-container .pprofile{
+  display: flex;
+  align-items: center;
+}
+
+.post-cell-container .pprofile>img{
+  height: 30px;
+  object-fit: cover;
+  width: auto;
+  border-radius: 5px;
+}
+
+
+.post-cell-container .plocation img{
+  height: 10px;
+  width: auto;
+}
+
+.post-cell-container .pname {
+  margin-left: 10px;
+}
+
+
+.post-cell-container .pname{
+  margin-right: 10px;
+  font-size: 14px;
+  font-family: "Inter-Bold", sans-serif;
+  font-weight: 600;
+}
+
+.post-cell-container .content-container{
+  width: 100%;
+  padding-left: 40px;
+  padding-right: 20px;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.post-cell-container .ptitle{
+  display: flex;
+  font-size: var(--medium-font-size);
+  font-family: Inter-Bold, sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  text-align: center;
+}
+
+
+.post-cell-container .post-cell-tag{
+  margin-top: 0px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border: 2px solid var(--accent, #12C418);
+  background: var(--WHITE, #FFF); 
+  color: var(--accent, #12C418);
+  text-align: center;
+  width: fit-content;
+  padding: 0px 5px;
+  font-size: 13px;
+}
+
+.post-cell-container .detail-content {
+  max-width: 600px;
+  text-align: left;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* number of lines to show */
+  -webkit-box-orient: vertical;
+  height: 100%;
+  overflow: hidden;
+}
+
+.post-cell-container .previews{
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  width: 200px;
+  margin-top: 10px;
+  align-self: center;
+}
+
+.post-cell-container .rating-row{
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  align-items: center;
+  height: 15px;
+}
+
+.post-cell-container .pstars{
+  width: 200px;
+}
+
+.post-cell-container .pprice{
+  text-align: right;
+  color: #12C418;
+  font-size: 20px;
+  font-family: Inter-Bold, sans-serif;
+  font-weight: 700;
+
+}
+
+.post-cell-container .btn-row{
+  margin-top: 1%;
+  display: flex;
+  text-align: center;
+  width: 200px;
+  justify-content: center;
+}
+
+.post-cell-container .btn-bid button{
+  height: 34px;
+  width: 80px;
+  background-color: var(--primary);
+  border: none;
+  color: #FFF;
+  border-radius: 7px;
+  margin-bottom: 10px;
+}
+
+.post-cell-container .btn-bid button:active{
+  background-color: #066409;
+}
+
+.post-cell-container .rating img{
+  height: 15px;
+  width: 15px;
+}
+
+.post-cell-container .rating p{
+  margin: 0;
+}
+
+
+.post-cell-container .pbid{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  text-align: center;
+  margin-top: 1%;
+  align-items: center;
+}
+
+.post-cell-container .num-reviews-wrapper {
+    text-align: center;
+  }
+
+  .post-cell-container .btn-row img{
+  height: 34px;
+  object-fit: cover;
+  margin-left: 15px;
+}

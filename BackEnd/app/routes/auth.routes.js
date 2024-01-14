@@ -1,5 +1,6 @@
 const { verifySignUp } = require("../middleware");
 const auth_controller = require("../controllers/auth.controller");
+const { verifyToken, isAdmin } = require("../middleware/authJwt");
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -22,7 +23,9 @@ module.exports = function(app) {
   );
 
   router.post("/signin", auth_controller.signin);
+  router.get("/checkisadmin", [verifyToken, isAdmin], auth_controller.sendIsAdminTrue);
   router.post("/googleLogin", auth_controller.googleLogin);
+  router.post("/googleSignup", auth_controller.googleSignup);
 
   app.use("/api/auth", router);
 };

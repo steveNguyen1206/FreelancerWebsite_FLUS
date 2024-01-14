@@ -1,7 +1,15 @@
 module.exports = (sequelize, Sequelize) => {
     const Issue = sequelize.define("issue", {
       content: {
-        type: Sequelize.STRING(512),
+        type: Sequelize.STRING(1024),
+        allowNull: false
+      },
+      resources: {
+        type: Sequelize.STRING(1024),
+        allowNull: true
+      },
+      amount: {
+        type: Sequelize.DOUBLE,
         allowNull: false
       },
       type: {

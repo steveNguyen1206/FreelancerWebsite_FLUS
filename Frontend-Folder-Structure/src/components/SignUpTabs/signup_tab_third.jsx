@@ -22,7 +22,7 @@ const SignUpTabThird = ({
       nationality: signUpPayload.country,
       user_type: 1,
       email: signUpPayload.email,
-      avt_url: 'https://imgur.com/gallery/ApNKGxs',
+      avt_url: "https://res.cloudinary.com/dunbnutmw/image/upload/v1705132053/avatar_green_kunsk3.png",
       social_link: 'https://imgur.com/gallery/ApNKGxs',
     };
 
@@ -48,23 +48,27 @@ const SignUpTabThird = ({
       code: signUpPayload.code,
     };
     console.log('frontend: ', smsMessage);
-    signin();
-    onSignUp();
-    // smsAuthenService
-    //   .verifyCode(smsMessage)
-    //   .then((response) => {
-    //     if (response.status == 200) {
-    //       signin();
-    //       onSignUp();
-    //     } else {
-    //       console.log('Error: ', response.message);
-    //       error.code = 'Code is not correct, please try again';
-    //     }
-    //   })
-    //   .catch((e) => {
-    //     console.log('eRROR:', e.message);
-    //     error.code = 'Code is not correct, please try again';
-    //   });
+
+    // signin();
+    // onSignUp();
+
+    
+// >>>>>>> 2d84f5e00b58bcfe84fcff8f6bb86f9c2c19944a
+    smsAuthenService
+      .verifyCode(smsMessage)
+      .then((response) => {
+        if (response.status == 200) {
+          signin();
+          onSignUp();
+        } else {
+          console.log('Error: ', response.message);
+          error.code = 'Code is not correct, please try again';
+        }
+      })
+      .catch((e) => {
+        console.log('eRROR:', e.message);
+        error.code = 'Code is not correct, please try again';
+      });
   };
 
   return (

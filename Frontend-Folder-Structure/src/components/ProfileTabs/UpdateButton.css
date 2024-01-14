@@ -1,0 +1,17 @@
+@import url('../../assets/variables.css');
+
+.update-button {
+    background-color: var(--primary);
+    border-radius: 10px;
+    cursor: pointer;
+    display: inline-block;
+    margin-bottom: 0;
+    padding: 6px 12px;
+    vertical-align: middle;
+    white-space: nowrap;
+    
+    text-align: center;
+    font-size: small;
+    font-weight: 700;
+    color: var(--white);
+}

@@ -1,9 +1,4 @@
-.root{
-    color: #fff;
-    max-width: 100%;
-    width: 100%;
-}
-
+@import url("../../assets/variables.css");
 .col{
     margin-top: 0;
 }
@@ -14,7 +9,16 @@
     color: white;
     font-size: 22;
     font-weight: 800;
-    font-family: Inter-Black;
+    font-family: "Inter-Black";
     align-items: center;
     display: flex;
+    cursor: pointer;
+}
+
+.nav_text:active{
+    color: rgb(18, 151, 23);
+}
+
+.nav_text:hover{
+    color: rgba(171, 247, 174, 1);
 }

@@ -19,8 +19,9 @@
     display: flex;
     justify-content: space-around;
     margin: auto;
-    height: 50px;
+    height: 80px;
     width: 100%;
+    align-items: center;
 }
 
 .btn-new-post {

@@ -12,17 +12,25 @@
     background-color: #15a919;
     border-radius: 30px;
     height: 35px;
-    position: relative;
-    min-width: fit-content;
+    display: flex;
+    /* position: relative; */
+    /* min-width: fit-content; */
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    padding-left: 7px;
+    padding-right: 14px;
+    width: fit-content;
   }
   
   .profile .ellipse-4 {
     background-color: #ffffff;
     border-radius: 4px;
     height: 8px;
-    left: 11px;
-    position: relative;
-    top: 13px;
+    margin: 5px;
+    /* left: 11px; */
+    /* position: relative; */
+    /* top: 13px; */
     width: 8px;
   }
   
@@ -31,10 +39,11 @@
     font-family: "Inter-Regular", Helvetica;
     font-size: 16.4px;
     font-weight: 400;
-    left: 37px;
+    /* left: 37px; */
     letter-spacing: 0;
-    line-height: normal;
-    position: relative;
+    /* line-height: normal; */
+    /* position: relative; */
     white-space: nowrap;
-    min-width: 10px;
+    /* min-width: 10px; */
+    /* width: fit-content; */
   }

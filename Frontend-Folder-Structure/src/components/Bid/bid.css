@@ -7,7 +7,7 @@
 }
 
 .bid{
-    height: 250px;
+    height: 200px;
     width: 300px;
     border-radius: 12px;
     border: 3px solid #15A919;
@@ -17,67 +17,85 @@
     justify-content: space-between;
 }
 
-.bid-header{
+.bid-rating{
+    align-items: center;
+    color: #D9C301;
+}
+
+.bid-cont{
+    width: 300px;
+    border-radius: 12px;
+    border: 3px solid #15A919;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    justify-content: space-between;
+}
+
+.bid-cont .bid-header{
     display: flex;
     align-items: center;
     margin-top: 10px;
     margin-left: 10px;
 }
 
-.image-profile img{
+.bid-cont .bid-contimage-profile img{
     height: 50px;
     width: 50px;
     border-radius: 10px;
     margin-right: 20px;
 }
 
-.bid-username{
+.bid-cont .bid-contbid-username{
     align-items: center;
     justify-self: center;
     margin-right: 20px;
 }
-.bid-username p{
+.bid-cont .bid-username p{
     margin-bottom: 0;
 }
 
-.bid-username h5{
+.bid-cont .bid-username h5{
     margin-bottom: 0px;
+    font-size: 1rem;
 }
 
 
-.bid-rating{
+.bid-cont .bid-rating{
     align-items: center;
     color: #D9C301;
 }
 
-.bid-message {
+.bid-cont .bid-message {
     margin-left: 20px;
     max-width: 200px;
     max-height: 140px;
 }
 
 
-.bid-message p{
+.bid-cont .bid-message p{
     margin-bottom: 0;
 }
 
 
-.bid-price p{
+.bid-cont .bid-price p{
     display: flex;
-    font-size: 20px;
+    font-size: 30px;
     color: var(--primary);
     align-items: center;
     justify-content: center;
-    margin-right: 20px;
+    margin: 10px 0px;
+    font-style: bold;
+    font-weight: 800;
 }
 
-.bid-body-detail{
+.bid-cont .bid-body-detail{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
 }
 
-.bid-button .accept, .reject{
+.bid-cont .bid-button .accept, .reject{
     width: 104px;
     height: 25px;
     border-radius: 8px;
@@ -85,7 +103,7 @@
     
 }
 
-.bid-button{
+.bid-cont .bid-button{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -94,11 +112,12 @@
     margin-bottom: 15px;
 }
 
-.accept{
-    background-color: #A91E15;
+.bid-cont .accept{
+    background-color: #15A919;
 }
 
-.reject{
-    background-color: #15A919;
+.bid-cont .reject{
+    background-color: #A91E15;
+    
 }
 

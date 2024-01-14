@@ -6,6 +6,10 @@
   padding: 0;
 }
 
+.post-container .left-post {
+  width: 75%;
+}
+
 .post-container{
   height: 280px;
   width: 880px;
@@ -15,80 +19,73 @@
 }
 
 
-.pprofile{
+.post-container .pprofile{
   display: flex;
+  align-items: center;
 }
 
-.pprofile img{
-  margin: 10px;
-  height: 80px;
-  width: 80px;
+.post-container .pprofile img{
+  height: 40px;
+  object-fit: cover;
+  width: auto;
 }
 
-.pplocation img{
-  height: 15px;
-  width: 22px;
-  margin-top: 20px;
+.post-container .plocation img{
+  height: 10px;
+  width: auto;
 }
 
-.ppname {
-  margin-top: 15px;
+.post-container .pname {
   margin-left: 10px;
-  font-size: 15px;
-  font-weight: 600;
-  font-family: Inter-Bold, sans-serif;
-}
 
-.ppusername {
-  margin-top: 12px;
 }
 
 
-.pname{
+.post-container .pname{
   margin-right: 10px;
   font-size: var(--medium-font-size);
   font-family: Inter-Bold, sans-serif;
   font-weight: 600;
 }
 
-.ptitle{
+.post-container .content-container{
+  width: 100%;
+  padding-left: 40px;
+  padding-right: 20px;
+  height: 100%;
+}
+.post-container .ptitle{
   display: flex;
-  margin-left: 110px;
-  margin-top: -57px;
   font-size: var(--medium-font-size);
   font-family: Inter-Bold, sans-serif;
   font-weight: 700;
+  font-size: 20px;
 }
 
-.ptag{
-  margin-left: 110px;
-  margin-top: 5px;
+
+.post-container .post-tag{
+  margin-top: 0px;
   border-radius: 8px;
   margin-bottom: 10px;
   border: 2px solid var(--accent, #12C418);
   background: var(--WHITE, #FFF); 
   color: var(--accent, #12C418);
-  text-align: center; 
-  width: 70px;
-  font-family: Inter-Bold, sans-serif;
-  font-weight: 500;
+  text-align: center;
+  width: fit-content;
+  padding: 0px 5px;
 }
 
-.detail {
+.post-container .detail-content {
   max-width: 600px;
-  max-height: 140px;
-  margin-left: 70px;
   text-align: left;
-
+  display: -webkit-box;
+  -webkit-line-clamp: 5; /* number of lines to show */
+  -webkit-box-orient: vertical;
+  height: 100%;
+  overflow: hidden;
 }
 
-.detail-header{
-  margin-left: 70px;
-  text-align: left;
-  margin-top: 0px;
-}
-
-.previews{
+.post-container .previews{
   display: flex;
   justify-content: space-between;
   flex-direction: column;
@@ -96,64 +93,62 @@
   margin-top: 30px;
 }
 
-.rating{
+.post-container .rating-row{
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   text-align: center;
   align-items: center;
+  height: 15px;
 }
 
-.rating-container{
-  align-items: center;
-  text-align: center;
-  padding-top: 9px;
-}
 
-.pstars{
+
+.post-container .pstars{
   width: 200px;
 }
 
 
-.pprice{
+.post-container .pprice{
   text-align: right;
+  color: #12C418;
   font-size: var(--xlarge-font-size);
   font-family: Inter-Bold, sans-serif;
   font-weight: 700;
 }
 
-.btn-p{
+.post-container .btn-row{
   margin-top: 15px;
   display: flex;
-  justify-content: space-around;
   text-align: center;
   width: 200px;
+  justify-content: center;
 }
 
-.btn-bid button{
+.post-container .btn-bid button{
   height: 40px;
   width: 80px;
   background-color: var(--primary);
   border: none;
+  color: #FFF;
+  border-radius: 7px;
   margin-bottom: 10px;
 }
 
-.wish button{
-  background-color: #FFF;
-  border: none;
+.post-container .btn-bid button:active{
+  background-color: #066409;
 }
 
-.rating img{
+.post-container .rating img{
   height: 15px;
   width: 15px;
 }
 
-.rating p{
+.post-container .rating p{
   margin: 0;
 }
 
 
-.pbid{
+.post-container .pbid{
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -162,6 +157,12 @@
   align-items: center;
 }
 
-.num-reviews {
+.post-container .num-reviews-wrapper {
     text-align: center;
   }
+
+.post-container .btn-row img{
+  height: 40px;
+  object-fit: cover;
+  margin-left: 15px;
+}

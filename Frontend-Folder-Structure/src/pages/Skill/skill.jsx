@@ -7,7 +7,7 @@ import delivery from '../../assets/delivery.png';
 import revision from '../../assets/revision.png';
 import github from '../../assets/github.png';
 import line from '../../assets/line.png';
-import Comment from '@/components/Comment/Comment';
+import Comment from '@/components/Comment/CommentProjectPost';
 import { Carousel } from 'react-bootstrap';
 
 const Skill = () => {

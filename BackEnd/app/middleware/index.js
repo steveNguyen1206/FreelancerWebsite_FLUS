@@ -1,9 +1,9 @@
 const authJwt = require("./authJwt");
 const verifySignUp = require("./verifySignUp");
-const multer = require("./multer");
+const upload = require("./multer")
 
 module.exports = {
   authJwt,
   verifySignUp,
-  multer,
+  upload
 };

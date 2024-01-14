@@ -4,6 +4,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING(512),
         allowNull: false
       },
+      status: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false
+      },
     //   project_post_id: Reference to PROJECT_POST - OK
     //   user_id: Reference to USER - OK
     });

@@ -8,7 +8,7 @@
 .input{
     background-color: var(--white);
     color: rgba(19, 14, 1, 0.5);
-    font-size: var(--large-font-size);
+    font-size: var(--large-font-size)!important;
     justify-content: center;
     align-items: center;
     text-align: center;

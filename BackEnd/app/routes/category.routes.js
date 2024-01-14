@@ -1,11 +1,39 @@
-const { authJwt } = require("../middleware");
-const category_controller = require("../controllers/category.controller.js");
+const { authJwt, upload } = require("../middleware");
+const { verifyToken, isAdmin } = require("../middleware/authJwt.js");
 
-module.exports = (app) => {
-  var router = require("express").Router();
+module.exports = app => {
+    const category = require("../controllers/category.controller.js");
+  
+    var router = require("express").Router();
+  
+    // Create a new Category
+    // router.post("/", category.create);
+     // Create a new freelancer_post
+     router.post("/", upload.single("img"), category.create);
+  
+    // Retrieve all Category
+    router.get("/", category.findAll);
+  
+    // Retrieve all Categories with their Subcategories from the database.
+    router.get("/all/:searchKey",[verifyToken, isAdmin], category.findAllCategoryInfo);
 
-  // get name of subcategory by id /subcategory/get_name/${id}`
-    router.get("/get_name/:id", category_controller.getNameSubcategory);
+    router.get("/all/",[verifyToken, isAdmin], category.findAllCategoryInfo);
 
-    app.use("/api/subcategory", router)
-};
+    // // Retrieve all published Category
+    // router.get("/published", category.findAllPublished);
+  
+    // Retrieve a single Category with id
+    router.get("/:id", category.findOne);
+  
+    // Update a Category with id
+    router.put("/",[verifyToken, isAdmin], category.update);
+  
+    // Delete a Category with id
+    router.delete("/:id",[verifyToken, isAdmin], category.delete);
+  
+    // // Delete all Tutorials
+    // router.delete("/", category.deleteAll);
+  
+    app.use('/api/category', router);
+  };
+  

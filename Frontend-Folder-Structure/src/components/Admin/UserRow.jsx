@@ -8,6 +8,9 @@ import banUserActive from "../../assets/banUser_active.png";
 import eyeLight from "../../assets/eyeLight.png";
 import avatar_green from "../../assets/avatar_green.png";
 import userDataService from "../../services/userDataServices";
+import projectPostServices from "@/services/projectPostServices";
+import freelancerPostService from "@/services/freelancerPostServices";
+import commentService from "@/services/commentServices";
 
 const UserRow = ({ user, refreshUsers, setRefreshUsers }) => {
     
@@ -19,9 +22,10 @@ const UserRow = ({ user, refreshUsers, setRefreshUsers }) => {
 
     const handleRemoveUser = () => {
         console.log("Remove user: ", account_name);
-        userDataService.removeUserByAccName(account_name)
+        userDataService.removeUserByAccName(account_name, localStorage.getItem("AUTH_TOKEN"))
             .then((response) => {
                 setRefreshUsers((prev) => !prev);
+                
             })
             .catch((error) => {
                 console.error(error);
@@ -37,11 +41,34 @@ const UserRow = ({ user, refreshUsers, setRefreshUsers }) => {
     const [active, setActive] = useState(status); // State to trigger refresh
     const handleChangeStatus = () => {
         const newStatus = active === 0 ? 1 : 0; // Change the logic based on your requirements
-        userDataService.changeStatusByID(id, newStatus)
+        userDataService.changeStatusByID(id, newStatus, localStorage.getItem("AUTH_TOKEN"))
             .then((response) => {
                 console.log("Status changed: ", newStatus);
                 setActive(newStatus);
                 setRefreshUsers((prev) => !prev);
+                //Change status of project post of user id
+                projectPostServices.findAndChangeStatusByUserID(id, newStatus)
+                .then((response) => {
+                    console.log("Status changed project post: ", newStatus);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+                //Change status of freelancer post of user id
+                freelancerPostService.findAndChangeStatusByUserID(id, newStatus)
+                .then((response) => {
+                    console.log("Status changed freelancer post: ", newStatus);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+                commentService.findAndChangeStatusByUserID(id, newStatus)
+                .then((response) => {
+                    console.log("Status changed comment: ", newStatus);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
             })
             .catch((error) => {
                 console.error(error);

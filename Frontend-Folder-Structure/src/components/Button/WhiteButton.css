@@ -15,3 +15,7 @@
     font-weight: 600;
 }
 
+.white-button:active{
+    background-color:  var(--primary);
+    color: var(--white);
+}
