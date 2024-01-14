@@ -111,23 +111,7 @@ exports.findAndChangeStatus = (req, res) => {
 };
 
 // Retrieve all Project_posts from the database.
-exports.findAllProjectPosts = (req, res) => {
-  // for each project post, check expired startDate, if expired, set status = 0
-  project_post
-    .findAll({ where: { status: 1 } })
-    .then((data) => {
-      data.forEach((projectPost) => {
-        const startDate = new Date(projectPost.start_date);
-        const currentDate = new Date();
-        if (startDate < currentDate) {
-          project_post.update({ status: 0 }, { where: { id: projectPost.id } });
-        }
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
+exports.findAll = (req, res) => {
   project_post
     .findAll({
       where: { status: 1 },

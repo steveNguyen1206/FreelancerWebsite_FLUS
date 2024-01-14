@@ -3,8 +3,6 @@ import vietnam from '../../assets/vietnam.png';
 import profileimage from '../../assets/profile_image.png';
 import './Skill.css';
 import { StarRating } from '@/components';
-import delivery from '../../assets/delivery.png';
-import revision from '../../assets/revision.png';
 import github from '../../assets/github.png';
 import line from '../../assets/line.png';
 import Comment from '@/components/Comment/CommentProjectPost';
