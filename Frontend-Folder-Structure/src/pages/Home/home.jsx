@@ -10,6 +10,7 @@ import freelancer_post_Service from '@/services/freelancer_post_Service'
 import Slider from 'react-slick'
 import categoryService from '@/services/categoryService'
 import { useNavigate } from 'react-router'
+import { Link } from 'react-router-dom'
 
 const index = () => {
 
@@ -106,14 +107,14 @@ const index = () => {
           <div className='container' id='category-container_201123' style={{height:"100%", width:"100%", padding:"2% 5% 2% 5%"}}>
             <div className='row row-cols-7' style={{height:"100%", width:"100%", margin:"0"}}>
             {categories.map((category, index) => (
-                  <div className='col' key={index}>
-                    <div className="group-3" onClick={() => handleCategoryClick(category.name)}>
+              <Link className='col' key={index} to={`/findFreelancer?category=${encodeURIComponent(category.name)}&categoryId=${category.id}`}>
+                    <div className="group-3">
                       <img className="image" alt="Image" src={category.img} />
                       <div className="text-wrapper-5">{category.name}</div>
                       
                     </div>
-                  </div>
-                ))}
+                </Link>
+              ))}
             </div>
           </div>
         </div>
