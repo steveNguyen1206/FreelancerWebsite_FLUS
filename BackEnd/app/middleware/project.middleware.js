@@ -1,5 +1,6 @@
 const db = require("../models");
 const Project = db.projects;
+const ProjectPost = db.project_post;
 
 isMember = (req, res, next) => {
     const id = req.params.projectId;
@@ -22,6 +23,7 @@ isMember = (req, res, next) => {
 
     })
 };
+
 
 isOwner = (req, res, next) => {
     const id = req.params.projectId ?  req.params.projectId :  req.body.id;

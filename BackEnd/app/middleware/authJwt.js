@@ -29,6 +29,7 @@ isAdmin = (req, res, next) => {
   User.findByPk(req.userId)
     .then((user) => {
       if (user.user_type === 2) {
+        console.log("ADMIN", req.params);
         next();
       } else {
         res.status(403).send({

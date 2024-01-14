@@ -14,6 +14,7 @@ const Header = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   console.log("signin", signin);
   console.log("isAdmin", isAdmin);
+  
   const handleSignOut = () => {
     localStorage.removeItem('AUTH_TOKEN');
     localStorage.removeItem('LOGINID');
@@ -24,8 +25,7 @@ const Header = () => {
   }
   // console.log("AVATAR", localStorage.getItem('AVT'));
   const avatarSrc = (localStorage.getItem('AVT') != undefined && localStorage.getItem('AVT') != 'https://imgur.com/gallery/ApNKGxs') ? localStorage.getItem('AVT') : avatar_green;
-
-  const navigate = useNavigate();
+  
   // const auth_token = localStorage.getItem('AUTH_TOKEN');
   // console.log("auth_token", auth_token);
   authServices.checkIsAdmin(localStorage.getItem('AUTH_TOKEN')).then(res => {
@@ -36,19 +36,21 @@ const Header = () => {
     }
   })
   .catch(err => {
-    console.log(err);
+    // console.log(err);
   })
-
+  
+  const navigate = useNavigate();
 
   return (
     <div className={styles.header}>
       <img src={logo} style={{padding:"15px", marginLeft:"2%"}}/>
       <Navbar></Navbar>
-      <div className='button-avatar' style={{display: "flex",flexWrap:"wrap" ,alignContent:"center", width:"250px", height:"100%" , marginRight:"3%", padding: "0.75%"}}>
+      <div className='button-avatar' style={{display: "flex", flexWrap:"wrap" ,alignContent:"left", width:"400px", height:"100%" , marginRight:"3%", padding: "0.75%"}}>
         {signin && (
           <div className="sign-in-done" style={{height:"100%", width:"100%"}}>
-            <img onClick={handleSignOut} src={avatarSrc}  style={{position:"inline", objectFit:"cover",height:"100%", margin:"1%",border: "1px solid #000", borderRadius:"50.964px", boxSizing:"border-box"}}/>
+            <img onClick={() => navigate(`/myprofile/${localStorage.getItem("LOGINID")}`)} src={avatarSrc}  style={{position:"inline", objectFit:"cover",height:"40px", width: "40px", margin:"1%",border: "1px solid #000", borderRadius:"50.964px", boxSizing:"border-box"}}/>
             {isAdmin && (<div id='login_button-201123' className='btn btn-light'  onClick={() => navigate('/admin')} style={{marginLeft:"8%"}}>Admin</div>)}
+            <div id='login_button-201123' className='btn btn-light'  onClick={handleSignOut} style={{marginLeft:"8%"}}>Logout</div>
           </div>
          
         )}

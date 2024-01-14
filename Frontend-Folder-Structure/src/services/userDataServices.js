@@ -46,19 +46,37 @@ const findOnebyEmail = email => {
   return http.get(`/user/email/${email}`);
 };
 
-const findUsersbyPage = (page, size, searchKey) => {
+const findUsersbyPage = (page, size, searchKey, access_token) => {
   console.log("findUsersbyPage: ", page, size, searchKey);
-  return http.get(`/user/getusers/${page}&${size}&${searchKey}`);
+  return http.get(`/user/getusers/${page}&${size}&${searchKey}`, {headers: {
+    "Content-type": "application/json",
+    "x-access-token": access_token,
+  }});
 };
 
-const removeUserByAccName = (accountName) => {
+const removeUserByAccName = (accountName, access_token) => {
   console.log("removeUserByAccName: ", accountName);
-  return http.delete(`/user/deleteuser/${accountName}`);
+  return http.delete(`/user/deleteuser/${accountName}`, {headers: {
+    "Content-type": "application/json",
+    "x-access-token": access_token,
+  }});
 };
 
 
-const changeStatusByID = (id, status) => {
-  return http.put(`/user/status/${id}&${status}`);
+const changeStatusByID = (id, status, access_token) => {
+  console.log("changeStatusByID: ", id, status, access_token);
+  
+  const data = {
+    useridtochange: id,
+    status: status
+  };
+
+  return http.put(`/user/status/${id}&${status}`, data, {
+    headers: {
+      "Content-type": "application/json",
+      "x-access-token": access_token,
+    },
+  });
 };
 
 const changePassword = (data) => {
@@ -86,7 +104,7 @@ const updateAvatar = (user_id, selectedFile) => {
   console.log(selectedFile);
 
   return media_upload.put(`/user/avatar/${user_id}`, formData, {headers: {
-    "Content-type": "application/json",
+    "Content-type": "multipart/form-data",
     "x-access-token": access_token,
   }});
 }

@@ -22,7 +22,7 @@ const SignUpTabThird = ({
       nationality: signUpPayload.country,
       user_type: 1,
       email: signUpPayload.email,
-      avt_url: 'https://imgur.com/gallery/ApNKGxs',
+      avt_url: "https://res.cloudinary.com/dunbnutmw/image/upload/v1705132053/avatar_green_kunsk3.png",
       social_link: 'https://imgur.com/gallery/ApNKGxs',
     };
 

@@ -19,9 +19,10 @@ const LogIn = () => {
     userPassword: '',
   };
 
-  let navigate = useNavigate();
-
+  // const [error, setError] = useState('');
   const [loginPayload, setLoginPayload] = useState(InititalLoginPayload);
+
+  let navigate = useNavigate();
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -64,12 +65,18 @@ const LogIn = () => {
       .then((response) => {
         if (response.status == 200) {
           var id = response.data.id;
-          localStorage.setItem('LOGINID',id);
-          localStorage.setItem('AUTH_TOKEN',response.data.accessToken);
+          localStorage.setItem('LOGINID', id);
+          localStorage.setItem('AUTH_TOKEN', response.data.accessToken);
           localStorage.setItem('AVT', response.data.avt_url);
           console.log("AVATER", localStorage.getItem('AVT'));
           setSignin(true);
-          navigate(`/myprofile/${id}`);
+          if(response.data.roles.includes("ROLE_ADMIN")){
+            navigate('/admin');
+            console.log('admin')
+          }
+          else{
+            navigate('/');
+          }
         }
         console.log(localStorage.getItem('AUTH_TOKEN'));
       })
@@ -87,16 +94,16 @@ const LogIn = () => {
       });
   };
   const googleLogIn = useGoogleLogin({
-    onSuccess: async(tokenRespond) => {
-        try {
-            const res = await axios.get(
-                'https://www.googleapis.com/oauth2/v3/userinfo',
-                {
-                    headers: {
-                        Authorization: `Bearer ${tokenRespond.access_token}`,
-                    },
-                }
-                )
+    onSuccess: async (tokenRespond) => {
+      try {
+        const res = await axios.get(
+          'https://www.googleapis.com/oauth2/v3/userinfo',
+          {
+            headers: {
+              Authorization: `Bearer ${tokenRespond.access_token}`,
+            },
+          }
+        );
 
         try {
           const server_host = 'http://127.0.0.1:8080';
@@ -123,9 +130,20 @@ const LogIn = () => {
           localStorage.setItem('LOGINID',result.data.id);
           localStorage.setItem('AUTH_TOKEN',result.data.accessToken);
           // console.log("AVATAR GG", result.data.avt_url);
+          console.log(result.data);
           localStorage.setItem('AVT', result.data.avt_url);
-          console.log('Token: ' + result.data.accessToken + " " + result.data.id);
+          console.log(
+            'Token: ' + result.data.accessToken + ' ' + result.data.id
+          );
           setSignin(true);
+          // navigate('/admin')
+          if(result.data.roles.includes("ROLE_ADMIN")){
+            navigate('/admin');
+            // console.log('admin')
+          }
+          else{
+            navigate('/');
+          }
         } catch (error) {
           console.log('Error with GoogleLogin' + error);
         }
@@ -159,7 +177,7 @@ const LogIn = () => {
                 onChange={handleInputChange}
               />
 
-              <div className="error-message">{error.username}</div>
+              {/* <div className="error-message">{error.username}</div> */}
             </div>
             <div className="input-container">
               <label for="inputPassword5" class="form-label">
@@ -173,7 +191,8 @@ const LogIn = () => {
                 aria-describedby="passwordHelpBlock"
                 onChange={handleInputChange}
               />
-              <div className="error-message">{error.password}</div>
+              {/* <div className="error-message">{error.password}</div> */}
+              {error && <div className="error-message">{error.password}</div>}
             </div>
 
             <div className="sign-in-button">

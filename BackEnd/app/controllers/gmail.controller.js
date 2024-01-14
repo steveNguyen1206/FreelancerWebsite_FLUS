@@ -3,6 +3,7 @@ const db = require("../models");
 const User = db.user;
 
 const sendEmailToFreelancer = (req, res) => {
+  // const email = req.body.email;
   const email = req.body.email;
   // const freelancer_post_id = req.body.freelancer_post_id;
   const url = req.body.url;
@@ -10,6 +11,13 @@ const sendEmailToFreelancer = (req, res) => {
   console.log("Email from sendEmail: ",email);
   // console.log("freelancer_post_id from sendEmail: ",freelancer_post_id)
   console.log("url from sendEmail: ",url);
+
+  let message = "Someone is asking to join a project with you! Check your FLUS account to see the BIDs.";
+
+  if (url.includes("project-manage")) {
+    message = "You have accepted the invitation to join a project! Check your FLUS account to see the BIDs.";
+  }
+
   // return  {
     try {
       // Find the user by id
@@ -161,7 +169,6 @@ const sendEmailToFreelancer = (req, res) => {
               </tr>
             </tbody>
           </table>
-        
               </td>
             </tr>
           </tbody>
@@ -195,7 +202,7 @@ const sendEmailToFreelancer = (req, res) => {
               <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px 100px;font-family:'Montserrat',sans-serif;" align="left">
                 
           <div class="v-font-size" style="font-size: 14px; line-height: 140%; text-align: center; word-wrap: break-word;">
-            <p style="font-size: 14px; line-height: 140%;">Someone is asking to join a project with you! Check your FLUS account to see the BIDs.</p>
+            <p style="font-size: 14px; line-height: 140%;">${message}</p>
           </div>
         
               </td>

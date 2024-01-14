@@ -81,6 +81,7 @@ const OfferDetailTag = ({ contactOne, checkOwner }) => {
         display: '-webkit-box',
         WebkitLineClamp: expanded ? 'unset' : 5,
         WebkitBoxOrient: 'vertical',
+        marginBottom: "1%"
     };
 
     // const contactOne = {
@@ -178,7 +179,7 @@ const OfferDetailTag = ({ contactOne, checkOwner }) => {
                             </a>
                         )}
                     </div>
-                    <div className="col-3">
+                    <div className="col-3" style={{height:"100%", display:"flex", flexDirection:"column", justifyContent:"center"}}>
                         <div className="budget-wrapper">
                             {/* $600 */}
                             ${contactOne.budget}

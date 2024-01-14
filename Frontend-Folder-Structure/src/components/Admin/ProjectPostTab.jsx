@@ -14,16 +14,22 @@ const ProjectPostTab = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [refreshProjPosts, setRefreshProjPosts] = useState(false); // State to trigger refresh
     const [searchKey, setSearchKey] = useState(""); // State for search key
+    const [noMatching, setNoMatching] = useState(false); // State for search key
 
     const fetchProjPosts = async () => {
         try {
-            const response = await projectPostServices.findProjPostsByPage(page, 3, searchKey.toString());
+            const response = await projectPostServices.findProjPostsByPage(page, 3, searchKey.toString(), localStorage.getItem("AUTH_TOKEN"));
             console.log("RESPONSE: ", response.data);
             const { proj_posts, totalPages } = response.data;
             console.log("projposts: ", proj_posts);
             console.log("totalPages: ", totalPages);
             setProjPosts(proj_posts);
             setTotalPages(totalPages);
+            if(proj_posts.length == 0) {
+                setNoMatching(true);
+            }else{
+                setNoMatching(false);
+            }
         } catch (error) {
             console.error(error);
         }
@@ -66,21 +72,14 @@ const ProjectPostTab = () => {
                     />
                     <img className="search-icon-instance" onClick={ fetchProjPosts} src={search} alt="Search" />
                 </div>
-                <div className="gr-dropdown">
+                {/* <div className="gr-dropdown">
                     <div className="filter-text">Reported times</div>
                     <img className="caret-icon" src={cavet} alt="Caret" />
-                </div>
+                </div> */}
             </div>
 
             <div className="overlap-5">
-                {/* <div className="table-head row">
-                    <div className="col-1"></div>
-                    <div className="text-wrapper-27 col-3">User name</div>
-                    <div className="text-wrapper-27 col">Name</div>
-                    <div className="text-wrapper-27 col">Reported times</div>
-                    <div className="text-wrapper-27 col">Registration Date</div>
-                    <div className="col"></div>
-                </div> */}
+                {noMatching && (<div style={{color:"red", textAlign:"center", width:"100%"}}>No matching results</div>)}
                 <div className="table-projpost">
                     {projposts.map(project => (
                         <ProjectPostRow 
@@ -90,6 +89,7 @@ const ProjectPostTab = () => {
                         projectTagsId={project.tag_id}
                         projectDetail={project.detail}
                         projectBudget={[project.budget_min, project.budget_max]}
+                        projectStatus={project.status}
                         userID={project.user_id}
                         setRefreshProjPosts={setRefreshProjPosts}
                         handleBidClick={() => {

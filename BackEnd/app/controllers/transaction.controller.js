@@ -4,9 +4,15 @@ const Op = db.Sequelize.Op;
 // const Project = db.projects;
 // const ProjectNoti = db.projects_notis;
 const ProjectController = require('./project.controller')
+const projectReportController = require('./project_report.controller')
+const IssueController = require('./issue.controller')
 
 
 TRAN_CONFIGURE_PAID = 1
+TRAN_ACCEPT_PROJECT = 1
+TRAN_REJECT_PROJECT = 2
+TRAN_RESOLVE_COMPLAINT = 3
+TRAN_CREATE_PROJECT = 4
 
 // Create and Save a new Tutorial
 exports.createTransaction = (req, res) => {
@@ -126,6 +132,7 @@ exports.deleteAll = (req, res) => {
     });
 };
 
+
 exports.createTransactionAndUpdateProject = (req, res) => {
   // Validate request
   if (!req.body.tran_amount 
@@ -171,3 +178,117 @@ exports.createTransactionAndUpdateProject = (req, res) => {
     });
 };
 
+
+exports.createTransactionAndAcceptProject = (req, res) => {
+  // Validate request
+  if (!req.body.costs
+    || !req.body.receiverIds) {
+    res.status(400).send({
+      message: "missing information!"
+    });
+    return;
+  }
+
+  const projectId = req.params.projectId;
+
+  const transaction = {
+    amount: req.body.costs[0],
+    sender_id: 1,
+    receiver_id: req.body.receiverIds[0],
+    project_id: projectId,
+    transactionId: req.transactionId,
+    type: 1,
+  }
+
+    // Save Transaction in the database
+    Transaction.create(transaction)
+    .then(trans_data => {
+      // res.send(data);
+      projectReportController.accept(req, res);
+
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the transaction in accept project."
+      });
+    });
+}
+
+
+// create rejectTransaction and reject project status
+exports.createTransactionAndRejectProject = (req, res) => {
+  // Validate request
+  if (!req.body.costs
+    || !req.body.receivers) {
+    res.status(400).send({
+      message: "missing information!"
+    });
+    return;
+  };
+
+  const projectId = req.params.projectId;
+  //  mapping multibe transtions basd on cost and receiver
+  const transactions = req.body.costs.map((cost, index) => {
+    return {
+      amount: cost,
+      sender_id: 1,
+      receiver_id: req.body.receiverIds[index],
+      project_id: projectId,
+      transactionId: req.transactionIds[index],
+      type: 2,
+    }
+  });
+
+  // Save Transaction in the database
+  Transaction.bulkCreate(transactions)
+    .then( trans_data => {
+      // res.send(data);
+      projectReportController.reject(req, res);
+
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the transaction in reject project."
+      });
+    });
+}
+
+
+exports.createTransactionAndResolveComplaint = (req, res) => {
+  // Validate request
+  if (!req.body.costs
+    || !req.body.receiverIds) {
+    res.status(400).send({
+      message: "missing information!"
+    });
+    return;
+  }
+
+  const projectId = req.body.projectId;
+
+  const transaction = {
+    amount: req.body.costs[0],
+    sender_id: 1,
+    receiver_id: req.body.receiverIds[0],
+    project_id: projectId,
+    transactionId: req.transactionIds[0],
+    type: 3,
+  }
+
+    // Save Transaction in the database
+    Transaction.create(transaction)
+    .then(trans_data => {
+      // res.send(data);
+      // projectReportController.accept(req, res);
+      IssueController.acceptIssue(req, res);
+
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the transaction in accept issue."
+      });
+    });
+}

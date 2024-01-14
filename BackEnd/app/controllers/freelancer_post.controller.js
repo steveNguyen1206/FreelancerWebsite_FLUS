@@ -404,7 +404,7 @@ exports.findAllPosts = (req, res) => {
     // console.log("Params: ", req.params);
     // console.log("freelancer_id: ", freelancer_id);
    
-    var condition = freelancer_id ? { freelancer_id: { [Op.eq]: `${freelancer_id}` } } : null;
+    var condition = freelancer_id? { freelancer_id: { [Op.eq]: `${freelancer_id}` } } : null;
 
     Freelancer_post.findAll({
         where: condition,
@@ -477,7 +477,7 @@ exports.getFreelancerEmail = (req, res) => {
         ? {
             [Op.or]: [
               { title: { [Op.like]: `%${searchKey}%` } },
-              { detail: { [Op.like]: `%${searchKey}%` } },
+              { skill_description: { [Op.like]: `%${searchKey}%` } },
             ],
           }
         : null;
@@ -638,3 +638,30 @@ exports.findAllActivePosts = (req, res) => {
         });
 };
 
+
+exports.filterOnCategory = (req, res) => {
+    const { category_id } = req.params.categoryId;
+    console.log("category_id: ", category_id);
+    Freelancer_post.findAll({
+        where: {
+            category_id: category_id,
+        },
+        include: [
+            {
+                model: Subcategory,
+                where: {
+                    categoryId: category_id,
+                },            }
+        ],
+    })
+        .then((data) => {
+            res.send(data);
+        })
+        .catch((err) => {
+            console.error("Sequelize Error:", err);
+            res.status(500).send({
+                message: "Could not find Freelancer_post with category_id=" + category_id,
+            });
+        });
+}
+  

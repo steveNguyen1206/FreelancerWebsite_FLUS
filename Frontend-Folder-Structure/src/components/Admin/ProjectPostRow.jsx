@@ -11,6 +11,7 @@ import banUser from '../../assets/banUser.png';
 import banUserActive from '../../assets/banUser_active.png';
 import recycleBin from '../../assets/recycleBin.png';
 import projectPostServices from '@/services/projectPostServices';
+import avatar_green from '../../assets/avatar_green.png';
 
 
 const ProjectPostRow = ({
@@ -19,6 +20,7 @@ const ProjectPostRow = ({
     projectTagsId,
     projectDetail,
     projectBudget,
+    projectStatus,
     userID,
     handleBidClick,
     setRefreshProjPosts,
@@ -56,10 +58,10 @@ const ProjectPostRow = ({
       // console.log('project tag: ', projectTagsData.data.subcategory_name);
     };
 
-    const [active, setActive] = useState(status); // State to trigger refresh
+    const [active, setActive] = useState(projectStatus); // State to trigger refresh
     const handleChangeStatus = () => {
         const newStatus = active === 0 ? 1 : 0; // Change the logic based on your requirements
-        projectPostServices.changeStatusByID(projectId, newStatus)
+        projectPostServices.changeStatusByID(projectId, newStatus, localStorage.getItem("AUTH_TOKEN"))
             .then((response) => {
                 console.log("Status changed: ", newStatus);
                 setActive(newStatus);
@@ -72,7 +74,7 @@ const ProjectPostRow = ({
 
     const handleRemoveProjPost = () => {
         console.log("Remove ProjPost: ", projectId);
-        projectPostServices.removePostById(projectId)
+        projectPostServices.removePostById(projectId, localStorage.getItem("AUTH_TOKEN"))
             .then((response) => {
                 setRefreshProjPosts((prev) => !prev);
             })
@@ -88,7 +90,7 @@ const ProjectPostRow = ({
           <div className="post-header">
             <div className="post-profile">
               {/* {console.log('owner project: ', ownerProject)} */}
-              <img className='img-post' src={ownerProject.avt_url} alt="profile" />
+              <img className='img-post' src={ownerProject.avt_url != "https://imgur.com/gallery/ApNKGxs" ? ownerProject.avt_url : avatar_green} alt="profile" />
               <div className="post-name">{ownerProject.account_name}</div>
               <div className="post-username">({ownerProject.profile_name})</div>
               <div className="post-location">

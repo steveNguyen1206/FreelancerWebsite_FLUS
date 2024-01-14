@@ -15,13 +15,6 @@ const UpdateNameContacts = ({ user_id }) => {
     setProfileName(e.target.value);
   };
 
-  // handle account name change
-  const [accountName, setAccountName] = useState('');
-
-  const handleAccountNameChange = (e) => {
-    setAccountName(e.target.value);
-  };
-
   // handle social link change
   const [socialLink, setSocialLink] = useState('');
 
@@ -36,9 +29,9 @@ const UpdateNameContacts = ({ user_id }) => {
 
     // create object from unempty fields
     const fields = {};
-    if (profileName) fields['profile_name'] = profileName;
-    if (accountName) fields['account_name'] = accountName;
-    if (socialLink) fields['social_link'] = socialLink;
+    
+    if (profileName) fields['profile_name'] = profileName.trim();
+    if (socialLink) fields['social_link'] = socialLink.trim();
 
     // check if object is empty
     if (Object.keys(fields).length === 0) {
@@ -57,12 +50,12 @@ const UpdateNameContacts = ({ user_id }) => {
   };
 
   return (
+    // <EditTextField field_name={"Account Name"} onChange={handleAccountNameChange}/>
     <div className='update-part-container'>
       <div className='title'>Name & Contacts</div>
 
       <div className='fields'>
         <EditTextField field_name={"Profile Name"} onChange={handleProfileNameChange}/>
-        <EditTextField field_name={"Account Name"} onChange={handleAccountNameChange}/>
         <EditTextField field_name={"Social Link"} onChange={handleSocialLinkChange}/>
       </div>
 
