@@ -44,6 +44,7 @@ const LogIn = () => {
     await userDataService
       .findOnebyAccountName(data.account_name)
       .then((response) => {
+        console.log("response.status", response.status);
         if (response.status == 200) {
           console.log(response.data.status);
           if (response.data.status == 0) {
@@ -55,6 +56,10 @@ const LogIn = () => {
           }
         }
       })
+      .catch((error) => {
+        setError(prevState => ({ ...prevState, password: 'Invalid username or password, or the user has been banned.' }));
+        hasError = true;
+      });
 
     if (hasError) {
       return;
