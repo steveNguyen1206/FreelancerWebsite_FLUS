@@ -10,10 +10,10 @@ function valuetext(value) {
   return `${value} $`;
 }
 
-const Filter = ({
+const Filter2 = ({
   selectedTags,
   onSelectedTagsChange,
-  onSelectedRangeChange,
+  onSelectedLowsetPriceChange,
 }) => {
   const initialSkills = [
     {
@@ -71,16 +71,17 @@ const Filter = ({
   //     .catch((e) => {
   //       console.log(e);
   //     });
-      
+
   //   }
   // }, [location.search]);
 
-  
+
 
   const [value, setValue] = useState([0, 10000]);
   const [selectedSkills, setSelectedSkills] = useState([]);
 
   const handleInputLowerChange = (event) => {
+    // trả ra kết quả là inputLower
     setValue([
       event.target.value === '' ? 0 : Number(event.target.value),
       value[1],
@@ -123,6 +124,8 @@ const Filter = ({
     );
   };
 
+
+
   return (
     <div className="filter-container">
       <div className="header">
@@ -159,7 +162,7 @@ const Filter = ({
       </div>
 
       <div className="salary-range">
-        <label htmlFor="inputRange" className="form-label">
+        {/* <label htmlFor="inputRange" className="form-label">
           Salary Range
         </label>
         <Box sx={{ width: 250 }}>
@@ -187,21 +190,22 @@ const Filter = ({
               },
             }}
           />
-        </Box>
+        </Box> */}
         {/* <div className="display"> */}
         <div className="text-range-row">
           <p className="text-range">From</p>
           <div className="lower">
             <input
               className="values"
-              value={value[0]}
-              id="inputLower"
-              onChange={handleInputLowerChange}
+              // value={value[0]}
+              // id="inputLower"
+              // onChange={handleInputLowerChange}
+              onChange={onSelectedLowsetPriceChange}
             />
           </div>
           <p className="dollar">$</p>
         </div>
-        <div className="text-range-row">
+        {/* <div className="text-range-row">
           <p className="text-range">To</p>
           <div className="upper">
             <input
@@ -212,11 +216,12 @@ const Filter = ({
             />
           </div>
           <p className="dollar">$</p>
-        </div>
+        </div> */}
         {/* </div> */}
       </div>
     </div>
   );
 };
 
-export default Filter;
+export default Filter2;
+

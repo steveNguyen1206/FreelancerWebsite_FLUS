@@ -3,7 +3,7 @@ import './findFreelancer.css';
 import Search from '@/components/Search';
 import { Header, Footer } from '@/layout';
 import Post from '@/components/JobPost/Post';
-import Filter from '@/components/Filter';
+import Filter2 from '@/components/Filter/Filter2';
 import { FreelancerPost } from '@/components/JobPost';
 import { useNavigate } from 'react-router';
 // import { FreelancerPostService } from '@/services';
@@ -57,6 +57,11 @@ const FindFreelancer = () => {
     setSearchTitle(event.target.value);
   };
 
+  const [lowsetPrice, setLowsetPrice] = useState(0);
+  const handleLowsetPriceChange = (event) => {
+    setLowsetPrice(event.target.value);
+  };
+  console.log('lowsetPrice', lowsetPrice)
   // const [selectedTags, setSelectedTags] = useState([]);
   // const handleFilterChange = (newSelectedTags) => {
   //   setSelectedTags(newSelectedTags);
@@ -67,13 +72,16 @@ const FindFreelancer = () => {
     setSelectedRange(newSelectedRange);
   };
   console.log('posts', posts);
+
   const filteredPosts = posts.filter(
     (post) =>
       post.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
       // if selectedTags is empty, ignore the tag filter
       (selectedTags.length === 0 || selectedTags.includes(post.subcategory.id)) &&
-      post.lowset_price >= selectedRange[0] &&
-      post.lowset_price <= selectedRange[1]
+      post.lowset_price >= lowsetPrice
+      // post.lowset_price >= selectedRange[0] 
+      // &&
+      // post.lowset_price <= selectedRange[1]
   );
   console.log('selectedRange', selectedRange);
 
@@ -129,10 +137,11 @@ const FindFreelancer = () => {
 
         <div className="c-container">
           <div className="left-job">
-            <Filter
+            <Filter2
               selectedTags={selectedTags}
               onSelectedTagsChange={handleFilterChange}
-              onSelectedRangeChange={handleRangeChange}
+              // onSelectedRangeChange={handleRangeChange}
+              onSelectedLowsetPriceChange = {handleLowsetPriceChange}
             />
           </div>
           <div className="right-job">

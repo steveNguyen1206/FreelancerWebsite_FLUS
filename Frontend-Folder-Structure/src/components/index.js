@@ -51,3 +51,4 @@ export {default as WishlistTab} from './ProfileTabs/WishlistTab'
 export {default as CalendarTab} from './ProfileTabs/CalendarTab'
 export {default as PaymentAccountTab} from './ProfileTabs/PaymentAccountTab'
 
+export {default as Filter2} from './Filter/filter2'
