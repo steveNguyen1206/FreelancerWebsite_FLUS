@@ -42,6 +42,13 @@ const resolveComplaint = (issueId, data, accessToken) => {
   }});
 }
 
+const createPaymentAccount = (data, access_token) => {
+  return http.post(`/payment_account`, data, {headers: {
+    "Content-type": "application/json",
+    "x-access-token": access_token,
+  }});
+}
+
 
 const paymentServices = {
  createOrder,
@@ -50,7 +57,8 @@ const paymentServices = {
  paidAndUpdateProject,
  acceptProject,
  rejectProject,
- resolveComplaint
+ resolveComplaint,
+ createPaymentAccount
  
 };
 
