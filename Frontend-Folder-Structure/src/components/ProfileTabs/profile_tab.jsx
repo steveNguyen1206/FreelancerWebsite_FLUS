@@ -18,7 +18,7 @@ const EmptyTab = () => {
   );
 };
 
-const BankTab = () => {
+const BankTab = (userId) => {
     return(
         <div className='bank-tab'>
             {/* <div className="scroll-bar">
@@ -31,9 +31,9 @@ const BankTab = () => {
                 <input className='paypal-mail' placeholder='Input your paypal email here to add your paypal account'/>
                 <button text={"Add Paypal"} className='add-paypal-btn'>Add Paypal</button>
             </div>
-            <div className='available-payment-header'>
+            {/* <div className='available-payment-header'>
                 Your available paypal email(s):
-            </div>
+            </div> */}
             
         </div>
        
@@ -47,7 +47,7 @@ const WishlistTab = ({ userID }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    projectPostWishlistServices.getWishlistByUserId(userID).then((response) => {
+    projectPostWishlistServices.getWishlistByUserId(localStorage.getItem("AUTH_TOKEN")).then((response) => {
       console.log('response: ', response.data);
       setWishlist(response.data);
     });
@@ -64,7 +64,7 @@ const WishlistTab = ({ userID }) => {
             projectTagsId={item.tag_id}
             projectDetail={item.detail}
             projectBudget={[item.budget_min, item.budget_max]}
-            userID={userID}
+            userID={item.user_id}
             handleToProjectPostClick={() => {
               console.log('navigate to project detail page');
               navigate(`/project/${item.id}`);

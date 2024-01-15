@@ -6,6 +6,7 @@ export {default as StarRating} from "./StarRating/star"
 export {SmallProj as SmallProj } from "./DisplayCard/card"
 export {EmptyTab as EmptyTab} from './ProfileTabs/profile_tab'
 export {BankTab as BankTab} from './ProfileTabs/profile_tab'
+export {WishlistTab as WishlistTab} from './ProfileTabs/profile_tab'
 export {Tag as Tag} from './Tag/tag'
 export {default as SignUpTabFirst} from './SignUpTabs/signup_tab_first'
 export {default as SignUpTabSecond} from './SignUpTabs/signup_tab_second'
@@ -47,7 +48,7 @@ export {default as HorizonFreelancerPostCell} from './HorizontalPostCell/Horizon
 
 export {default as ProjectPostsTab} from './ProfileTabs/ProjectPostsTab'
 export {default as FreelancerPostsTab} from './ProfileTabs/FreelancerPostsTab'
-export {default as WishlistTab} from './ProfileTabs/WishlistTab'
-export {default as CalendarTab} from './ProfileTabs/CalendarTab'
-export {default as PaymentAccountTab} from './ProfileTabs/PaymentAccountTab'
+// export {default as WishlistTab} from './ProfileTabs/WishlistTab'
+// export {default as CalendarTab} from './ProfileTabs/CalendarTab'
+// export {default as PaymentAccountTab} from './ProfileTabs/PaymentAccountTab'
 
