@@ -1,7 +1,12 @@
 import React from 'react';
 import './WhiteButton.css';
 
-const WhiteButton = ({name, onClick}) => {
-  return <button className="white-button" onClick={onClick}>{name}</button>;
+const WhiteButton = ({text, onClick}) => {
+  return (
+    <button onClick={onClick}
+    className="white-button">
+      {text}
+    </button>
+  );
 };
 export default WhiteButton;

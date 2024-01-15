@@ -1,15 +1,62 @@
-.tab {
+@import url('../../assets/variables.css');
+
+.bank-tab {
     overflow-y: scroll;
     height: 889px;
     width: 1037px;
     display: flex;
     flex-direction: column;
+    align-items: center;
   }
 
   .link-to-bank-text-wrap{
-    font-size: 20px;
+    font-size: 26px;
     font-weight: 800;
     margin-top: 3%;
-    font-family: 'Inter', sans-serif;
+  }
+
+  .bank-tab .paypal-mail-wrapper{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3%;
+    height: 30px;
+  }
+
+  .bank-tab .paypal-mail{
+    width: 70%;
+    border: 2px solid black;
+    border-radius: 5px;
+    text-align: center;
+    height: 100%;
   }
   
+  .bank-tab .add-paypal-btn{
+    margin-left: 2%;
+    background-color: var(--primary);
+    color: white;
+    padding: 0px  5px;
+    border-radius:5px;
+    height: 100%;
+    font-family: "Inter-Regular";
+    font-size: 16px;
+  }
+
+  .bank-tab .available-payment-header{
+    font-size: 22px;
+    font-weight: 800;
+    margin-top: 10%;
+    align-self: flex-start;
+    margin-left: 3%;
+  }
+
+  .wishlist-tab{
+    overflow-y: scroll;
+    height: 889px;
+    width: 1037px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 15px;
+  }

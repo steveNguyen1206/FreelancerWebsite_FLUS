@@ -37,6 +37,9 @@
     letter-spacing: 0;
     line-height: normal;
     opacity: 0.5;
+    width: 100%;
+    border: none;
+    text-align: center;
     /* Center the text horizontally */
     margin: 0 auto;
   }
@@ -82,7 +85,7 @@
   
   .user-management .overlap-5 {
     width: 100%;
-    height: 90%;
+    /* height: 90%; */
     padding-top: 2%;
     padding-left: 60px;
     padding-right: 30px;
@@ -126,5 +129,11 @@
   .pagination-section{
     display: flex;
     justify-content: center;
+    margin-bottom: 2px;
   }
-  
+
+.UserTab .MuiFormControl-root{
+  height: 80%;
+  padding: 0px;
+  margin: 0px;
+}

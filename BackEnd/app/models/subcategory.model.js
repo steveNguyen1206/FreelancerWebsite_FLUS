@@ -3,7 +3,8 @@ module.exports = (sequelize, Sequelize) => {
 const Subcategory = sequelize.define('subcategories', {
     subcategory_name: {
       type: Sequelize.STRING(50),
-      allowNull: false
+      allowNull: false,
+      unique : true
     },
     // // category_id is the foreign key referencing the id column in the categories table
     // category_id: {

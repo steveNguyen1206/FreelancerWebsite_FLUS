@@ -1,0 +1,19 @@
+@import url("../../assets/variables.css");
+
+.delete-button{
+    background-color: var(--white);
+    border: 2px solid var(--black);
+    border-radius: 12px;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    /* red cross */
+    color: var(--red);
+    font-size: 10px;
+    font-weight: bold;
+}

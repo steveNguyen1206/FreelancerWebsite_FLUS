@@ -83,6 +83,7 @@ exports.signin = (req, res) => {
         email: user.email,
         roles: authorities,
         accessToken: token,
+        avt_url: user.avt_url,
       });
     })
     .catch((err) => {
@@ -90,7 +91,7 @@ exports.signin = (req, res) => {
     });
 };
 
-exports.googleLogin = (req, res) => {
+exports.googleSignup = (req, res) => {
   if (!req.body.account_name || !req.body.password) {
     res.status(400).send({
       message: "Account name and Password can not be empty!",
@@ -98,7 +99,6 @@ exports.googleLogin = (req, res) => {
     return;
   }
   console.log("req: " + req.body.account_name + " " + req.body.password);
-  // find user in database
   User.findOne({
     where: {
       account_name: req.body.account_name,
@@ -112,7 +112,7 @@ exports.googleLogin = (req, res) => {
           account_name: req.body.account_name,
           password: bcrypt.hashSync(req.body.password, 8),
           profile_name: req.body.profile_name,
-          phone_number: "",
+          phone_number: 0,
           nationality: req.body.nationality,
           user_type: req.body.user_type,
           email: req.body.email,
@@ -150,7 +150,7 @@ exports.googleLogin = (req, res) => {
           })
           .catch((err) => {
            
-            console.log("err: ", "Error create user in db");
+            console.log("err: ",err);
             res.status(500).send({
               message:
                 err.message || "Some error occurred while creating the User.",
@@ -165,7 +165,25 @@ exports.googleLogin = (req, res) => {
             account_name: req.body.account_name,
           },
         });
-      } else {
+      } 
+    })
+};
+
+exports.googleLogin = (req, res) => {
+  if (!req.body.account_name || !req.body.password) {
+    res.status(400).send({
+      message: "Account name and Password can not be empty!",
+    });
+    return;
+  }
+  console.log("req: " + req.body.account_name + " " + req.body.password);
+  // find user in database
+  User.findOne({
+    where: {
+      account_name: req.body.account_name,
+    },
+  })
+    .then((user) => {
         // check password
         console.log("password meomeomeo -----> ",bcrypt.hashSync(req.body.password, 8))
         console.log("user password meomeomeo -----> ",user.password)
@@ -203,11 +221,16 @@ exports.googleLogin = (req, res) => {
           email: user.email,
           roles: authorities,
           accessToken: token,
+          avt_url: user.avt_url,
         });
       }
-    })
+    )
     .catch((err) => {
       // return error
       res.status(500).send({ message: err.message });
     });
+};
+
+exports.sendIsAdminTrue = (req, res) => {
+  res.status(200).send({ isAdmin: true });
 };

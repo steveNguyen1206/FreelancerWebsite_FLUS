@@ -19,8 +19,9 @@
     display: flex;
     justify-content: space-around;
     margin: auto;
-    height: 50px;
+    height: 80px;
     width: 100%;
+    align-items: center;
 }
 
 .btn-new-post {
@@ -57,6 +58,7 @@
     justify-content: space-between;
     overflow-y: scroll;
     height: 640px;
+    min-width: 976.8px;
 }
 
 .post-container{

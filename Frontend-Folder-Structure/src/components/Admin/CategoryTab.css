@@ -1,0 +1,86 @@
+@import url("../../assets/variables.css");
+
+.CategoryTab{
+    height: 100%;
+    width: 100%;
+    padding-top: 3%;
+    display: inline-block;
+  }
+  
+  .search-section{
+    margin-top: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  
+  .search-area {
+    background-color: #fafcff;
+    border: 0.93px solid;
+    border-color: #989898;
+    border-radius: 7px;
+    height: 30px;
+    position: relative;
+    width: 600px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0px 4px 10px #0000001a;
+  }
+  
+  .search-area .text-wrapper {
+    color: black;
+    font-family: "Inter-Regular", Helvetica;
+    font-size: 18.6px;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: normal;
+    opacity: 0.5;
+    /* Center the text horizontally */
+    margin: 0 auto;
+    background-color: white;
+    width: 93%;
+    outline: none;
+  }
+  
+  .search-area .search-icon-instance {
+    height: 60%;
+    position: relative;
+    margin-right: 1%;
+  }
+  
+  
+  /* Add an Add category button here */
+  .add-category-button {
+    background-color: var(--primary);
+    border-radius: 20px;
+    color: var(--white);
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+
+    font-size: var(--medium-font-size);
+    font-family: "Inter-Regular", Helvetica;
+    font-weight: 800;
+    line-height: normal;
+    opacity: 1;
+    padding: 10px;
+  }
+  
+  *{
+    box-sizing: border-box;
+  }
+  
+  .category-gallery {
+    margin-top: 30px;
+    margin-left: 30px;
+    height: 800px;
+    width: 95%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px;
+    }

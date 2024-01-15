@@ -1,67 +1,104 @@
 import React from 'react';
 import './Post.css';
 import vietnam from '../../assets/vietnam.png';
-import profileimage from '../../assets/profile_image.png';
-import stars from '../../assets/stars.png';
 import heart from '../../assets/heart-active.png';
+import unactiveHeart from '../../assets/heart-unactive.png';
 import { StarRating } from '..';
+import { useEffect, useState } from 'react';
+import projectPostWishlistServices from '../../services/projectPostWishlistServices';
 
-const Post = () => (
-  <div className="post-container">
-    <div className="left-post">
-      <div className="pheader">
-        <div className="pprofile">
-          <img src={profileimage} alt="profile" />
-          <div className="ptname">Nguyen Thi Truc </div>
-          <div className="ptusername">(cogai20)</div>
-          <div className="pplocation">
-            <img src={vietnam} alt="vietnam" />
+const Post = ({ project, handleBidClick }) => {
+  console.log('project', project);
+  const [isLiked, setIsLiked] = useState('');
+
+  useEffect(() => {
+    projectPostWishlistServices
+      .isExisted(project.id, localStorage.getItem('AUTH_TOKEN'))
+      .then((response) => {
+        if (response.data === true) {
+          setIsLiked(heart);
+        } else {
+          setIsLiked(unactiveHeart);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [project.user.id, project.id]);
+
+  console.log(project);
+
+  const handleLikeClick = () => {
+    if (isLiked === unactiveHeart) {
+      projectPostWishlistServices
+        .create(project.id, localStorage.getItem('AUTH_TOKEN'))
+        .then((response) => {
+          setIsLiked(heart);
+        });
+    }
+    if (isLiked === heart) {
+      projectPostWishlistServices
+        .remove(project.id, localStorage.getItem('AUTH_TOKEN'))
+        .then((response) => {
+          setIsLiked(unactiveHeart);
+        });
+    }
+  };
+
+  return (
+    <div className="post-container">
+      <div className="left-post">
+        <div className="post-header">
+          <div className="post-profile">
+            <img
+              className="img-post"
+              src={project.user.avt_url}
+              alt="profile"
+            />
+            <div className="post-name">{project.user.profile_name}</div>
+            <div className="post-username">({project.user.account_name})</div>
+            <div className="post-location">
+              <img src={vietnam} alt="vietnam" />
+            </div>
           </div>
         </div>
 
-        <div className="pttitle">
-          SEO, Link Building, Marketing, Google Adwords, WordPress
-        </div>
-
-        <div className="pttags">
-          <div className="pttag">UI/UX</div>
-          <div className="pttag">UI/UX</div>
+        <div className="project-post-container">
+          <div className="post-title">{project.title}</div>
+          <div className="post-tag">{project.subcategory.subcategory_name}</div>
+          <div className="post-detail">{project.detail}</div>
         </div>
       </div>
-      <div className="details">
-        <div className="detail-header">Detail text here everyone.</div>
-        <div className="detail">
-          Hello everyone, my name is Duy Khang Ho. This job is hard... Detail
-          text here everyone text here everyone Hello everyone, my name is Duy
-          Khang Ho. This job is hard... Detail text here ever... Detail text
-          here everyone text here everyone Hello everyone, my name is Duy Khang
-          Ho.
+
+      <div className="right-post">
+        <div className="post-reviews">
+          <div className="post-rating">
+            <StarRating
+              rating={parseFloat(project.user.avg_rating)}
+              width={100}
+              className="pstars"
+            />
+            <p>{project.user.avg_rating}</p>
+          </div>
+        </div>
+        <div className="post-bid">
+          <div className="post-price">
+            {`$${project.budget_min} - $${project.budget_max}`}
+          </div>
+          <div className="btn-bid-container">
+            <div className="btn-bid-project">
+              <button onClick={handleBidClick}>Bid</button>
+            </div>
+            <div className="post-wish">
+              <button onClick={handleLikeClick}>
+                <img src={isLiked} alt="heart icon" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-
-    <div className="right-post">
-      <div className="previews">
-        <div className="rating">
-          <p>4.5</p>
-          <StarRating rating={4.5} className="pstars" />
-        </div>
-      </div>
-      <div className="pbid">
-        <div className="pprice">$500 - 700</div>
-        <div className="btn-p">
-          <div className="btn-bid">
-            <button>Bid</button>
-          </div>
-          <div className="wish">
-            <button>
-              <img src={heart} alt="heart icon" />
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-);
+  );
+};
 
 export default Post;

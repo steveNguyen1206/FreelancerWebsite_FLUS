@@ -1,22 +1,30 @@
-.rating-container{
+.ratingContainer{
     height: 100%;
     width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
 }
 
-.rating-container span{
+.ratingContainer span{
     height: 100%;
     width: auto;
     display: inline-block;
+    position: relative;
 }
-.rating-container > span >span{
+.ratingContainer > span >span{
     margin-right: 5%;
 }
 
-.rating-container > span{
+.ratingContainer > span >span > span{
+    position: relative;
+}
+
+.ratingContainer > span{
     width: 100%;
 }
 
-.rating-container img{
+.ratingContainer img{
     top:0;
     left:0;
     position: relative;

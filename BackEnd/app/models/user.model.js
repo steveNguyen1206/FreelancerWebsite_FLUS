@@ -35,6 +35,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.INTEGER,
         defaultValue: 0
       },
+      status: {
+        type: Sequelize.TINYINT,
+        defaultValue: 1 // 0: banned, 1: active
+      },
     });
   
     return User;

@@ -5,12 +5,16 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false
       },
       type: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.TINYINT,
         allowNull: false
       },
 
-      
+      transactionId: {
+        type: Sequelize.STRING(50),
+        allowNull: false
+      }
     });
+
   
     return Transaction;
   };

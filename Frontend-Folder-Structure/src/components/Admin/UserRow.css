@@ -32,6 +32,11 @@
     text-align: left;
     padding-right: 15px;
   }
+  .profilename{
+    text-align: left;
+    padding-left: 3%;
+  }
+
   .user-management .text-wrapper-7 {
     color: #000000;
     font-family: "Inter-Medium", Helvetica;
@@ -43,7 +48,7 @@
     overflow-x: hidden;
   }
   
-  .user-management .vector-wrapper {
+  .user-management .ban-icon {
     border-radius: 14.75px;
     height: 30px;
   }

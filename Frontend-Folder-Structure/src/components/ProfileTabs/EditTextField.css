@@ -1,0 +1,23 @@
+@import url('../../assets/variables.css');
+
+.edit-text-container {
+    width: 100%;
+    margin: 5px;
+}
+
+.field-name {
+    font-size: small;
+    font-weight: 700;
+}
+
+.input-field {
+    background-color: var(--white);
+    color: var(--black);
+    width: 100%;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 5px;
+    font-size: 16px;
+}

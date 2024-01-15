@@ -1,0 +1,252 @@
+
+.popup-container-offer .offer {
+    width: 90%;
+    margin-top: 3%;
+    max-height: 100%;
+  }
+  
+  .popup-container-offer .overlap {
+    background-color: #ffffff;
+    border-radius: 12.32px;
+    height: 100%;
+    position: relative;
+    width: 100%;
+    border-color: #000000;
+    margin-top: 1%;
+  }
+
+  
+  .popup-container-offer .group {
+    height: 79px;
+    position: relative;
+    width: 315px;
+    --bs-gutter-x: 0;
+  }
+  
+  .popup-container-offer .rectangle {
+    height: 50px;
+    object-fit:cover;
+  }
+
+  .name-container{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: auto;
+  }
+
+  .first-line-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+    flex-wrap: nowrap;
+  }
+
+  
+  .popup-container-offer .text-wrapper-5 {
+    color: #000000;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: normal;
+    width: auto;
+  }
+  
+  .popup-container-offer .text-wrapper-6 {
+    font-family: "Inter-Regular", Helvetica;
+    font-size: 16.4px;
+  }
+  
+  .popup-container-offer .group-2 {
+    height: 15px;
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .rating-number{
+    width: auto;
+    height: 100%;
+    text-align: left;
+
+  }
+ 
+  .flag-container{
+    width: auto;
+    height: 100%;
+    display: flex;
+    margin-left: 15px;
+    align-items: center;
+  }
+  .popup-container-offer .rectangle-2 {
+    height: 15px;
+    object-fit: cover;
+  }
+  
+  
+  .popup-container-offer .detail-text-container {
+    color: transparent;
+    font-family: "Inter-Light", Helvetica;
+    font-size: 16.4px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: normal;
+    width: 100%;
+    text-align: justify;
+    padding-left: 5%;
+    padding-right: 2%;
+    margin-top: 3%;
+    height: auto;
+  }
+  .detail-text-container > span-1{
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical; 
+    overflow: hidden; 
+  }
+
+.job-name{
+    color: #000000;
+    font-style: bold;
+    font-size: 20px;
+    font-weight: 800;
+    font-family: "Inter-Bold", Helvetica;
+    margin-bottom: 12px;
+
+}
+  .popup-container-offer .span, .span-1 {
+    color: #000000;
+    font-weight: 300;
+
+  }
+  .date-offer{
+    color: #000000;
+    font-style: bold;
+    font-size: 16px;
+    font-weight: 800;
+    font-family: "Inter-Bold", Helvetica;
+  }
+  .date-text {
+    color: #009304;
+    font-family: "Inter-Bold", Helvetica;
+    font-weight: 300;
+
+  }
+  
+  .popup-container-offer .text-wrapper-3 {
+    color: #009304;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 18px;
+    font-weight: 700;
+    padding-left: 5%;
+  }
+  
+  .popup-container-offer .budget-wrapper {
+    color: #009304;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: normal;
+    text-align: center;
+    width: 93px;
+    margin-top: 50%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+
+  
+  .popup-container-offer .btns {
+    height: 97px;
+    width: 146px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 7%;
+  }
+  
+  .popup-container-offer .overlap-group-3 {
+    background-color: #009304;
+    border-radius: 8px;
+    height: 42px;
+    position: relative;
+    width: 146px;
+  }
+  
+  .popup-container-offer .text-wrapper-7 {
+    color: #ffffff;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 16.4px;
+    font-weight: 700;
+    left: 43px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    top: 13px;
+    white-space: nowrap;
+    width: 61px;
+  }
+  
+  
+  .popup-container-offer .overlap-2 {
+    background-color: #a91d15;
+    border-radius: 8px;
+    height: 42px;
+    position: relative;
+    width: 146px;
+    margin-top: 5px;
+  }
+  
+  .popup-container-offer .text-wrapper-8 {
+    color: #ffffff;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 16.4px;
+    font-weight: 700;
+    left: 46px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    top: 13px;
+    white-space: nowrap;
+    width: 56px;
+  }
+  
+  .popup-container-offer .overlap-wrapper {
+    height: 271px;
+    left: 65px;
+    position: absolute;
+    top: 446px;
+    width: 987px;
+  }
+  
+  .popup-container-offer .overlap-group-wrapper {
+    height: 271px;
+    left: 65px;
+    position: absolute;
+    top: 737px;
+    width: 987px;
+  }
+  
+  .popup-container-offer .scroll-bar {
+    background-color: #d9d9d966;
+    border-radius: 30px;
+    height: 853px;
+    left: 1087px;
+    position: absolute;
+    top: 155px;
+    width: 11px;
+  }
+  
+  .popup-container-offer .rectangle-3 {
+    background-color: #d9d9d9;
+    border-radius: 30px;
+    height: 106px;
+    position: relative;
+    top: 23px;
+  }
+  

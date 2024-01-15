@@ -1,21 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import './profile.css';
 import profileCover from '../../assets/profile_cover.jpg';
-import avatar from '../../assets/avatar_green.png';
-import facebookicon from '../../assets/SocialIcon/facebook.png';
-import instaicon from '../../assets/SocialIcon/insta.png';
 import linkedinicon from '../../assets/SocialIcon/linkedin.png';
 import editIcon from '../../assets/editProfileIcon.png';
-import { EmptyTab, StarRating, Tag } from '@/components';
+import {
+  StarRating,
+  Tag,
+  PopupUpdateProfile,
+  UpdateButton,
+  BankTab,
+} from '@/components';
 import { SignUp } from '@/pages';
 import { useParams, useNavigate } from 'react-router';
 import userDataService from '@/services/userDataServices';
+import userSubcategoryService from '@/services/userSubcategoryServices';
+import reviewService from '@/services/reviewServices';
 import { Link } from 'react-router-dom';
+import {
+  ProjectPostsTab,
+  FreelancerPostsTab,
+} from '@/components';
+import { WishlistTab } from '@/components/ProfileTabs/profile_tab';
+
+const calAverage = (num1, count1, num2, count2) => {
+  if (count1 + count2 === 0) return 0;
+  return (num1 * count1 + num2 * count2) / (count1 + count2);
+};
 
 const profile = () => {
-
+  const this_id = localStorage.getItem('LOGINID');
   const { id } = useParams();
+
+  const isOwnProfile = this_id === id;
+
   let navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState(0);
+  const [refresh, setRefresh] = useState(0);
+  const [review, setReview] = useState([]);
 
   const initialProfileState = {
     id: '',
@@ -30,7 +51,17 @@ const profile = () => {
   };
 
   const [userProfile, setUserProfile] = useState(initialProfileState);
+  const [showUpdateProfile, setShowUpdateProfile] = useState(false);
+  const [userSkills, setUserSkills] = useState([]);
 
+  const handleUpdateProfile = () => {
+    setShowUpdateProfile(true);
+  };
+
+  const handleClosePopupUpdateProfile = () => {
+    setShowUpdateProfile(false);
+    setRefresh(1 - refresh);
+  };
 
   const getUserProfile = (id) => {
     userDataService
@@ -44,68 +75,150 @@ const profile = () => {
       });
   };
 
+  // get all skills of an user
+  const getUserSkills = (id) => {
+    userSubcategoryService
+      .findAll(id)
+      .then((response) => {
+        setUserSkills(response.data);
+        setRefresh();
+      })
+      .catch((e) => {
+        const message = e.response.data.message;
+        setErrorMessage(message);
+      });
+  };
+
   useEffect(() => {
-    if (id) getUserProfile(id);
+    if (id) {
+      getUserProfile(id);
+      getUserSkills(id);
+    }
+  }, [id, refresh]);
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+
+  const goToProjectsCreated = () => {
+    navigate(`/my-project-manage`);
+  };
+
+  const goToProjectsJoined = () => {
+    navigate(`/project-manage`);
+  };
+
+  let avg_rating = 0;
+
+  useEffect(() => {
+    let obj = {};
+    reviewService
+      .getRatingFreelancer(id)
+      .then((res) => {
+        obj.freelancer = res.data;
+        reviewService.getRatingClient(id).then((res) => {
+          obj.client = res.data;
+          setReview(obj);
+          calAverage(
+            review.freelancer.rating,
+            review.freelancer.count,
+            review.client.rating,
+            review.client.count
+          );
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [id]);
 
   return (
     <div>
-      {userProfile ? (
+      {/* Update Profile Popup */}
+      {showUpdateProfile && (
+        <PopupUpdateProfile
+          // m_state={showUpdateProfile}
+          // m_function={setShowUpdateProfile}
+          user_profile={userProfile}
+          handleCloseIconClick={handleClosePopupUpdateProfile}
+        />
+      )}
 
-        
+      {userProfile ? (
         <div className="profile">
           <div className="overlap">
             <div className="profile-info-section">
               <div className="cover-avatar-section">
                 <img className="rectangle" alt="Rectangle" src={profileCover} />
                 <div className="avatar-container">
-                  <img className="ellipse" alt="Ellipse" src={userProfile.avt_url} />
+                  <img
+                    className="ellipse"
+                    alt="Avatar"
+                    src={userProfile.avt_url}
+                  />
                 </div>
               </div>
               <div className="information-section">
                 <div className="frame">
                   <p className="name-section">
-                    <span className="text-wrapper">{userProfile.profile_name} </span>
+                    <span className="text-wrapper">
+                      {userProfile.profile_name}{' '}
+                    </span>
                     <span className="span">({userProfile.account_name})</span>
-                    <div
-                      className="edit-container"
-                      style={{ display: 'flex', alignItems: 'center' }}
-                    >
-                      {/* <span style={{fontSize:"16px", marginRight:"10px"}}>Edit</span> */}
-                      <img
-                        className="image"
-                        alt="edit profile"
-                        src={editIcon}
-                      />
-                    </div>
+
+                    {isOwnProfile && (
+                      <div
+                        className="edit-container"
+                        style={{ display: 'flex', alignItems: 'center' }}
+                      >
+                        {/* <span style={{fontSize:"16px", marginRight:"10px"}}>Edit</span> */}
+                        <img
+                          className="image"
+                          alt="edit profile"
+                          src={editIcon}
+                          onClick={handleUpdateProfile}
+                        />
+                      </div>
+                    )}
                   </p>
                   <div className="text-wrapper-2">
                     Junior FullStack Developer
                   </div>
                 </div>
 
-                <div className="row social-row">
-                  <div className="col ">
-                    <img className="img" alt="Ellipse" src={facebookicon} />
-                    <Link className="text-wrapper-3" to={userProfile.social_link}>TrucVy</Link>
-                  </div>
-                  <div className="col">
-                    <img className="img" alt="Ellipse" src={instaicon} />
-                    <div className="text-wrapper-3">TrucVy</div>
-                  </div>
-                  <div className="col">
+                <div className="navigate-container">
+                  <div className="social-link">
                     <img className="img" alt="Ellipse" src={linkedinicon} />
-                    <div className="text-wrapper-3">TrucVy</div>
+                    <Link
+                      className="text-wrapper-3"
+                      to={userProfile.social_link}
+                    >
+                      TrucVy
+                    </Link>
                   </div>
+
+                  {isOwnProfile && (
+                    <div className="to-projects-manager">
+                      <div className="navigate-button">
+                        <UpdateButton
+                          button_name={'Projects Created'}
+                          onClick={goToProjectsCreated}
+                        />
+                      </div>
+                      <div className="navigate-button">
+                        <UpdateButton
+                          button_name={'Projects Joined'}
+                          onClick={goToProjectsJoined}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="rating-bar">
+                <StarRating rating={avg_rating} width={160} />
 
-
-                <StarRating rating={4.6} />
-
-
-                <div className="text-wrapper-6">4.6</div>
+                <div className="text-wrapper-6">{avg_rating}</div>
               </div>
             </div>
           </div>
@@ -116,36 +229,78 @@ const profile = () => {
                   <div className="text-wrapper-7">My Job Tags:</div>
                   <div className="tag-box">
                     <div className="tag-box-inner">
-                      <Tag string={'Web Developer'} />
-                      <Tag string={'Web'} />
-                      <Tag string={'Web Design'} />
-                      <Tag string={'Chief of Technology'} />
-                      <Tag string={'Chief of Technology'} />
-                      <Tag string={'Chief of Technology'} />
+                      {userSkills.map((skill) => (
+                        <Tag string={skill.subcategory_name} />
+                      ))}
                     </div>
                   </div>
                 </div>
                 <div className="overlap-10">
                   <div className="rectangle-2" />
                   <div className="tab-container">
-                    <div className="group-6 active">
-                      <div className="text-wrapper-11">My Jobs</div>
+                    <div
+                      className={`${
+                        activeTab === 0 ? 'active group-6' : 'group-6'
+                      }`}
+                      onClick={() => handleTabClick(0)}
+                    >
+                      <div className="text-wrapper-11">Project Post</div>
                     </div>
-                    <div className="group-6">
-                      <div className="text-wrapper-11">My Offers</div>
+                    <div
+                      className={`${
+                        activeTab === 1 ? 'group-6 active' : 'group-6'
+                      }`}
+                      onClick={() => handleTabClick(1)}
+                    >
+                      <div className="text-wrapper-11">Freelancer Post</div>
                     </div>
-                    <div className="group-6">
-                      <div className="text-wrapper-11">My Wishlist</div>
-                    </div>
-                    <div className="group-6">
-                      <div className="text-wrapper-11">My Calendar</div>
-                    </div>
-                    <div className="group-6">
-                      <div className="text-wrapper-11">My Payment Account</div>
-                    </div>
+                    {isOwnProfile && (
+                      <div
+                        className={`${
+                          activeTab === 2 ? ' group-6 active' : 'group-6'
+                        }`}
+                        onClick={() => handleTabClick(2)}
+                      >
+                        <div className="text-wrapper-11">Wishlist</div>
+                      </div>
+                    )}
+                    {/* {isOwnProfile && (
+                      <div
+                        className={`${
+                          activeTab === 3 ? 'group-6 active' : 'group-6'
+                        }`}
+                        onClick={() => handleTabClick(3)}
+                      >
+                        <div className="text-wrapper-11">Calendar</div>
+                      </div>
+                    )} */}
+                    {isOwnProfile && (
+                      <div
+                        className={`${
+                          activeTab === 4 ? 'active group-6' : 'group-6'
+                        }`}
+                        onClick={() => handleTabClick(4)}
+                      >
+                        <div className="text-wrapper-11">Payment Account</div>
+                      </div>
+                    )}
                   </div>
                   <div className="main-tab-container">
-                    <EmptyTab />
+                    {activeTab === 0 && (
+                      <ProjectPostsTab userId={userProfile.id} />
+                    )}
+                    {activeTab === 1 && (
+                      <FreelancerPostsTab userId={userProfile.id} />
+                    )}
+                    {isOwnProfile && activeTab === 2 && (
+                      <WishlistTab userID={userProfile.id} />
+                    )}
+                    {/* {isOwnProfile && activeTab === 3 && (
+                      <CalendarTab userId={userProfile.id} />
+                    )} */}
+                    {isOwnProfile && activeTab === 4 && (
+                      <BankTab userId={userProfile.id} />
+                    )}
                   </div>
                 </div>
               </div>
@@ -154,9 +309,7 @@ const profile = () => {
         </div>
       ) : (
         <div>
-
           <SignUp />
-
         </div>
       )}
     </div>
