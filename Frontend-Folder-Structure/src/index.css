@@ -65,6 +65,21 @@ h1 {
 }
 
 
+.form-container {
+  width: 100%;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: space-between;
+  align-content: center;
+  padding: 56px;
+  border-radius: 16px;
+  background-color: white;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.1);
+
+}
+
 .my-input {
   /* width: 100%; */
   outline: none ;
@@ -84,10 +99,6 @@ h1 {
   font-weight: 500;
   font-size: 16px;
   border: none !important;
-}
-
-.my-button {
-
 }
 
 .my-button:disabled {
