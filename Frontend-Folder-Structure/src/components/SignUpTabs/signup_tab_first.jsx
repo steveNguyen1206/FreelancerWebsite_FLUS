@@ -15,7 +15,7 @@ const verifyPassword = (password, confirmPassword) => {
   return password === confirmPassword;
 };
 
-const checkUserName = (userName) => {
+const checkUserName = async (userName) => {
   if (userName.length == 0) {
     return 'Username is required.';
   } else if (userName.length < 6) {
@@ -28,16 +28,19 @@ const checkUserName = (userName) => {
   } else if (!userName.match(/^[0-9a-zA-Z_]+$/i)) {
     // user name contains other character than number, alphabet and underscore
     return 'Username must contain only number, alphabet and underscore.';
-  } 
-  else {
+  } else {
     // user name is already existed
-    userDataService.findOnebyAccountName(userName).then((response) => {
-      if (response.data) {
+    try {
+      const response = await userDataService.findOnebyAccountName(userName);
+      if (response.status == 200) {
         return 'Username is already existed.';
+      } else {
+        return '';
       }
-    });
+    } catch (error) {
+      return '';
+    }
   }
-  return '';
 };
 
 const signUpTabFirst = ({ setTab, signUpPayload, setSignUpPayload }) => {
@@ -56,9 +59,9 @@ const signUpTabFirst = ({ setTab, signUpPayload, setSignUpPayload }) => {
     confirmPassword: '',
   });
 
-  const isValidForm = () => {
+  const isValidForm = async () => {
     const errors = {
-      userName: checkUserName(signUpPayload.userName),
+      userName: await checkUserName(signUpPayload.userName),
       userPassword: isValidPassword(signUpPayload.userPassword)
         ? ''
         : 'Password must be at least 8 characters.',
@@ -73,8 +76,8 @@ const signUpTabFirst = ({ setTab, signUpPayload, setSignUpPayload }) => {
     return !Object.values(errors).some((error) => error !== '');
   };
 
-  const handleSignUpClick = () => {
-    if (isValidForm()) {
+  const handleSignUpClick = async () => {
+    if (await isValidForm()) {
       setTab(2);
     } else {
       console.log('Form is not valid. Please check the errors.');
@@ -119,7 +122,7 @@ const signUpTabFirst = ({ setTab, signUpPayload, setSignUpPayload }) => {
           );
 
           console.log('Token: ' + result.data.accessToken);
-          navigate(`/login`)
+          navigate(`/login`);
         } catch (error) {
           console.log('Error with GoogleSignup' + error);
         }
