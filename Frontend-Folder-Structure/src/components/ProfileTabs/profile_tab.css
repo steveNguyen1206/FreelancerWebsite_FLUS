@@ -50,3 +50,13 @@
     align-self: flex-start;
     margin-left: 3%;
   }
+
+  .wishlist-tab{
+    overflow-y: scroll;
+    height: 889px;
+    width: 1037px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 15px;
+  }
