@@ -34,6 +34,9 @@ const LogIn = () => {
     password: '',
   });
 
+  const [logInError, setLogInError] = useState({
+    errorMessage: '',
+  });
 
   const signin = async () => {
     var data = {
@@ -146,6 +149,7 @@ const LogIn = () => {
           }
         } catch (error) {
           console.log('Error with GoogleLogin' + error);
+          setLogInError(prevState => ({ ...prevState, errorMessage: 'Please sign up before log in' }));
         }
       } catch (error) {
         console.log(error);
@@ -212,6 +216,8 @@ const LogIn = () => {
                 onClick={() => googleLogIn()}
               />
             </div>
+            {logInError && <div className="error-message-google">{logInError.errorMessage}</div>}
+
           </div>
         </div>
       </div>
