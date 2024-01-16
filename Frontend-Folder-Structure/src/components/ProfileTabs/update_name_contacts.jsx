@@ -38,6 +38,13 @@ const UpdateNameContacts = ({ user_id }) => {
       setErrorMessage('Please fill in at least one field.');
       return;
     }
+    if (profileName) {
+      if (profileName.trim().length > 20) {
+        setErrorMessage('Profile name cannot exceed 20 characters!');
+        return;
+      }
+    }
+    
 
     // call API to update name & contacts
     userDataService.updateNameAndSocialLink({id: user_id, data: fields})

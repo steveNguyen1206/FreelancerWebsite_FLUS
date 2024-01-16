@@ -193,7 +193,7 @@ const profile = () => {
                       className="text-wrapper-3"
                       to={userProfile.social_link}
                     >
-                      TrucVy
+                      {userProfile.profile_name}
                     </Link>
                   </div>
 
