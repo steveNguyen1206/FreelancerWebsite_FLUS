@@ -8,8 +8,7 @@ import subcategoryService from '@/services/subcategoryService';
 
 const isValidTitle = (title) => {
   if (!title) return true;
-  if (!title) return true;
-  const titleRegex = /^[a-zA-Z0-9\s]*$/;
+  const titleRegex = /^[a-zA-Z0-9\s\-]*$/;
   return titleRegex.test(title);
 };
 
@@ -115,10 +114,16 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
 
     let isValid = true;
 
-    if (!isValidTitle(updateProject.projectTitle)) {
+    if (!isValidTitle(updateProject.title)) {
       newErrors.title =
         'Invalid title. Title must be alphanumeric and not empty.';
       isValid = false;
+    }else {
+      if ((updateProject.title).length > 50) {
+        newErrors.title = 'The project title must not exceed 50 characters.';
+        isValid = false;
+      }else
+        newErrors.title = '';
     }
 
     if (!isValidImage(updateProject.image)) {
