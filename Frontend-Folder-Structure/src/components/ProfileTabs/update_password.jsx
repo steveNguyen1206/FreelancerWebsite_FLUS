@@ -40,6 +40,21 @@ const UpdatePassword = ({ user_id }) => {
       return;
     }
 
+    if (newPassword === currentPassword) {
+      setErrorMessage('New password is the same with old password!');
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      setErrorMessage("New password must be at least 8 characters!");
+      return;
+    }
+
+    if (newPassword.length > 40) {
+      setErrorMessage("New password must be at most 40 characters!");
+      return;
+    }
+
     // call API to check if current password is correct & update password
     const data = {
       id: user_id,

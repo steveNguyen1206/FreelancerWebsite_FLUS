@@ -23,6 +23,9 @@ const BidDetailTag = ({ project, bid, onChangeBid, isOwnerProjectPost ,onChangeP
   const [showSeeMore, setShowSeeMore] = useState(false);
   const textContainerRef = useRef(null);
 
+  console.log('bid: ', bid);
+  console.log('project: ', project);
+
   useEffect(() => {
     const textContainer = textContainerRef.current;
     if (textContainer.scrollHeight > textContainer.clientHeight) {
@@ -58,7 +61,7 @@ const BidDetailTag = ({ project, bid, onChangeBid, isOwnerProjectPost ,onChangeP
     onChangeBid();
     const emailData = {
       email: bid.email,
-      url: 'http://localhost:8081/project-manage/' + projectId,
+      url: 'http://localhost:8081/project-manage/',
     };
     gmailService.sendEmail(emailData).then((response) => {
       console.log('response: ', response);
