@@ -61,6 +61,7 @@ require("./app/routes/bid.routes")(app);
 require("./app/routes/comment.routes")(app);
 require("./app/routes/user_subcategory.routes")(app);
 require("./app/routes/issue.routes")(app);
+require("./app/routes/payment_account.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
