@@ -24,6 +24,24 @@ const Filter = ({
   ];
 
   const [skills, setSkills] = useState(initialSkills);
+  const [allSkills, setAllSkills] = useState(initialSkills);
+
+  const getAllSkills = () => {
+    subcategoryService
+      .findAll()
+      .then((response) => {
+        setAllSkills(response.data);
+        console.log(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  useEffect(() => {
+    getAllSkills();
+  }, []);
+
   const getSkills = () => {
     subcategoryService
       .findAll()
@@ -40,19 +58,43 @@ const Filter = ({
     getSkills();
   }, []);
 
+
+
   const getIdbyName = (name) => {
-    for (let i = 0; i < skills.length; i++) {
-      if (skills[i].subcategory_name == name) {
-        console.log('a', skills[i].id);
-        return skills[i].id;
+    for (let i = 0; i < allSkills.length; i++) {
+      if (allSkills[i].subcategory_name == name) {
+        console.log('a', allSkills[i].id);
+        return allSkills[i].id;
       }
     }
   };
 
   const [value, setValue] = useState([0, 10000]);
   const [selectedSkills, setSelectedSkills] = useState([]);
-
   const [selectedCategory, setSeletedCategory] = useState();
+
+  useEffect(() => {
+    console.log('selectedSkills1', selectedSkills);
+    console.log('skills1', skills);
+    const filteredSkills = allSkills.filter(
+      (skill) =>
+        !selectedSkills.some(
+          (selectedSkill) =>
+            selectedSkill === skill.subcategory_name
+        )
+    );
+    setSkills(filteredSkills);
+
+    const selectedSkillIDs = selectedSkills.map((skill) => getIdbyName(skill));
+    console.log('selectedSkillIDs', selectedSkillIDs);
+    onSelectedTagsChange(selectedSkillIDs);
+  }, [selectedSkills]);
+
+  useEffect(() => {
+    console.log('selectedSkills2', selectedSkills);
+    console.log('skills2', skills);
+  }, [skills]);
+
   const location = useLocation();
   // Read the category from the query parameter
   const params = new URLSearchParams(location.search);
@@ -86,10 +128,11 @@ const Filter = ({
 
   const handleFilterChange = (event) => {
     const selectedOption = event.target.value;
+    console.log('target', event.target.value)
     if (selectedOption) {
       const selectedOptionId = getIdbyName(selectedOption);
       setSelectedSkills((prevSkills) => [...prevSkills, selectedOption]);
-      onSelectedTagsChange([...selectedTags, selectedOptionId]);
+      // onSelectedTagsChange([...selectedTags, selectedOptionId]);
     }
   };
 
@@ -101,10 +144,10 @@ const Filter = ({
   const handleRemoveSkill = (index) => {
     const removedTag = selectedSkills[index];
     setSelectedSkills((prevSkills) => prevSkills.filter((_, i) => i !== index));
-    const removedTagId = getIdbyName(removedTag);
-    onSelectedTagsChange(
-      selectedTags.filter((tagId) => tagId !== removedTagId)
-    );
+    // const removedTagId = getIdbyName(removedTag);
+    // onSelectedTagsChange(
+    //   selectedTags.filter((tagId) => tagId !== removedTagId)
+    // );
   };
 
   return (
