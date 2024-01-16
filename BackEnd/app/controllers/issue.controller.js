@@ -209,11 +209,11 @@ exports.acceptIssue = (req, res) => {
                         ProjectNoti.create(notification)
                             .then(noti_data => {
                                 // res.send(project_data);
-                                // res.send({
-                                //     message: "Refound successfully."
-                                // });
+                                res.send({
+                                    message: "Refound successfully."
+                                });
 
-                                let reported_time = User.findByPk(req.userId)
+                                // let reported_time = 
                                 
                             })
                             .catch(err => {
