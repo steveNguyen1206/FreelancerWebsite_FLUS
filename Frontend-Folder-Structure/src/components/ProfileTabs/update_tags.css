@@ -32,3 +32,8 @@
   color: var(--primary);
   font-size: small;
 }
+
+.add-a-tag .update-button{
+  margin-top: 0 !important;
+  margin-left: 5px;
+}
