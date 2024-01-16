@@ -180,7 +180,7 @@ exports.update = (req, res) => {
 
 
 exports.updateAvatar = async (req, res) => {
-  const id = 1;
+  const id = req.userId;
   console.log("######### UPDATE AVATAR #########");
   console.log(req);
 

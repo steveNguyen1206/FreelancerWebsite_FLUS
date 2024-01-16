@@ -14,7 +14,7 @@ const isValidTitle = (title) => {
 };
 
 const isValidDate = (date) => {
-  if (date == '') return false;
+  if (date == '') return true;
   const dateRegex = /^\d{4}\/\d{1,2}\/\d{1,2}$/;
   const currentDate = new Date();
   //input date is yyyy/mm/dd
