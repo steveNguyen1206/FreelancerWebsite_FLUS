@@ -8,6 +8,7 @@ import {
   Tag,
   PopupUpdateProfile,
   UpdateButton,
+  BankTab,
 } from '@/components';
 import { SignUp } from '@/pages';
 import { useParams, useNavigate } from 'react-router';
@@ -18,10 +19,8 @@ import { Link } from 'react-router-dom';
 import {
   ProjectPostsTab,
   FreelancerPostsTab,
-  WishlistTab,
-  CalendarTab,
-  PaymentAccountTab,
 } from '@/components';
+import { WishlistTab } from '@/components/ProfileTabs/profile_tab';
 
 const calAverage = (num1, count1, num2, count2) => {
   if (count1 + count2 === 0) return 0;
@@ -194,7 +193,7 @@ const profile = () => {
                       className="text-wrapper-3"
                       to={userProfile.social_link}
                     >
-                      TrucVy
+                      {userProfile.profile_name}
                     </Link>
                   </div>
 
@@ -265,7 +264,7 @@ const profile = () => {
                         <div className="text-wrapper-11">Wishlist</div>
                       </div>
                     )}
-                    {isOwnProfile && (
+                    {/* {isOwnProfile && (
                       <div
                         className={`${
                           activeTab === 3 ? 'group-6 active' : 'group-6'
@@ -274,7 +273,7 @@ const profile = () => {
                       >
                         <div className="text-wrapper-11">Calendar</div>
                       </div>
-                    )}
+                    )} */}
                     {isOwnProfile && (
                       <div
                         className={`${
@@ -294,13 +293,13 @@ const profile = () => {
                       <FreelancerPostsTab userId={userProfile.id} />
                     )}
                     {isOwnProfile && activeTab === 2 && (
-                      <WishlistTab userId={userProfile.id} />
+                      <WishlistTab userID={userProfile.id} />
                     )}
-                    {isOwnProfile && activeTab === 3 && (
+                    {/* {isOwnProfile && activeTab === 3 && (
                       <CalendarTab userId={userProfile.id} />
-                    )}
+                    )} */}
                     {isOwnProfile && activeTab === 4 && (
-                      <PaymentAccountTab userId={userProfile.id} />
+                      <BankTab userId={userProfile.id} />
                     )}
                   </div>
                 </div>

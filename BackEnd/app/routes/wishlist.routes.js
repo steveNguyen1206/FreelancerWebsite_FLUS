@@ -11,7 +11,7 @@ module.exports = (app) => {
     router.delete("/:projectPostId", [verifyToken, isOwnerWishlist], wishlist.delete);
 
     // get all wishlist of a user
-    router.get("/get_wishlist/:userId",[verifyToken], wishlist.findAllWishlistByUserId);
+    router.get("/get_wishlist",[verifyToken], wishlist.findAllWishlistByUserId);
 
     // check is existed in wishlist
     router.get("/is_existed/:projectPostId", [verifyToken], wishlist.isExisted);

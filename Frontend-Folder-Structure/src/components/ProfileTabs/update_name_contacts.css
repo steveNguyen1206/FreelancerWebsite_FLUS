@@ -12,8 +12,8 @@
 .title {
     font-size: medium;
     margin-bottom: 10px;
-    background: var(--accent);
-    opacity: 0.5;
+    color: var(--primary);
+    font-family: "Inter-Bold";
     padding: 5px;
     border-radius: 5px;
 }
@@ -24,7 +24,7 @@
     /* margin-bottom: 10px; */
 }
 
-.update-button {
+.update-part-container .update-button {
     cursor: pointer;
     transition: all 0.1s ease-in-out;
     margin-top: 5px;

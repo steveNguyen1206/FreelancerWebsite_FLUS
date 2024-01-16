@@ -8,7 +8,7 @@ import subcategoryService from '@/services/subcategoryService';
 
 const isValidTitle = (title) => {
   if (!title) return false;
-  const titleRegex = /^[a-zA-Z0-9\s]*$/;
+  const titleRegex = /^[a-zA-Z0-9\s\-]*$/;
   return titleRegex.test(title);
 };
 
@@ -87,7 +87,11 @@ const NewProjectPost = ({ isOpen, onClose, onUpdate }) => {
         'Invalid title. Title must be alphanumeric and not empty.';
       isValid = false;
     } else {
-      newErrors.title = '';
+      if (newProject.title.length > 50) {
+        newErrors.title = 'The project title must not exceed 50 characters.';
+        isValid = false;
+      }else
+        newErrors.title = '';
     }
 
     // Validate image
@@ -95,6 +99,13 @@ const NewProjectPost = ({ isOpen, onClose, onUpdate }) => {
       newErrors.image = 'Please select an image.';
       isValid = false;
     } else {
+      const file = newProject.image;
+      const allowedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webg'];
+
+      if (file && !allowedFormats.includes(file.type)) {
+        newErrors.image = 'Image file not in supported format!';
+        isValid = false;
+      }
       newErrors.image = '';
     }
 

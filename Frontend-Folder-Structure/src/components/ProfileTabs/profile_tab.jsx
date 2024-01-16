@@ -5,6 +5,7 @@ import projectPostWishlistServices from '@/services/projectPostWishlistServices'
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import WishlistPost from '../DisplayCard/wishlist';
+import paymentServices from '@/services/paymentServices';
 
 const EmptyTab = () => {
   return (
@@ -18,27 +19,61 @@ const EmptyTab = () => {
   );
 };
 
-const BankTab = () => {
-    return(
-        <div className='bank-tab'>
-            {/* <div className="scroll-bar">
-                <div className="rectangle-3" />
-            </div> */}
-            <div className='link-to-bank-text-wrap'>
-               Link to Payment Account
-            </div>
-            <div className='paypal-mail-wrapper'>
-                <input className='paypal-mail' placeholder='Input your paypal email here to add your paypal account'/>
-                <button text={"Add Paypal"} className='add-paypal-btn'>Add Paypal</button>
-            </div>
-            <div className='available-payment-header'>
-                Your available paypal email(s):
-            </div>
-            
+const BankTab = (userId) => {
+  const [sended, setSended] = useState(false);
+  const [paymentAccount, setPaymentAccount] = useState('');
+
+  useEffect(() => {
+    setSended(false);
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const payload = {
+      account_address: paymentAccount,
+    };
+    console.log(payload);
+    try {
+      const response = await paymentServices.createPaymentAccount(
+        payload,
+        localStorage.getItem('AUTH_TOKEN')
+      );
+      setSended(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <>
+      {sended ? (
+        <div className="form-container">
+          <h3 style={{ marginBottom: '36px' }}>Payment account created</h3>
         </div>
-       
-    );
-}
+      ) : (
+        <div className="bank-tab">
+          {/* <div className="scroll-bar">
+                <div className="rectangle-3" />
+              </div> */}
+          <div className="link-to-bank-text-wrap">Link to Payment Account</div>
+          <div className="paypal-mail-wrapper">
+            <input
+              className="paypal-mail"
+              placeholder="Input your paypal email here to add your paypal account"
+              onChange={(e) => setPaymentAccount(e.target.value)}
+            />
+            <button text={'Add Paypal'} className="add-paypal-btn" onClick={handleSubmit}>
+              Add Paypal
+            </button>
+          </div>
+          {/* <div className='available-payment-header'>
+                Your available paypal email(s):
+              </div> */}
+        </div>
+      )}
+    </>
+  );
+};
 
 const WishlistTab = ({ userID }) => {
   console.log('user id: ', userID);
@@ -47,10 +82,12 @@ const WishlistTab = ({ userID }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    projectPostWishlistServices.getWishlistByUserId(userID).then((response) => {
-      console.log('response: ', response.data);
-      setWishlist(response.data);
-    });
+    projectPostWishlistServices
+      .getWishlistByUserId(localStorage.getItem('AUTH_TOKEN'))
+      .then((response) => {
+        console.log('response: ', response.data);
+        setWishlist(response.data);
+      });
   }, [userID]);
 
   return (
@@ -64,12 +101,11 @@ const WishlistTab = ({ userID }) => {
             projectTagsId={item.tag_id}
             projectDetail={item.detail}
             projectBudget={[item.budget_min, item.budget_max]}
-            userID={userID}
+            userID={item.user_id}
             handleToProjectPostClick={() => {
               console.log('navigate to project detail page');
               navigate(`/project/${item.id}`);
-            }
-            }
+            }}
           />
         ))}
       </div>
@@ -78,4 +114,3 @@ const WishlistTab = ({ userID }) => {
 };
 
 export { EmptyTab, BankTab, WishlistTab };
-

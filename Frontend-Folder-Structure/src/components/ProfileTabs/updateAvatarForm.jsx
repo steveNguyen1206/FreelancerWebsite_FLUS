@@ -10,7 +10,15 @@ const UpdateAvatarForm = ({userId}) => {
   const [successMessage, setSuccessMessage] = useState('');
 
   const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+    const file = event.target.files[0];
+    const allowedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webg'];
+
+    if (file && !allowedFormats.includes(file.type)) {
+      setErrorMessage('Image file not in supported format');
+      return;
+    }
+
+    setSelectedFile(file);
   };
 
   const handleUpload = () => {

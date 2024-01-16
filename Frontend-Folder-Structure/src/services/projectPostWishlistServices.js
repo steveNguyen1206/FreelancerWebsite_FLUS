@@ -19,7 +19,8 @@ const remove = (projectPostId, access_token) => {
 };
 
 const getWishlistByUserId = (access_token) => {
-  return http.get(`/wishlist/get_wishlist/`, {
+  console.log('getWishlistByUserId', access_token);
+  return http.get(`/wishlist/get_wishlist`, {
     headers: {
       'Content-Type': 'application/json',
       'x-access-token': access_token,

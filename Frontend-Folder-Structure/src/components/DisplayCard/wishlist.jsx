@@ -35,6 +35,7 @@ function WishlistPost({
     try {
       const ownerProjectData = await userDataService.findOnebyId(userID);
       setOwnerProject(ownerProjectData.data);
+      console.log('owner project: ', ownerProjectData.data);
     } catch (error) {
       console.error('Error fetching projects:', error);
     }
