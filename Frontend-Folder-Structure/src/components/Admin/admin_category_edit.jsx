@@ -107,7 +107,7 @@ const EditCategory = ({ m_state, m_function, fetchFunction, category }) => {
 
             <div className='col-buttons'>
               <div className="delete-category-button" onClick={handleDeleteCategory}>
-                <div className="div-wrapper">Delete</div>
+                <div className="div-wrapper-del">Delete</div>
               </div>
               
               <div className="save-category-button" onClick={handleEditCategory}>
