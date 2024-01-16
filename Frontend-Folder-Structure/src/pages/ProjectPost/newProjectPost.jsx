@@ -105,8 +105,8 @@ const NewProjectPost = ({ isOpen, onClose, onUpdate }) => {
       if (file && !allowedFormats.includes(file.type)) {
         newErrors.image = 'Image file not in supported format!';
         isValid = false;
-      }
-      newErrors.image = '';
+      }else
+        newErrors.image = '';
     }
 
     // Validate tag

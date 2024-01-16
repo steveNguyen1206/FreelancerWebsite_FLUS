@@ -21,7 +21,7 @@ const index = () => {
 
   const fetchPosts = async () => {
     try {
-      const postsData = await freelancer_post_Service.allposts();
+      const postsData = await freelancer_post_Service.allAllPosts();
       const sortedPosts = postsData.data
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
         .slice(0, 6);
