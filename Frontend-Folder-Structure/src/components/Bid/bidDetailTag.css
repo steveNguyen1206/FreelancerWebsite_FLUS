@@ -125,7 +125,7 @@
     color: #009304;
     font-family: "Inter-Bold", Helvetica;
     font-weight: 300;
-
+    text-wrap: nowrap;
   }
   
   .popup-container-bid .text-wrapper-3 {
