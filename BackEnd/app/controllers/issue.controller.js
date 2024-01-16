@@ -5,6 +5,7 @@ const Issue = db.issues;
 const Op = db.Sequelize.Op;
 const Project = db.projects;
 const ProjectNoti = db.projects_notis;
+const User = db.user;
 
 exports.create = (req, res) => {
     // Validate request
@@ -208,9 +209,12 @@ exports.acceptIssue = (req, res) => {
                         ProjectNoti.create(notification)
                             .then(noti_data => {
                                 // res.send(project_data);
-                                res.send({
-                                    message: "Refound successfully."
-                                });
+                                // res.send({
+                                //     message: "Refound successfully."
+                                // });
+
+                                let reported_time = User.findByPk(req.userId)
+                                
                             })
                             .catch(err => {
                                 res.status(500).send({

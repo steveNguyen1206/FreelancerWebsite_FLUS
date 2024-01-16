@@ -202,7 +202,7 @@ export const ProjectConfigure = () => {
                 <h4 className="title-text --size-16">Budget</h4>
                 <div className="row-container" style={{marginBottom: 0}}>
                   <input name="budget" type="text" className="label-text --size-20 my-input" onChange={formatMoneyInput} value={project.budget}  />
-                  <h4 className="title-text --size-16" >VND</h4>
+                  <h4 className="title-text --size-16" >USD</h4>
                 </div>
               </div>
             </div>
@@ -212,7 +212,7 @@ export const ProjectConfigure = () => {
                 <h4 className="title-text --size-16">Pre Pay (minimun 30%)</h4>
                 <div className="row-container"  style={{marginBottom: 0}}>
                   <input  type="text" className="label-text --size-20 my-input" value={prePaidFull ? project.budget : project.budget * 30 / 100} readOnly />
-                  <h4 className="title-text --size-16" >VND</h4>
+                  <h4 className="title-text --size-16" >USD</h4>
                 </div>
               </div>
             </div>

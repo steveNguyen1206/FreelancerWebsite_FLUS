@@ -4,11 +4,12 @@ import StarModifier from "@/components/StarRating/star-modified";
 import { TextField } from "@mui/material";
 import reviewService from "@/services/reviewServices";
 import { useProjectManageContext } from "./ProjectManageProvider";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const ProjectReview = ()=> {
 
     const {isOwn, project, error, setError} = useProjectManageContext();
+    const [sended, setSended] = useState(false);
 
     let review = {
         rating: 0,
@@ -45,9 +46,11 @@ export const ProjectReview = ()=> {
             .createReview(project.id, review, localStorage.getItem('AUTH_TOKEN'))
             .then((response) => {
               console.log(response.data);
+              setSended(true);
             })
             .catch((e) => {
               console.log(e);
+              setSended(false);
             });
             setError(null);
         }
@@ -58,11 +61,16 @@ export const ProjectReview = ()=> {
     }
 
     useEffect(() => {
+  
         setError(null);
         }
     , []);
 
     return (
+
+      <>
+      {
+        !sended ? (
         <div className="project-content-container" style={{justifyContent: 'center'}}>
             <div className="project-content-container" style={{padding: '24px'}}>
 
@@ -102,6 +110,16 @@ export const ProjectReview = ()=> {
                 Send your review
               </button>
         </div>
+        ) : (
+          <div className="project-content-container" style={{padding: '24px'}}>
+          <div className="title-text" style={{ marginTop: 16 }}>
+              Your review sent!
+          </div>
+          </div>
+        )
+
+      }
+      </>
     )
 
 };

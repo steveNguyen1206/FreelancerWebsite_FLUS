@@ -6,20 +6,21 @@ const Contact = db.contact;
 isOwnerContact = (req, res, next) => {
     const contact_id = req.params.contact_id;
     const userId = req.userId;
-    // console.log(id, userId)
-    Contact.findByPk({
-        where: {id: contact_id}, 
+
+    console.log("test in contact midđle", contact_id, userId)
+    Contact.findByPk(contact_id, {
         include: [
             {
                 model: FreelacerPost,
-                attibutes: ["id", "freelancer_id"]
+                as: "freelancer_post",
+                attributes: ["id", "freelancer_id"]
             },
 
         ]
     })
     .then((data) => {
-        // console.log(data.freelancer_id)
-        const freelancer_id = data.FreelacerPost.freelancer_id;
+        console.log(data)
+        const freelancer_id = data.freelancer_post.freelancer_id;
         if(freelancer_id == userId)
         {
             next();
@@ -30,7 +31,7 @@ isOwnerContact = (req, res, next) => {
         }
     })
     .catch((error) => {
-        res.status(500).send({message: "Error retrieving project in middleware: ", error});
+        res.status(500).send({message: "Error retrieving contact in middleware: "+ error});
     })
 };
 

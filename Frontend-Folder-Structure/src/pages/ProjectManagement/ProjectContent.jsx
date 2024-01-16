@@ -13,15 +13,21 @@ export const ProjectContent = () => {
     const startDate = new Date(startDateString);
     const endDate = new Date(endDateString);
     console.log("STATUS", project.status);
-  
+    console.log("START", startDate);
+    console.log("END", endDate);
+    
     // Get the current date
     const currentDate = new Date();
+    console.log("CUR", currentDate) 
   
     // Calculate the total time difference in milliseconds
     const totalTimeDifference = endDate - startDate;
   
     // Calculate the time difference from start day to current day in milliseconds
     const currentTimeDifference = currentDate - startDate;
+    if(currentTimeDifference < 0) {
+      return 0;
+    }
     console.log(currentTimeDifference, totalTimeDifference);
   
     // Calculate the percentage of time that has passed

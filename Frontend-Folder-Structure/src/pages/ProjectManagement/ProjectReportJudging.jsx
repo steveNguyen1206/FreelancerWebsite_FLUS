@@ -396,6 +396,7 @@ export const ProjectReportJudging = () => {
                         name="end_date"
                         className="label-text --size-20 my-input"
                         onChange={handleInputChange}
+                        // min = {project.end_date}
                         value={project.end_date}
                       />
                     </div>

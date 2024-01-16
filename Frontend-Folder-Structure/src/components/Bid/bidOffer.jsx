@@ -9,7 +9,7 @@ import projectService from '@/services/projectServices';
 
 const BidOffer = ({ bidOne, checkOwner }) => {
   const navigate = useNavigate();
-  const skill = 'React, NodeJS';
+  const skill = '';
   const initProject = {
     name: '',
     description: '',
