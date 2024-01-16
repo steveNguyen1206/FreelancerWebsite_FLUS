@@ -159,6 +159,8 @@ const NewProjectPost = ({ isOpen, onClose, onUpdate }) => {
   const [newProject, setNewProject] = useState(initState);
   const [errorMessage, setErrorMessage] = useState('');
 
+  console.log(newProject)
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setNewProject({ ...newProject, [name]: value });
