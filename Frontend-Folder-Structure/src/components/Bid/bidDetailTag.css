@@ -16,14 +16,15 @@
   }
   
   .popup-container-bid .group {
-    height: 85px;
+    height: fit-content;
     position: relative;
-    width: 315px;
+    /* width: 315px; */
     --bs-gutter-x: 0;
+    flex-wrap: nowrap;
   }
 
   .popup-container-bid .rectangle {
-    height: 50px;
+    height: 40px;
     object-fit:cover;
   }
 
@@ -31,7 +32,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: auto;
+    width: fit-content;
   }
 
   .first-line-container {
@@ -48,7 +49,7 @@
   .popup-container-bid .text-wrapper-5 {
     color: #000000;
     font-family: "Inter-Bold", Helvetica;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 700;
     letter-spacing: 0;
     line-height: normal;
@@ -57,7 +58,8 @@
   
   .popup-container-bid .text-wrapper-6 {
     font-family: "Inter-Regular", Helvetica;
-    font-size: 16.4px;
+    font-size: 16px;
+    text-wrap: nowrap;
   }
   
   .popup-container-bid .group-2 {
@@ -72,7 +74,8 @@
     width: auto;
     height: 100%;
     text-align: left;
-
+    margin: 0;
+    line-height: normal;
   }
  
   .flag-container{
@@ -106,7 +109,10 @@
   .popup-container-bid .span {
     color: #000000;
     font-weight: 300;
-
+    text-wrap: wrap;
+    display: inline;
+    white-space:normal; 
+    word-wrap:break-word;
   }
   .date-offer{
     color: #000000;
