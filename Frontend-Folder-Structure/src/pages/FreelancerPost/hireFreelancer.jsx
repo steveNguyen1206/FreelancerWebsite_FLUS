@@ -42,7 +42,8 @@ const isValidStartDate = (start_date) => {
     // start_date must be a date in the past
     // must be mm/dd/yyyy format (01 <= mm <= 12, 01 <= dd <= 31, 2000 <= yyyy <= 2100)
     const datePattern = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/(2000|20[0-9][0-9]|2100)$/;
-    return datePattern.test(start_date);
+    
+    return datePattern.test(start_date) && new Date(start_date) > new Date();
 }
 
 
@@ -55,7 +56,10 @@ const isValidStartEndDate = (start_date, end_date) => {
     // start_date < end_date
     const startDate = new Date(start_date);
     const endDate = new Date(end_date);
-    return startDate < endDate;
+    // start_date > current date
+    const currentDate = new Date();
+    // return startDate < endDate;
+    return startDate < endDate ;
 }
 
 const HireFreelancer = ({ isOpen, onClose, onUpdate, setShowHirePopup }) => {
@@ -129,7 +133,8 @@ const HireFreelancer = ({ isOpen, onClose, onUpdate, setShowHirePopup }) => {
         }
 
         if (!isValidStartDate(hireFreelancer.start_date)) {
-            newError.start_date = 'Start date must be mm/dd/yyyy format (01 <= mm <= 12, 01 <= dd <= 31, 2000 <= yyyy <= 2100)';
+            // newError.start_date = 'Start date must be mm/dd/yyyy format (01 <= mm <= 12, 01 <= dd <= 31, 2000 <= yyyy <= 2100)';
+            newError.start_date = 'Start date must be mm/dd/yyyy format (01 <= mm <= 12, 01 <= dd <= 31, 2000 <= yyyy <= 2100) and greater than current date';
             isValid = false;
         } else {
             newError.start_date = '';

@@ -6,60 +6,90 @@ import { StarRating } from '@/components';
 import { Collapse } from 'react-bootstrap';
 import contactService from '@/services/contactServices';
 import reviewService from '@/services/reviewServices';
+import { useNavigate } from 'react-router-dom';
+import projectService from '@/services/projectServices';
+import gmailService from '@/services/gmailServices';
 
-const OfferDetailTag = ({ contactOne, checkOwner }) => {
+const OfferDetailTag = ({ contactOne, checkOwner, onChangeBid }) => {
   const [expanded, setExpanded] = useState(false);
   const [showSeeMore, setShowSeeMore] = useState(false);
   const textContainerRef = useRef(null);
   const [review, setReview] = useState([]);
+  const navigate = useNavigate();
+  const skill = '';
+  const initProject = {
+    name: '',
+    description: '',
+    startDate: '',
+    endDate: '',
+    budget: '',
+    tag_id: '',
+    contact_id: '',
+    owner: '',
+    member: ''
+  }
 
   const handleAccept = async () => {
     console.log('accept');
-    console.log('bidOne.id: ', contactOne.id);
-    contactService.changeContactStatus(contactOne.id, -1).then((response) => {
+    // console.log('contactOne.id: ', contactOne.id);
+    await contactService.changeContactStatus(contactOne.id, 1).then((response) => {
       console.log('response: ', response);
-      // onChangeBid();
-        });
+      onChangeBid();
+    });
 
-        await contactService.showContactByContactId(bidOne.id).then((response) => {
-            console.log('response: ', response);
-            const contact = response.data[0];
-            console.log('contact: ', contact);
-            console.log("Freelancer Post:", contact.budget);
-      
-            const project = initProject;
-            const projectId = contact.project_id;
-            console.log('projectId: ', projectId);
-            project.name = contact.job_name;
-            project.description = contact.job_description;
-            project.startDate = contact.start_date;
-            project.endDate = contact.end_date;
-            project.budget = contact.budget;
-            project.tag_id = contact.freelancer_post.skill_tag;
-            project.contact_id = contact.id;
-            project.owner = contact.client_id;
-            project.member = contact.freelancer_post.freelancer_id;
-            console.log('project: ', project);
-            projectService.createProject(project).then((response) => {
-              console.log('response: ', response);
-              console.log('project: ', project);
-              navigate(`/project-manage/${response.data.id}`)
-      
-            });
-      
-            // <Route path="/project-manage/:id" element={<ProjectManagement own={false}/>} />
-            // copilot :3 code navigate to project-manage/response.data.id
-            // window.location.href = `/project-manage/${response.data.id}`;
-            
+    await contactService.showContactByContactId(contactOne.id).then((response) => {
+      console.log('response: ', response);
+      const contact = response.data[0];
+      console.log('contact: ', contact);
+      console.log("Freelancer Post:", contact.budget);
+
+      const project = initProject;
+      const projectId = contact.project_id;
+      console.log('projectId: ', projectId);
+      project.name = contact.job_name;
+      project.description = contact.job_description;
+      project.startDate = contact.start_date;
+      project.endDate = contact.end_date;
+      project.budget = contact.budget;
+      project.tag_id = contact.freelancer_post.skill_tag;
+      project.contact_id = contact.id;
+      project.owner = contact.client_id;
+      project.member = contact.freelancer_post.freelancer_id;
+
+      console.log('project: ', project);
+      projectService.createProject(project).then((response) => {
+        console.log('response: ', response);
+        console.log('project: ', project);
+        navigate(`/project-manage/${response.data.id}`)
+        const emailData = {
+          email: contact.user.email,
+          url: `http://localhost:8081/my-project-manage/${response.data.id}`,
+        };
+
+        gmailService.sendEmail(emailData).then((response) => {
+          console.log('response: ', response);
+        });
       });
+
+      // <Route path="/project-manage/:id" element={<ProjectManagement own={false}/>} />
+      // copilot :3 code navigate to project-manage/response.data.id
+      // window.location.href = `/project-manage/${response.data.id}`;
+
+    });
   };
 
-  const handleReject = () => {
+  const handleReject = async () => {
     console.log('reject');
-    console.log('bidOne.id: ', contactOne.id);
-    contactService.changeContactStatus(contactOne.id, -1).then((response) => {
+    console.log('contactOne.id: ', contactOne.id);
+    await contactService.changeContactStatus(contactOne.id, -1).then((response) => {
       console.log('response: ', response);
-      // onChangeBid();
+      onChangeBid();
+    });
+    await contactService.showContactByContactId(contactOne.id).then((response) => {
+      // navigate and refresh
+      console.log('response: ', response);
+      navigate(`/findFreelancer/${response.data[0].freelancer_post.freelancer_id}`)
+      window.location.reload(); // chữa cháy
     });
   };
 
