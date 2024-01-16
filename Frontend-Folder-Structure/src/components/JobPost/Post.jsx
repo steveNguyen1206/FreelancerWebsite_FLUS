@@ -75,7 +75,7 @@ const Post = ({ project, handleBidClick }) => {
           <div className="post-rating">
             <StarRating
               rating={parseFloat(project.user.avg_rating)}
-              width={100}
+              width={120}
               className="pstars"
             />
             <p>{project.user.avg_rating}</p>
@@ -87,7 +87,7 @@ const Post = ({ project, handleBidClick }) => {
           </div>
           <div className="btn-bid-container">
             <div className="btn-bid-project">
-              <button onClick={handleBidClick}>Bid</button>
+              <button onClick={handleBidClick}>View</button>
             </div>
             <div className="post-wish">
               <button onClick={handleLikeClick}>
