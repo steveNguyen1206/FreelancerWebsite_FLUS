@@ -88,8 +88,8 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
     if (!newPost.title) {
       newErrors.title = 'Please write your post title.';
       isValid = false;
-    } else  if (newPost.title.length > 50) {
-      newErrors.title = 'The title must not exceed 50 characters.';
+    } else  if (newPost.title.length > 70) {
+      newErrors.title = 'The title must not exceed 70 characters.';
       isValid = false;
     }else if (!isValidTitle(newPost.title)) {
       newErrors.title = 'Title is invalid. Title must be alphanumeric and not empty.';
