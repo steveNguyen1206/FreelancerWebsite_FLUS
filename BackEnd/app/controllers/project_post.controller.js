@@ -62,9 +62,11 @@ exports.create = async (req, res) => {
       imgage_post_urls: img_url,
       user_id: req.userId,
       tag_id: req.body.tag_id,
-      start_date: req.body.start_date,
+      start_date: new Date(new Date(req.body.start_date).setHours(new Date(req.body.start_date).getHours() + 7)).toISOString(),
       status: 1,
     };
+
+    console.log("projectPost: ", projectPost);
 
     project_post
       .create(projectPost)
@@ -282,6 +284,7 @@ exports.findOne = (req, res) => {
       ],
     })
     .then((data) => {
+      console.log(data)
       if (!data) {
         res.status(404).send({
           message: "Not found project_post with id " + id,
@@ -294,7 +297,7 @@ exports.findOne = (req, res) => {
           .then((reviews) => {
             let sum = 0;
             reviews.forEach((review) => {
-              sum += review.star;
+              sum += parseFloat(review.star);
             });
             data.user.dataValues.avg_rating = sum / reviews.length || 0;
             return data;

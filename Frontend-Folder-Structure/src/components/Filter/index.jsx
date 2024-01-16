@@ -5,6 +5,7 @@ import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 import exitButton from '../../assets/exitButton.png';
 import { useLocation } from 'react-router';
+import { event } from 'jquery';
 
 function valuetext(value) {
   return `${value} $`;
@@ -51,7 +52,6 @@ const Filter = ({
 
   const [value, setValue] = useState([0, 10000]);
   const [selectedSkills, setSelectedSkills] = useState([]);
-
   const [selectedCategory, setSeletedCategory] = useState();
   const location = useLocation();
   // Read the category from the query parameter
@@ -60,23 +60,46 @@ const Filter = ({
   useEffect(() => {
     if (category) {
       setSeletedCategory([category]);
-      // Apply the filter logic as needed
       onCategoryChange(category);
     }
   }, [location.search]);
 
+  const defaultRange = [0, 10000];
+
   const handleInputLowerChange = (event) => {
-    setValue([
+    const inputValue = event.target.value;
+    if (isNaN(inputValue) || inputValue < defaultRange[0] || inputValue > defaultRange[1] || inputValue > value[1]) {
+      handleChange(event, [defaultRange[0], defaultRange[1]]);
+      return;
+    }
+    const newValue = [
       event.target.value === '' ? 0 : Number(event.target.value),
       value[1],
-    ]);
+    ];
+    setValue(newValue);
+  
+    handleChange(event, newValue);
   };
 
   const handleInputUpperChange = (event) => {
-    setValue([
+    const inputValue = event.target.value;
+    if (isNaN(inputValue) || inputValue < defaultRange[0] || inputValue > defaultRange[1] || inputValue < value[0]) {
+      handleChange(event, [defaultRange[0], defaultRange[1]]);
+      return;
+    }
+
+
+    const newValue = [
       value[0],
       event.target.value === '' ? 0 : Number(event.target.value),
-    ]);
+    ];
+    setValue(newValue);
+  
+    if (newValue[0] > newValue[1]) {
+      setValue([newValue[1], newValue[0]]);
+    }
+  
+    handleChange(event, newValue);
   };
 
   const handleChange = (event, [lower, upper]) => {
@@ -88,11 +111,17 @@ const Filter = ({
     const selectedOption = event.target.value;
     if (selectedOption) {
       const selectedOptionId = getIdbyName(selectedOption);
-      setSelectedSkills((prevSkills) => [...prevSkills, selectedOption]);
-      onSelectedTagsChange([...selectedTags, selectedOptionId]);
+      setSelectedSkills((prevSkills) => {
+        if (!prevSkills.includes(selectedOption)) {
+          return [...prevSkills, selectedOption];
+        }
+        return prevSkills;
+      });
+      if (!selectedTags.includes(selectedOptionId)) {
+        onSelectedTagsChange([...selectedTags, selectedOptionId]);
+      }
     }
   };
-
   const removeCategory = () => {
     setSeletedCategory(null);
     onCategoryChange(null);
@@ -140,8 +169,7 @@ const Filter = ({
             </div>
           ))}
 
-          {selectedCategory
-          && (
+          {selectedCategory && (
             <div className="skill" key={'cate'}>
               <p className="skill-name">{selectedCategory}</p>
               <img
@@ -194,6 +222,7 @@ const Filter = ({
               value={value[0]}
               id="inputLower"
               onChange={handleInputLowerChange}
+              readOnly = {true}
             />
           </div>
           <p className="dollar">$</p>
@@ -206,6 +235,7 @@ const Filter = ({
               value={value[1]}
               id="inputUpper"
               onChange={handleInputUpperChange}
+              readOnly = {true}
             />
           </div>
           <p className="dollar">$</p>

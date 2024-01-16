@@ -17,7 +17,7 @@ const Bid = ({ bid, onChangeBid, onChangeProjectId, isOwnerProjectPost }) => {
     onChangeBid();
     const emailData = {
       email: bid.email,
-      url: 'http://localhost:8081/project-manage/' + projectId,
+      url: 'http://localhost:8081/project-manage/',
     };
     gmailService.sendEmail(emailData).then((response) => {
       console.log('response: ', response);
