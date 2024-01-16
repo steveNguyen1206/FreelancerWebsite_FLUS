@@ -99,7 +99,7 @@ const FindFreelancer = () => {
 
   const filteredPosts = posts.filter(
     (post) =>
-      // post.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
+      post.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
       // if selectedTags is empty, ignore the tag filter
       (selectedTags.length == 0 && selectedCategory == null ) ||
 
