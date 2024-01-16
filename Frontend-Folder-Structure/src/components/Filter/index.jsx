@@ -222,6 +222,7 @@ const Filter = ({
               value={value[0]}
               id="inputLower"
               onChange={handleInputLowerChange}
+              readOnly = {true}
             />
           </div>
           <p className="dollar">$</p>
@@ -234,6 +235,7 @@ const Filter = ({
               value={value[1]}
               id="inputUpper"
               onChange={handleInputUpperChange}
+              readOnly = {true}
             />
           </div>
           <p className="dollar">$</p>
