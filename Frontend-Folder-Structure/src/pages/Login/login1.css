@@ -162,3 +162,11 @@
   top: 16px;
   width: 29px;
   }
+
+  .error-message-google {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+    display: flex;
+    justify-content: center;
+  }
