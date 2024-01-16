@@ -2,17 +2,17 @@ import React from "react";
 import "./style.css";
 import { TextField } from "@mui/material";
 import { PayPalButtons } from "@paypal/react-paypal-js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useProjectManageContext } from "./ProjectManageProvider";
 import paymentServices from "@/services/paymentServices";
 import projectService from "@/services/projectServices";
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 
 
 export const ProjectConfigure = () => {
 
   
-  const {project, setProject} = useProjectManageContext();
+  const {project, setProject, error, setError} = useProjectManageContext();
   const [prePaidFull, setPrePaidFull] = useState(true);
 
   // useEffect(()=>{
@@ -35,6 +35,24 @@ export const ProjectConfigure = () => {
   reference.isFull = prePaidFull;
 
   // console.log("tessst", project.member.account_name)
+
+  const isValid = () => {
+    if(reference.project.start_date < currentDate || reference.project.end_date < currentDate) {
+      setError("Start date and end date must be after today");
+      return false;
+    }
+    if ( reference.project.start_date > reference.project.end_date) {
+      setError("Start date must be before end date");
+      return false;
+    }
+    if (reference.project.project_description.length < 50) {
+      console.log("description error")
+      setError("Project requirements must be at least 50 characters");
+      return false;
+    }
+    return true;
+  }
+
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -74,6 +92,7 @@ export const ProjectConfigure = () => {
 
 
   const createOrder = async (data) => {
+    if(!isValid()) return;
     const payload = {
       product_cost: reference.isFull ? reference.project.budget : reference.project.budget * 30 / 100,
       currenry_code: "USD",
@@ -127,6 +146,11 @@ export const ProjectConfigure = () => {
 
   };
 
+  useEffect(() => {
+    setError("");
+  }
+  , [])
+
   return (
 
           <form className="project-content-container">
@@ -141,16 +165,18 @@ export const ProjectConfigure = () => {
               <div className="field-container">
                 <div className="title-text --size-16">Date begin</div>
                 {/* set minimun date to today */}
-                <input type="date" name="start_date" className="label-text --size-20 my-input" value={project.start_date} min={currentDate} onChange={handleInputChange}/>
+                <input type="date" name="start_date" className="label-text --size-20 my-input" value={project.start_date} min={currentDate} max={project.end_date} onChange={handleInputChange}/>
                 {/* <input id="startDate" type="date"name="start_date" className="label-text --size-20 my-input" value={project.start_date} onChange={handleInputChange}/> */}
               
               </div>
 
               <div className="field-container">
                 <div className="title-text --size-16">Date end</div>
-                <input type="date" name="end_date" className="label-text --size-20 my-input" value={project.end_date} min={currentDate} onChange={handleInputChange}/>
+                <input type="date" name="end_date" className="label-text --size-20 my-input" value={project.end_date} min={project.start_date} onChange={handleInputChange}/>
               </div>  
             </div>
+
+
 
             <div className="row-container">
               <div className="field-container">
@@ -165,11 +191,10 @@ export const ProjectConfigure = () => {
             </div>
 
             <div className="project-requirement-container">
-              <h4 className="title-text --size-20">Requierments</h4>
+              <h4 className="title-text --size-20">Requirements</h4>
               <TextField  multiline name="project_description" onChange={handleInputChange} value={project.project_description}/>
             </div>
-
-
+ 
 
 
             <div className="row-container" style={{ alignItems: 'left'}}>
@@ -216,8 +241,11 @@ export const ProjectConfigure = () => {
                 <h3 className="title-text --size-20">Pay 30% and start</h3>
 
               </div>
+              
             </div>
-
+            <div style={{ height: '30px', width: '100%' }}> 
+              <div className="value-text --size-14 --color-error">{error}</div>
+            </div>
                 <PayPalButtons
                     createOrder={(data, actions) => createOrder(data, actions)}
                     onApprove={(data, actions) => onApprove(data, actions)}
