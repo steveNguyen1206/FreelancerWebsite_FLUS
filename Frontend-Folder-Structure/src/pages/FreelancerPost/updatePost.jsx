@@ -11,42 +11,53 @@ import { useParams } from 'react-router';
 
 const isValidTitle = (title) => {
   if (!title) return true;
-  const titleRegex = /^[a-zA-Z0-9\s]*$/;
+  const titleRegex = /^[a-zA-Z0-9\s\-]*$/;
   return titleRegex.test(title);
 };
 
-const isValidDetail = (detail) => {
-  if (!detail) return true;
-  const detailRegex = /^.{10,}$/;
-  return detailRegex.test(detail);
+const isValidAboutMe = (about_me) => {
+  // const detailRegex = /^.{10,}$/;
+  // return detailRegex.test(detail);
+  if (!about_me) return true;
+  const aboutMeRegex = /^[a-zA-Z0-9\s]*$/;  
+  return aboutMeRegex.test(about_me);
 };
 
-const isValidBudget = (budget) => {
-  if (!budget) return true;
-  const budgetRegex = /^[0-9]*$/;
-  return budgetRegex.test(budget) && budget > 0;
+const isValidDeliveryDescription = (delivery_description) => {
+  if (!delivery_description) return true;
+  const descriptionRegex = /^[a-zA-Z0-9\s]{1,511}$/;
+  return descriptionRegex.test(delivery_description);
 };
 
-const isValidTag = (tag) => {
-  if (!tag) return true;
-  const tagRegex = /^[a-zA-Z0-9\s/\\]*$/;
-  return tagRegex.test(tag);
+const isValidSkillDescription = (skill_description) => {
+  if (!skill_description) return true;
+  const skillRegex = /^[a-zA-Z0-9\s]{1,511}$/;
+  return skillRegex.test(skill_description);
 };
 
-const isValidImage = (image) => {
-  return true;
+const isValidLowestPrice = (lowset_price) => {
+  if (lowset_price === '') return true;
+  const lowestPriceRegex = /^[0-9]*$/;
+  return lowestPriceRegex.test(lowset_price) && lowset_price > 0;
 };
+
+const isValidDeliveryDue = (delivery_due) => {
+  if (delivery_due === '') return true;
+  const deliveryDueRegex = /^[0-9]*$/;
+  return deliveryDueRegex.test(delivery_due) && delivery_due >= 0;
+};
+
+const isValidRevisionNumber = (revision_number) => {
+  if (revision_number === '') return true;
+  const revisionNumberRegex = /^[0-9]*$/;
+  return revisionNumberRegex.test(revision_number) && revision_number >= 0;
+};
+
 
 const UpdatePost = ({ isOpen, onClose, onUpdate }) => {
   const userId = localStorage.getItem('LOGINID');
-
-  const [showOverlay, setShowOverlay] = useState(isOpen);
-  const [error, setError] = useState({
-
-  });
   const currentURL = window.location.href;
   const postId = currentURL.split("/").pop();
-
   const initState = {
     freelancer_id: userId,
     title: '',
@@ -61,11 +72,94 @@ const UpdatePost = ({ isOpen, onClose, onUpdate }) => {
     image_file: null, // Lấy file ảnh luôn
     id: postId
   };
+  const [updatePost, setUpdatePost] = useState(initState);
 
-  console.log("initState: ", initState);
+  const [showOverlay, setShowOverlay] = useState(isOpen);
+  const [error, setError] = useState({
+    title: '',
+    image: '',
+    about_me: '',
+    delivery_description: '',
+    skill_description: '',
+    lowset_price: '',
+    delivery_due: '',
+    revision_number: '',
+  });
+  
+
+  
+
+  // console.log("initState: ", initState);
 
   const validateForm = () => {
     let isValid = true;
+    const newErrors = {...error};
+
+    if (updatePost.title.length > 50) {
+      newErrors.title = 'The title must not exceed 50 characters.';
+      isValid = false;
+    }else if (!isValidTitle(updatePost.title)) {
+      newErrors.title = 'Title is invalid. Title must be alphanumeric and not empty.';
+      isValid = false;
+    } else {
+      newErrors.title = '';
+    }
+
+    
+    const file = updatePost.image_file;
+    const allowedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webg'];
+
+    if (file && !allowedFormats.includes(file.type)) {
+      newErrors.image = 'Image file not in supported format!';
+      isValid = false;
+    }else
+      newErrors.image = '';
+
+    if (!isValidAboutMe(updatePost.about_me)) {
+      newErrors.about_me = 'About me is invalid. About me must be alphanumeric and not empty.';
+      isValid = false;
+    } else {
+        newErrors.about_me = '';
+    }
+
+    if (!isValidDeliveryDescription(updatePost.delivery_description)) {
+      newErrors.delivery_description = 'Delivery description is invalid. Delivery description must be alphanumeric and not empty.';
+      isValid = false;
+    } else {
+      newErrors.delivery_description = '';
+    }
+
+    if (!isValidSkillDescription(updatePost.skill_description)) {
+      newErrors.skill_description = 'Skill description is invalid. Skill description must be alphanumeric and not empty.';
+      isValid = false;
+    } else {
+      
+        newErrors.skill_description = '';
+    }
+
+    if (!isValidLowestPrice(updatePost.lowset_price)) {
+      newErrors.lowset_price = 'Lowest price is invalid. Lowest price must be numeric and greater than 0.';
+      isValid = false;
+    } else {
+        newErrors.lowset_price = '';
+    }
+
+    if (!isValidDeliveryDue(updatePost.delivery_due)) {
+      newErrors.delivery_due = 'Delivery due is invalid. Delivery due must be numeric and greater than or equal to 0.';
+      isValid = false;
+    }
+    else {
+      newErrors.delivery_due = '';
+    }
+
+    if (!isValidRevisionNumber(updatePost.revision_number)) {
+      newErrors.revision_number = 'Revision number is invalid. Revision number must be numeric and greater than or equal to 0.';
+      isValid = false;
+    } else {
+        newErrors.revision_number = '';
+    }
+
+    setError(newErrors);
     return isValid;
   };
   const initialSkills = [
@@ -92,7 +186,7 @@ const UpdatePost = ({ isOpen, onClose, onUpdate }) => {
   }
 
   const [fileName, setFileName] = useState('');
-  const [updatePost, setUpdatePost] = useState(initState);
+  
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
