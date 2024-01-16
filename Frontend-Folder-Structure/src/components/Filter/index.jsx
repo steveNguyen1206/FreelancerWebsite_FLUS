@@ -68,7 +68,12 @@ const Filter = ({
 
   const handleInputLowerChange = (event) => {
     const inputValue = event.target.value;
-    if (isNaN(inputValue) || inputValue < defaultRange[0] || inputValue > defaultRange[1] || inputValue > value[1]) {
+    if (
+      isNaN(inputValue) ||
+      inputValue < defaultRange[0] ||
+      inputValue > defaultRange[1] ||
+      inputValue > value[1]
+    ) {
       handleChange(event, [defaultRange[0], defaultRange[1]]);
       return;
     }
@@ -77,28 +82,30 @@ const Filter = ({
       value[1],
     ];
     setValue(newValue);
-  
     handleChange(event, newValue);
   };
 
   const handleInputUpperChange = (event) => {
     const inputValue = event.target.value;
-    if (isNaN(inputValue) || inputValue < defaultRange[0] || inputValue > defaultRange[1] || inputValue < value[0]) {
+    if (
+      isNaN(inputValue) ||
+      inputValue < defaultRange[0] ||
+      inputValue > defaultRange[1] ||
+      inputValue < value[0]
+    ) {
       handleChange(event, [defaultRange[0], defaultRange[1]]);
       return;
     }
-
-
     const newValue = [
       value[0],
       event.target.value === '' ? 0 : Number(event.target.value),
     ];
     setValue(newValue);
-  
+
     if (newValue[0] > newValue[1]) {
       setValue([newValue[1], newValue[0]]);
     }
-  
+
     handleChange(event, newValue);
   };
 
@@ -222,7 +229,7 @@ const Filter = ({
               value={value[0]}
               id="inputLower"
               onChange={handleInputLowerChange}
-              readOnly = {true}
+              readOnly={true}
             />
           </div>
           <p className="dollar">$</p>
@@ -235,7 +242,7 @@ const Filter = ({
               value={value[1]}
               id="inputUpper"
               onChange={handleInputUpperChange}
-              readOnly = {true}
+              readOnly={true}
             />
           </div>
           <p className="dollar">$</p>
