@@ -118,7 +118,7 @@ const BidDetailTag = ({ project, bid, onChangeBid, isOwnerProjectPost ,onChangeP
 
                 <div className="group-2">
                   <StarRating rating={bid.user.avg_rating} width={140} />
-                  <div className="rating-number">{bid.user.avg_rating}</div>
+                  {/* <div className="rating-number">{bid.user.avg_rating}</div> */}
                 </div>
               </div>
             </div>
