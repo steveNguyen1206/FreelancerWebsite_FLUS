@@ -67,7 +67,7 @@ const FreelancerPost = ({post}) => {
       <div className="right-post">
         <div className="previews">
           <div className="rating-row">
-            <StarRating rating={review.averageStar} width={160} className="pstars" />
+            <StarRating rating={review.averageStar} width={130} className="pstars" />
             <div style={{}}>{review.averageStar}</div>
           </div>
           <div className="num-reviews-wrapper">{review.count + " reviews"}</div>
@@ -75,10 +75,10 @@ const FreelancerPost = ({post}) => {
         <div className="pbid">
           <div className="pprice">From ${post.lowset_price}</div>
           <div className="btn-row">
-            <div className="btn-bid">
-              <button>Hire me</button>
+            <div className="btn-bid" onClick={() => handleClickPost(post.id)} >
+              <button>View</button>
             </div>
-            <img src={eyeLight} onClick={() => handleClickPost(post.id)} />
+            {/* <img src={eyeLight} /> */}
           </div>
         </div>
       </div>

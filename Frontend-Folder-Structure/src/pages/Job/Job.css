@@ -12,7 +12,7 @@
     justify-content: flex-start;
     min-height: 700px;
     height: 100%;
-    background-color: #eee;
+    background-color: white;
 }
 
 .topbar {
@@ -48,7 +48,7 @@
 .c-container{
     display: flex;
     justify-content: space-around;
-    margin-top: 50px;
+    /* margin-top: 50px; */
     width: 100%;
 }
 
