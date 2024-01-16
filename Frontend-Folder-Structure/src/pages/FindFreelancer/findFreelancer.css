@@ -12,7 +12,7 @@
     justify-content: flex-start;
     min-height: 700px;
     height: 100%;
-    background-color: #eee;
+    background-color: white;
     margin-top: 20px;
 }
 
@@ -49,7 +49,7 @@
 .c-container{
     display: flex;
     justify-content: space-around;
-    margin-top: 50px;
+    /* margin-top: 50px; */
     width: 100%;
 
 }
@@ -78,5 +78,5 @@
 
 
 .left-job{
-    margin-left: 20px;
+    /* margin-left: 20px; */
 }
