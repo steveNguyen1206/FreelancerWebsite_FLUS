@@ -66,38 +66,48 @@ const Filter = ({
 
   const defaultRange = [0, 10000];
 
-  // const handleInputLowerChange = (event) => {
-  //   const inputValue = event.target.value;
-  //   if (isNaN(inputValue) || inputValue < defaultRange[0] || inputValue > defaultRange[1] || inputValue > value[1]) {
-  //     handleChange(event, [defaultRange[0], defaultRange[1]]);
-  //     return;
-  //   }
-  //   const newValue = [
-  //     event.target.value === '' ? 0 : Number(event.target.value),
-  //     value[1],
-  //   ];
-  //   setValue(newValue);
-  //   handleChange(event, newValue);
-  // };
+  const handleInputLowerChange = (event) => {
+    const inputValue = event.target.value;
+    if (
+      isNaN(inputValue) ||
+      inputValue < defaultRange[0] ||
+      inputValue > defaultRange[1] ||
+      inputValue > value[1]
+    ) {
+      handleChange(event, [defaultRange[0], defaultRange[1]]);
+      return;
+    }
+    const newValue = [
+      event.target.value === '' ? 0 : Number(event.target.value),
+      value[1],
+    ];
+    setValue(newValue);
+    handleChange(event, newValue);
+  };
 
-  // const handleInputUpperChange = (event) => {
-  //   const inputValue = event.target.value;
-  //   if (isNaN(inputValue) || inputValue < defaultRange[0] || inputValue > defaultRange[1] || inputValue < value[0]) {
-  //     handleChange(event, [defaultRange[0], defaultRange[1]]);
-  //     return;
-  //   }
-  //   const newValue = [
-  //     value[0],
-  //     event.target.value === '' ? 0 : Number(event.target.value),
-  //   ];
-  //   setValue(newValue);
-  
-  //   if (newValue[0] > newValue[1]) {
-  //     setValue([newValue[1], newValue[0]]);
-  //   }
-  
-  //   handleChange(event, newValue);
-  // };
+  const handleInputUpperChange = (event) => {
+    const inputValue = event.target.value;
+    if (
+      isNaN(inputValue) ||
+      inputValue < defaultRange[0] ||
+      inputValue > defaultRange[1] ||
+      inputValue < value[0]
+    ) {
+      handleChange(event, [defaultRange[0], defaultRange[1]]);
+      return;
+    }
+    const newValue = [
+      value[0],
+      event.target.value === '' ? 0 : Number(event.target.value),
+    ];
+    setValue(newValue);
+
+    if (newValue[0] > newValue[1]) {
+      setValue([newValue[1], newValue[0]]);
+    }
+
+    handleChange(event, newValue);
+  };
 
   const handleChange = (event, [lower, upper]) => {
     setValue([lower, upper]);
@@ -218,6 +228,8 @@ const Filter = ({
               className="values"
               value={value[0]}
               id="inputLower"
+              onChange={handleInputLowerChange}
+              readOnly={true}
             />
           </div>
           <p className="dollar">$</p>
@@ -229,6 +241,8 @@ const Filter = ({
               className="values"
               value={value[1]}
               id="inputUpper"
+              onChange={handleInputUpperChange}
+              readOnly={true}
             />
           </div>
           <p className="dollar">$</p>

@@ -151,6 +151,8 @@ exports.createTransactionAndUpdateProject = (req, res) => {
     return;
   }
 
+  console.log("Create transaction and update project")
+
   const id = req.body.id;
 
   const transaction = {
