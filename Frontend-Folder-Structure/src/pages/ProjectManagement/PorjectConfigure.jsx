@@ -140,7 +140,9 @@ export const ProjectConfigure = () => {
             <div className="row-container">
               <div className="field-container">
                 <div className="title-text --size-16">Date begin</div>
-                <input id="startDate" type="date"name="start_date" className="label-text --size-20 my-input" value={project.start_date} onChange={handleInputChange}/>
+                {/* set minimun date to today */}
+                <input type="date" name="start_date" className="label-text --size-20 my-input" value={project.start_date} min={currentDate} onChange={handleInputChange}/>
+                {/* <input id="startDate" type="date"name="start_date" className="label-text --size-20 my-input" value={project.start_date} onChange={handleInputChange}/> */}
               
               </div>
 
@@ -164,7 +166,7 @@ export const ProjectConfigure = () => {
 
             <div className="project-requirement-container">
               <h4 className="title-text --size-20">Requierments</h4>
-              <TextField  multiline name="project_description" onChange={handleInputChange}/>
+              <TextField  multiline name="project_description" onChange={handleInputChange} value={project.project_description}/>
             </div>
 
 
