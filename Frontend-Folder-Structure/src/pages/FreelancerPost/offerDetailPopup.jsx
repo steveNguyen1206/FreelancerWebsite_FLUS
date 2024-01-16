@@ -5,9 +5,14 @@ import "./offerDetailPopup.css";
 import contactService from '@/services/contactServices';
 import OfferDetailTag from "@/components/Offer/offerDetailTag";
 
-const OfferDetailPopup = ({setPopUpAppear, checkOwner}) => {
+const OfferDetailPopup = ({
+  setPopUpAppear, 
+  checkOwner,
+  onChange
+}) => {
   const { id } = useParams();
   const [contactOnes, setContactOnes] = useState([]);
+  const [isChange, setIsChange] = useState(false);
   useEffect(() => {
     fetchContacts();
   }, []);
@@ -27,6 +32,7 @@ const OfferDetailPopup = ({setPopUpAppear, checkOwner}) => {
 
   const handleExitClick = () => {
     setPopUpAppear(false);
+    onChange();
   };
 
   return (
@@ -51,7 +57,11 @@ const OfferDetailPopup = ({setPopUpAppear, checkOwner}) => {
             <OfferDetailTag/>
             <OfferDetailTag/> */}
             {contactOnes.map((contactOne) => (
-              <OfferDetailTag contactOne={contactOne} checkOwner={checkOwner}/>
+              <OfferDetailTag 
+                contactOne={contactOne} 
+                checkOwner={checkOwner}
+                onChangeBid={()  => setIsChange(!isChange)}
+              />
             ))}
           </div>
       </div>
