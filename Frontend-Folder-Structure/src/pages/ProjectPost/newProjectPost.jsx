@@ -95,6 +95,13 @@ const NewProjectPost = ({ isOpen, onClose, onUpdate }) => {
       newErrors.image = 'Please select an image.';
       isValid = false;
     } else {
+      const file = newProject.image;
+      const allowedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webg'];
+
+      if (file && !allowedFormats.includes(file.type)) {
+        newErrors.image = 'Image file not in supported format!';
+        isValid = false;
+      }
       newErrors.image = '';
     }
 

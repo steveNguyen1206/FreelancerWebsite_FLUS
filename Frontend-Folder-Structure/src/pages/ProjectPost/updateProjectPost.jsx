@@ -97,6 +97,7 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setFileName(file.name);
+    console.log(file);
     setUpdateProject({ ...updateProject, image: file });
   };
 
@@ -123,6 +124,14 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
     if (!isValidImage(updateProject.image)) {
       newErrors.image = 'Please select an image.';
       isValid = false;
+    }else{
+      const file = updateProject.image;
+      const allowedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webg'];
+
+      if (file && !allowedFormats.includes(file.type)) {
+        newErrors.image = 'Image file not in supported format!';
+        isValid = false;
+      }
     }
 
     if (!isValidDetail(updateProject.detail)) {
