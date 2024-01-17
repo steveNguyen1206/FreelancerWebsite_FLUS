@@ -3,6 +3,7 @@ import './signup_tab_third.css';
 import authServices from '@/services/authServices';
 import smsAuthenService from '@/services/smsAuthen';
 import paymentServices from '@/services/paymentServices';
+import { useState } from 'react';
 
 const convertToPhoneNumber = (phone) => {
   return '+84' + phone.substring(1);
@@ -31,6 +32,8 @@ const SignUpTabThird = ({
       .signup(data)
       .then((response) => {
         if (response.status == 200) {
+          // show a dialog to notify user that they have signed up successfully
+          alert('Sign up successfully');
           console.log('Sign up successfully');
         }
         console.log(response.data);
@@ -49,13 +52,13 @@ const SignUpTabThird = ({
         });
       })
       .catch((e) => {
+        alert(e.response.data.message);
         console.log(e);
       });
   };
 
-  const error = {
-    code: '',
-  };
+  const [error, setError] = useState("");
+
 
   const handleEnterClick = () => {
     const smsMessage = {
@@ -77,12 +80,12 @@ const SignUpTabThird = ({
           onSignUp();
         } else {
           console.log('Error: ', response.message);
-          error.code = 'Code is not correct, please try again';
+          setError('Code is not correct, please try again');
         }
       })
       .catch((e) => {
         console.log('eRROR:', e.message);
-        error.code = 'Code is not correct, please try again';
+        setError('Code is not correct, please try again');
       });
   };
 
@@ -92,6 +95,9 @@ const SignUpTabThird = ({
         <label htmlFor="inputSMSCode" className="form-label">
           CODE
         </label>
+        <div className="text-intro">
+          We have sent a code to your phone number. Please check your phone and enter the code below.
+        </div>
         <input
           id="inputSMSCode"
           type="text"
@@ -104,13 +110,16 @@ const SignUpTabThird = ({
             setSignUpPayload({ ...signUpPayload, code: e.target.value })
           }
         />
-        <div className="error-message">{error.code}</div>
+        <div className="error-message">{error}</div>
       </div>
+
+      <div className='buttons-container'>
 
       <div onClick={() => setTab(2)} className="sign-up-button row">
         <div className="div-wrapper-b">
           <div className="text-wrapper-2">Back</div>
         </div>
+      </div>
       </div>
       <div
         onClick={() => {

@@ -109,6 +109,10 @@ const updateAvatar = (user_id, selectedFile) => {
   }});
 }
 
+const checkPhoneExist = (phone) => {
+  return http.get(`/user/check_phone/${phone}`);
+}
+
 const userDataService = {
   findAll,
   findOnebyId,
@@ -122,7 +126,8 @@ const userDataService = {
   changeStatusByID, // Add the new service function here
   changePassword,
   updateNameAndSocialLink,
-  updateAvatar
+  updateAvatar,
+  checkPhoneExist
 };
 
 
