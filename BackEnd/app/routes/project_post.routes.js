@@ -86,5 +86,7 @@ module.exports = (app) => {
     projectPostController.deleteById
   );
 
+  router.put("/findAndChangeStatus/:userId&:status", projectPostController.findAndChangeStatus);
+
   app.use("/api/project_post", router);
 };
