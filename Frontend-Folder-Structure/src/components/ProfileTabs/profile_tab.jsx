@@ -40,7 +40,7 @@ const BankTab = (userId) => {
     };
     console.log(payload);
     try {
-      const response = await paymentServices.createPaymentAccount(
+      const response = await paymentServices.updatePaymentAccount(
         payload,
         localStorage.getItem('AUTH_TOKEN')
       );
