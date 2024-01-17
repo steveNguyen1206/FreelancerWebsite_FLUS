@@ -120,8 +120,8 @@ const ProjectPostRow = ({
               }
               alt="profile"
             />
-            <div className="post-name">{ownerProject.account_name}</div>
-            <div className="post-username">({ownerProject.profile_name})</div>
+            <div className="post-name">{ownerProject.profile_name}</div>
+            <div className="post-username">({ownerProject.account_name})</div>
             <div className="post-location">
               <img src={vietnam} alt="vietnam" />
             </div>
