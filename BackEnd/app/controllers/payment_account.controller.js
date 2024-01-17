@@ -15,7 +15,7 @@ exports.create = (req, res) => {
   // Create a Tutorial
   const payment_account = {
     account_address: req.body.account_address,
-    user_id: req.userId,
+    user_id: req.body.userId,
   };
 
   // Save Tutorial in the database
