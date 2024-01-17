@@ -10,7 +10,9 @@ const User = db.user;
 exports.create = (req, res) => {
     // Validate request
     if (!req.body.content
-        || !req.body.type) {
+        || !req.body.type
+        || !req.body.projectId
+        || !req.body.assignTo) {
         res.status(400).send({
             message: "Missing information!"
         });
@@ -31,6 +33,7 @@ exports.create = (req, res) => {
                         status: 0,
                         userId: req.userId,
                         project_id: projectId,
+                        assignedUserId: req.body.assignTo,
                         amount: (req.body.type == 1) ? project_data.budget * 0.3 : project_data.budget * 0.7
                     };
                     // Save Tutorial in the database
@@ -160,7 +163,7 @@ exports.findIssuesByPage = (req, res) => {
     const { limit, offset } = getPagination(parseInt(page), parseInt(size));
 
     // Find all users with condition by page
-    Issue.findAndCountAll({ where: condition, limit, offset , include: [{ model: Project, as: "project" }]})
+    Issue.findAndCountAll({ where: condition, limit, offset, include: [{ model: Project, as: "project" }] })
         .then((data) => {
             // console.log(data)
             const { rows: m_issues, count: totalItems } = data;
@@ -186,18 +189,12 @@ exports.acceptIssue = (req, res) => {
     const id = req.params.issueId;
     Issue.update({ status: 1 }, {
         where: { id: id }
-    })
-    .then(num => {
+    }).then(num => {
         if (num == 1) {
-            // res.status(200).send({
-            // message: "Issue was updated successfully."
-            // });
-
-            const upadte = { status: 5 }
-            Project.update(upadte, {
-                where: { id: req.body.projectId }
-            })
-                .then(num => {
+                const upadte = { status: 5 }
+                Project.update(upadte, {
+                    where: { id: req.body.projectId }
+                }).then(num => {
                     if (num == 1) {
                         const notification = {
                             title: req.body.subject,
@@ -207,43 +204,66 @@ exports.acceptIssue = (req, res) => {
                         }
 
                         ProjectNoti.create(notification)
-                            .then(noti_data => {
-                                // res.send(project_data);
-                                res.send({
-                                    message: "Refound successfully."
-                                });
-
-                                // let reported_time = 
-                                
-                            })
-                            .catch(err => {
+                        .then(noti_data => {
+                            // res.send(project_data);
+                            User.findByPk(req.body.assignTo)
+                            .then( user_data => {
+                                console.log("USER DATA");
+                                console.log(user_data);
+                                let reported_time = user_data.reported_times + 1;
+                                const user_update = { reported_times: reported_time }
+                                User.update(user_update, {
+                                    where: { id: req.body.assignTo }
+                                }).then( num => {
+                                    if (num == 1) {
+                                        res.send({
+                                            message: "User was updated successfully."
+                                        });
+                                    } else {
+                                        res.send({
+                                            message: `Cannot update User with id=${id}.`
+                                        });
+                                    }
+                                }).catch(err => {
+                                    res.status(500).send({
+                                        message: "Error updating User with id=" + id
+                                    });
+                                })
+                            }).catch(err => {
                                 res.status(500).send({
-                                    message:
-                                        err.message || "Some error occurred while resoling issue."
+                                    message: "Error retrieving User with id=" + id,
                                 });
                             });
+
+                        }).catch(err => {
+                            res.status(500).send({
+                                message:
+                                    err.message || "Some error occurred while resoling issue."
+                            });
+                        });
                     } else {
                         res.send({
                             message: `Cannot update project`
                         });
                     }
-                })
-                .catch(err => {
+                }).catch(err => {
                     res.status(500).send({
                         message: "Error updating Project with error=" + err
                     });
                 });
+           
         } else {
             res.send({
                 message: `Cannot update Issue with id=${id}`
             });
         }
-    })
-    .catch(err => {
+    }).catch(err => {
         res.status(500).send({
             message: "Error updating Issue with id=" + id
         });
     });
+
+
 }
 
 exports.rejectIssue = (req, res) => {
@@ -251,54 +271,54 @@ exports.rejectIssue = (req, res) => {
     Issue.update({ status: 2 }, {
         where: { id: id }
     })
-    .then(num => {
-        if (num == 1) {
-            const upadte = { status: 5 }
-            Project.update(upadte, {
-                where: { id: req.body.projectId }
-            })
-                .then(num => {
-                    if (num == 1) {
-                        const notification = {
-                            title: req.body.subject,
-                            content: req.body.message,
-                            creator_id: req.userId,
-                            project_id: req.body.projectId
-                        }
-
-                        ProjectNoti.create(notification)
-                            .then(noti_data => {
-                                // res.send(project_data);
-                                res.send({
-                                    message: "Issue resolved!"
-                                });
-                            })
-                            .catch(err => {
-                                res.status(500).send({
-                                    message:
-                                        err.message || "Some error occurred while resolving issue."
-                                });
-                            });
-                    } else {
-                        res.send({
-                            message: `Cannot update project`
-                        });
-                    }
+        .then(num => {
+            if (num == 1) {
+                const upadte = { status: 5 }
+                Project.update(upadte, {
+                    where: { id: req.body.projectId }
                 })
-                .catch(err => {
-                    res.status(500).send({
-                        message: "Error updating Project with error=" + err
+                    .then(num => {
+                        if (num == 1) {
+                            const notification = {
+                                title: req.body.subject,
+                                content: req.body.message,
+                                creator_id: req.userId,
+                                project_id: req.body.projectId
+                            }
+
+                            ProjectNoti.create(notification)
+                                .then(noti_data => {
+                                    // res.send(project_data);
+                                    res.send({
+                                        message: "Issue resolved!"
+                                    });
+                                })
+                                .catch(err => {
+                                    res.status(500).send({
+                                        message:
+                                            err.message || "Some error occurred while resolving issue."
+                                    });
+                                });
+                        } else {
+                            res.send({
+                                message: `Cannot update project`
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        res.status(500).send({
+                            message: "Error updating Project with error=" + err
+                        });
                     });
+            } else {
+                res.send({
+                    message: `Cannot update Issue with id=${id}`
                 });
-        } else {
-            res.send({
-                message: `Cannot update Issue with id=${id}`
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Error updating Issue with id=" + id
             });
-        }
-    })
-    .catch(err => {
-        res.status(500).send({
-            message: "Error updating Issue with id=" + id
         });
-    });
 }

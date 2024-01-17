@@ -111,15 +111,27 @@ db.transactions.belongsTo(db.projects, {
 });
 
 db.payment_accounts.belongsTo(db.user, {
-  foreignKey: 'user_id',
-  onDelete: 'CASCADE',
-  onUpdate: 'CASCADE'
+  foreignKey: {
+    name: "user_id",
+    allowNull: false,
+    unique: true,
+  },
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
 })
+
 
 db.user.belongsToMany(db.subcategories, { through: "user_subcategory" });
 db.subcategories.belongsToMany(db.user, { through: "user_subcategory" });
 
 db.issues.belongsTo(db.user, {
+  foreignKey: "userId",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+db.issues.belongsTo(db.user, {
+  foreignKey: "assignedUserId",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });

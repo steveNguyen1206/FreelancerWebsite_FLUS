@@ -49,6 +49,13 @@ const createPaymentAccount = (data, access_token) => {
   }});
 }
 
+const getPaymentAccount = (access_token) => {
+  return http.get(`/payment_account`, {headers: {
+    "Content-type": "application/json",
+    "x-access-token": access_token,
+  }});
+}
+
 
 const paymentServices = {
  createOrder,
@@ -58,7 +65,8 @@ const paymentServices = {
  acceptProject,
  rejectProject,
  resolveComplaint,
- createPaymentAccount
+ createPaymentAccount,
+ getPaymentAccount
  
 };
 
