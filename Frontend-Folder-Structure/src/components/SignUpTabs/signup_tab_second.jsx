@@ -10,7 +10,7 @@ const isValidEmail = (email) => {
   return emailRegex.test(email);
 };
 
-const isValidPhone = (phone) => {
+const isValidPhone = async (phone) => {
   // the phone number must has 10 exactly digits
   const phoneRegex = /^\d{10}$/;
 
@@ -19,10 +19,10 @@ const isValidPhone = (phone) => {
     return false;
   } else {
     // check if phone number is used by another account
-    userDataService
+   return userDataService
       .checkPhoneExist(phone)
       .then((response) => {
-        console.log(response);
+        console.log("chec phone exist");
         console.log(response.data.phoneExisted);
         if (response.data.phoneExisted == false) {
           console.log('2');
@@ -69,9 +69,9 @@ const SignUpTabSecond = ({ setTab, signUpPayload, setSignUpPayload }) => {
     nationality: '',
   });
 
-  const isValidForm = () => {
-    isValidPhone(signUpPayload.phone).then((valid) => {
-      console.log('Check valid phone: ', checkValidPhone);
+  const isValidForm = async () => {
+    return isValidPhone(signUpPayload.phone).then(valid => {
+      console.log('Check valid phone: ', valid);
 
       const errors = {
         email: isValidEmail(signUpPayload.email)
@@ -85,13 +85,18 @@ const SignUpTabSecond = ({ setTab, signUpPayload, setSignUpPayload }) => {
       };
       console.log(errors);
       setError(errors);
+       return !Object.values(errors).some((error) => error !== '');
+
+    }).catch((e) => {
+      console.log("check phone error");
+      console.log(e);
     });
-    return !Object.values(errors).some((error) => error !== '');
   };
 
   const handleVerifyClick = () => {
     console.log('handleVerifyClick');
-    isValidForm().then((valid) => {
+    isValidForm().then(valid => {
+      console.log('valid: ', valid);
       if (valid) {
         console.log(signUpPayload.phone);
         var phoneNum = {
@@ -114,6 +119,10 @@ const SignUpTabSecond = ({ setTab, signUpPayload, setSignUpPayload }) => {
       } else {
         console.log('Form is not valid. Please check the errors.');
       }
+    })
+    .catch((e) => {
+      console.log("check form error");
+      console.log(e);
     });
   };
 
