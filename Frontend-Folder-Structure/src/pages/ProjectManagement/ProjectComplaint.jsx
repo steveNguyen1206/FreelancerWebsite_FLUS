@@ -14,6 +14,7 @@ export const ProjectComplaint = () => {
     projectId: project.id,
     type: isOwn ? 1 : 2,
     status: 0,
+    assignTo: isOwn ? project.member_id : project.owner_id,
   };
   const [issue, setIssue] = useState(initialPayload);
   const [sended, setSended] = useState(false);
@@ -117,7 +118,7 @@ export const ProjectComplaint = () => {
               <button
                 className="my-button --button-green"
                 onClick={handleCreateIssue}
-                disabled={project.status != 3}
+                disabled={project.status != 4}
               >
                 Send Complaint
               </button>

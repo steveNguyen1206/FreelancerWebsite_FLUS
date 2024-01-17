@@ -25,6 +25,12 @@ const BankTab = (userId) => {
 
   useEffect(() => {
     setSended(false);
+    paymentServices.getPaymentAccount(localStorage.getItem('AUTH_TOKEN')).then((res) => {
+      if (res.status == 200) {
+        setPaymentAccount(res.data.account_address);
+      }
+      console.log(res.data.account_address)
+    });
   }, []);
 
   const handleSubmit = async (e) => {
@@ -60,10 +66,11 @@ const BankTab = (userId) => {
             <input
               className="paypal-mail"
               placeholder="Input your paypal email here to add your paypal account"
+              value={paymentAccount}
               onChange={(e) => setPaymentAccount(e.target.value)}
             />
             <button text={'Add Paypal'} className="add-paypal-btn" onClick={handleSubmit}>
-              Add Paypal
+              Update Paypal Account
             </button>
           </div>
           {/* <div className='available-payment-header'>
