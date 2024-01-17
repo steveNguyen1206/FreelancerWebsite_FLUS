@@ -21,6 +21,9 @@ module.exports = (app) => {
   // Retrieve a single User with email
   router.get("/email/:email", user_controller.findOnebyEmail);
 
+  // check if phone number is available
+  router.get("/check_phone/:phone", user_controller.checkPhoneExist);
+
   // Route to get users by page and size
   router.get('/getusers/:page&:size&:searchKey', [verifyToken, isAdmin], user_controller.findUsersbyPage);
   router.get('/getusers/:page&:size', [verifyToken, isAdmin], user_controller.findUsersbyPage);
