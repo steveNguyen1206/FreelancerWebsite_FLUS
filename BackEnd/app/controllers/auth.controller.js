@@ -33,6 +33,7 @@ exports.signup = (req, res) => {
   // Save User in the database
   User.create(user)
     .then((data) => {
+      console.log("data sau khi signup: ", data);
       res.status(200).send(data);
     })
     .catch((err) => {

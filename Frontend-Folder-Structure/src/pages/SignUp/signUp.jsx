@@ -27,6 +27,7 @@ const SignUp = () => {
     realName: '',
     nationality: '',
     code: '',
+    payment_account: '',
   };
 
   let navigate = useNavigate();

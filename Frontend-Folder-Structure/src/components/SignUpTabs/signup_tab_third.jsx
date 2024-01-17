@@ -2,6 +2,7 @@ import React from 'react';
 import './signup_tab_third.css';
 import authServices from '@/services/authServices';
 import smsAuthenService from '@/services/smsAuthen';
+import paymentServices from '@/services/paymentServices';
 
 const convertToPhoneNumber = (phone) => {
   return '+84' + phone.substring(1);
@@ -32,6 +33,20 @@ const SignUpTabThird = ({
         if (response.status == 200) {
           console.log('Sign up successfully');
         }
+        console.log(response.data);
+        paymentServices
+        .createPaymentAccount({
+          account_address: signUpPayload.payment_account,
+          userId: response.data.id,
+        })
+        .then((response) => {
+          if (response.status == 200) {
+            console.log('Create payment account successfully');
+          }
+        })
+        .catch((e) => {
+          console.log('Create payment account failed');
+        });
       })
       .catch((e) => {
         console.log(e);
