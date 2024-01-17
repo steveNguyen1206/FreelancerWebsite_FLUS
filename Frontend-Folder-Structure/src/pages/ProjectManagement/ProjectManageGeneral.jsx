@@ -246,7 +246,7 @@ export const ProjectManageGeneral = () => {
       <div className="frame">
         <div className="project-title-container">
           <h2 className="title-text --size-28 --color-white">
-            {project.status == 0 ? 'Confiugre Project' : project.project_name}
+            {project.status == 0 ? 'Configure Project' : project.project_name}
           </h2>
         </div>
         <div className="function-text-wraper">

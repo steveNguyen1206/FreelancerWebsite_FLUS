@@ -94,6 +94,7 @@ export const ProjectReportJudging = () => {
           'The client has fully paid the project budget. Time to judging project report. Freelancer will get all the remuneration after your report be accepted.',
       };
       const response = await paymentServices.paidAndUpdateProject(
+        reference.project.id,
         payload,
         localStorage.getItem('AUTH_TOKEN')
       );
@@ -395,6 +396,7 @@ export const ProjectReportJudging = () => {
                         name="end_date"
                         className="label-text --size-20 my-input"
                         onChange={handleInputChange}
+                        // min = {project.end_date}
                         value={project.end_date}
                       />
                     </div>

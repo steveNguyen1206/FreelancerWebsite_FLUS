@@ -6,9 +6,16 @@ import paymentServices from '@/services/paymentServices';
 const PaymentAccountTab = ({ userId }) => {
   const [sended, setSended] = useState(false);
   const [paymentAccount, setPaymentAccount] = useState(''); 
+  
 
   useEffect(() => {
     setSended(false);
+    paymentServices.getPaymentAccount(localStorage.getItem('AUTH_TOKEN')).then((res) => {
+      if (res.status == 200) {
+        setPaymentAccount(res.data.account_address);
+      }
+      console.log(res.data.account_address)
+    });
   }, []);
 
   const handleSubmit = async (e) => {
@@ -44,6 +51,7 @@ const PaymentAccountTab = ({ userId }) => {
               className="my-text-input my-input"
               placeholder="paypal@payment.com"
               style={{ marginBottom: '36px' }}
+              value={paymentAccount}
               onChange={(e) => setPaymentAccount(e.target.value)}
             />
             <button

@@ -28,6 +28,7 @@ const PostDetail = () => {
   const [project, setProject] = useState([]);
   const [userId, setUserId] = useState(0);
   const [user, setUser] = useState([]);
+  const [isChangeBid, setIsChangeBid] = useState(false);
 
 
 
@@ -136,9 +137,21 @@ const PostDetail = () => {
 
   const [numberOffer, setNumberOffer] = useState(0);
   const [bidOnes, setBidOnes] = useState([]);
+
+  const onChangeBid = () => {
+    setIsChangeBid(!isChangeBid);
+  };
+
   useEffect(() => {
     fetchBids();
-  }, []);
+  }, [isChangeBid, isChange]);
+
+  useEffect(() => {
+    if (isChangeBid) {
+      fetchBids();
+      setIsChangeBid(false);
+    }
+  }, [isChangeBid]);
 
   const fetchBids = async () => {
     try {
@@ -163,7 +176,17 @@ const PostDetail = () => {
         />
       )}
       {showHirePopup && <HireFreelancer setShowHirePopup={setShowHirePopup}  onUpdate={() => { setIsChange(!isChange) }}/>}
-      {showOfferPopup && <OfferDetailPopup setPopUpAppear={setShowOfferPopup} checkOwner={check_type(userId, login_id)}/>}
+      {showOfferPopup && 
+        <OfferDetailPopup 
+          setPopUpAppear={setShowOfferPopup} 
+          checkOwner={check_type(userId, login_id)}
+          onChange={
+            () => {
+              // setIsChange(!isChange);
+              setIsChangeBid(!isChangeBid);
+            }
+          }
+      />}
       <div className="pproject">
         <div className="left-project">
           <div className="main-post">
@@ -294,7 +317,7 @@ const PostDetail = () => {
             <div className="proj-bid-list">
 
               {bidOnes.map((bidOne) => (
-                <BidOffer bidOne={bidOne} checkOwner={check_type(userId, login_id)} />
+                <BidOffer bidOne={bidOne} checkOwner={check_type(userId, login_id)} onChangeBid={onChangeBid}/>
               ))}
 
               {/* <Bid />

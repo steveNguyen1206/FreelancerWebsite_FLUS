@@ -257,11 +257,11 @@ const Project = () => {
                   <div className="project-username-right">
                     <p>({project.user.profile_name})</p>
                   </div>
-                  <div className="project-right-stars">
+                  {/* <div className="project-right-stars">
                     <StarRating rating={project.user.avg_rating} width={100} />
                     <p>{project.user.avg_rating}</p>
                     <div className="project-right-nstars"></div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="project-location-right">
                   <img src={vietnam} alt="vietnam" />

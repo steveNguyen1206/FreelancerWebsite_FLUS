@@ -12,9 +12,12 @@ const sendEmailToFreelancer = (req, res) => {
   // console.log("freelancer_post_id from sendEmail: ",freelancer_post_id)
   console.log("url from sendEmail: ",url);
 
-  let message = "Someone is asking to join a project with you! Check your FLUS account to see the BIDs.";
+  let message = "Someone is asking to join a project with you! Check your FLUS account to see more";
 
-  if (url.includes("project-manage")) {
+  if (url.includes("my-project-manage")){
+    message = "Freelancer have accepted the invitation to join your project! Click the link below to see more";
+  }
+  else if (url.includes("project-manage")) {
     message = "You have accepted the invitation to join a project! Check your FLUS account to see the BIDs.";
   }
 

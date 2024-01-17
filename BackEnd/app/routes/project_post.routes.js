@@ -57,9 +57,6 @@ module.exports = (app) => {
   // get owner project `/project_post/owner/${id}`
   router.get("/owner/:id", projectPostController.findOwnerProject);
 
-  // `/project_post/${id}`
-  router.get("/:id", projectPostController.findOne);
-
   // /project_post/update
   router.put("/:id", upload.single("image_file"), projectPostController.update);
 

@@ -34,7 +34,9 @@ const countBids = freelancer_post_id => {
 
 const changeContactStatus = (contact_id, status) => {
   const access_token = localStorage.getItem('AUTH_TOKEN');
-  return http.put("/contact/changeContactStatus/" + contact_id + "/" + status, {
+  // console.log("test token in change contact", access_token)
+  console.log("test contact id", contact_id)
+  return http.put("/contact/changeContactStatus/" + contact_id + "/" + status, {}, {
     headers: {
       "Content-type": "application/json",
       "x-access-token": access_token,

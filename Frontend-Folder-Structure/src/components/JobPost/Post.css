@@ -96,7 +96,7 @@
   text-align: center;
   align-items: center;
   height: 15px;
-  justify-content: space-around;
+  justify-content: center;
 }
 
 .post-container .rating-container{
@@ -115,6 +115,7 @@
   font-size: var(--xlarge-font-size);
   font-family: Inter-Bold, sans-serif;
   font-weight: 700;
+  color: var(--primary);
 }
 
 .post-container .btn-bid-container{
@@ -131,6 +132,7 @@
   background-color: var(--primary);
   border: none;
   border-radius: 8px;
+  color: #FFF;
 }
 
 .post-container .post-wish button{
@@ -153,8 +155,9 @@
   flex-direction: column;
   justify-content: space-around;
   text-align: center;
-  margin-top: 70px;
+  margin-top: 60px;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 .post-container .post-wish img{

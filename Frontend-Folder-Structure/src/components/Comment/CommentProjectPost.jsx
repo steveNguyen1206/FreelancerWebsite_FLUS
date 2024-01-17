@@ -78,7 +78,7 @@ const CommentProject = ({ project_post_id }) => {
         .then((res) => {
           fetchComment();
         });
-      setCommentList(commentData.data);
+      setCommentList(comment.data);
     } catch (error) {
       console.error('Error creating comment:', error);
     }

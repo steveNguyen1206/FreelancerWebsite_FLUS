@@ -9,14 +9,14 @@ import userDataService from '@/services/userDataServices';
 
 const isValidTitle = (title) => {
   if (!title) return false;
-  const titleRegex = /^[a-zA-Z0-9\s]*$/;
+  const titleRegex = /^[a-zA-Z0-9\s\-]*$/;
   return titleRegex.test(title);
 };
 
 const isValidAboutMe = (about_me) => {
   // const detailRegex = /^.{10,}$/;
   // return detailRegex.test(detail);
-  const aboutMeRegex = /^[a-zA-Z0-9\s]*$/;  
+  const aboutMeRegex = /^[a-zA-Z0-9\s\-\.\,\!\?]*$/;  
   return aboutMeRegex.test(about_me);
 };
 
@@ -26,7 +26,7 @@ const isValidDeliveryDescription = (delivery_description) => {
 };
 
 const isValidSkillDescription = (skill_description) => {
-  const skillRegex = /^[a-zA-Z0-9\s]{1,511}$/;
+  const skillRegex = /^[a-zA-Z0-9\s\-\.\,\!\?]{1,511}$/;
   return skillRegex.test(skill_description);
 };
 
@@ -76,61 +76,104 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
     revision_number: '',
     imgage_post_urls: '',
     skill_tag: '',
-    image_file: null // Lấy file ảnh luôn
+    image_file: '' // Lấy file ảnh luôn
   };
+  const [fileName, setFileName] = useState('');
+  const [newPost, setNewPost] = useState(initState);
 
   const validateForm = () => {
     let isValid = true;
     const newErrors = {...errors};
 
-    if (!isValidTitle(newPost.title)) {
+    if (!newPost.title) {
+      newErrors.title = 'Please write your post title.';
+      isValid = false;
+    } else  if (newPost.title.length > 70) {
+      newErrors.title = 'The title must not exceed 70 characters.';
+      isValid = false;
+    }else if (!isValidTitle(newPost.title)) {
       newErrors.title = 'Title is invalid. Title must be alphanumeric and not empty.';
       isValid = false;
     } else {
       newErrors.title = '';
     }
 
-    if (!isValidAboutMe(newPost.about_me)) {
+    if (!newPost.image_file) {
+      newErrors.image = 'Please select an image.';
+      isValid = false;
+    } else {
+      const file = newPost.image_file;
+      const allowedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webg'];
+
+      if (file && !allowedFormats.includes(file.type)) {
+        newErrors.image = 'Image file not in supported format!';
+        isValid = false;
+      }else
+        newErrors.image = '';
+    }
+
+    if (!newPost.about_me) {
+      newErrors.about_me = 'Please write about yourself.';
+      isValid = false;
+    } else if (!isValidAboutMe(newPost.about_me)) {
       newErrors.about_me = 'About me is invalid. About me must be alphanumeric and not empty.';
       isValid = false;
     } else {
-      newErrors.about_me = '';
+        newErrors.about_me = '';
     }
 
-    if (!isValidDeliveryDescription(newPost.delivery_description)) {
+    if (!newPost.delivery_description) {
+      newErrors.delivery_description = 'Please write about your delivery.';
+      isValid = false;
+    } else if (!isValidDeliveryDescription(newPost.delivery_description)) {
       newErrors.delivery_description = 'Delivery description is invalid. Delivery description must be alphanumeric and not empty.';
       isValid = false;
     } else {
-      newErrors.delivery_description = '';
+      
+        newErrors.delivery_description = '';
     }
 
-    if (!isValidSkillDescription(newPost.skill_description)) {
+    if (!newPost.skill_description) {
+      newErrors.skill_description = 'Please write about your skill.';
+      isValid = false;
+    } else if (!isValidSkillDescription(newPost.skill_description)) {
       newErrors.skill_description = 'Skill description is invalid. Skill description must be alphanumeric and not empty.';
       isValid = false;
     } else {
-      newErrors.skill_description = '';
+      
+        newErrors.skill_description = '';
     }
 
-    if (!isValidLowestPrice(newPost.lowset_price)) {
+    if (!newPost.lowset_price) {
+      newErrors.lowset_price = 'Please specify your lowest price.';
+      isValid = false;
+    } else if (!isValidLowestPrice(newPost.lowset_price)) {
       newErrors.lowset_price = 'Lowest price is invalid. Lowest price must be numeric and greater than 0.';
       isValid = false;
     } else {
-      newErrors.lowset_price = '';
+        newErrors.lowset_price = '';
     }
 
-    if (!isValidDeliveryDue(newPost.delivery_due)) {
+    if (!newPost.delivery_due) {
+      newErrors.delivery_due = 'Please specify your delivery due.';
+      isValid = false;
+    } else if (!isValidDeliveryDue(newPost.delivery_due)) {
       newErrors.delivery_due = 'Delivery due is invalid. Delivery due must be numeric and greater than or equal to 0.';
       isValid = false;
     }
     else {
-      newErrors.delivery_due = '';
+      
+        newErrors.delivery_due = '';
     }
 
-    if (!isValidRevisionNumber(newPost.revision_number)) {
+    if (!newPost.revision_number) {
+      newErrors.revision_number = 'Please specify your revision number.';
+      isValid = false;
+    } else if (!isValidRevisionNumber(newPost.revision_number)) {
       newErrors.revision_number = 'Revision number is invalid. Revision number must be numeric and greater than or equal to 0.';
       isValid = false;
     } else {
-      newErrors.revision_number = '';
+        newErrors.revision_number = '';
     }
 
     setErrors(newErrors);
@@ -159,8 +202,7 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
       });
   }
 
-  const [fileName, setFileName] = useState('');
-  const [newPost, setNewPost] = useState(initState);
+  
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -255,7 +297,7 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
                 </option>
               ))}
             </select>
-            {/* <div className="error-message">{errors.title}</div> */}
+            {/* <div className="error-message">{errors.}</div> */}
           </div>
 
           <div className="add-image-input">
@@ -290,7 +332,7 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
                 Supported formats: JPEG, PNG, JPG
               </p>
             </div>
-            {/* <div className="error-message">{errors.}</div> */}
+            <div className="error-message">{errors.image}</div>
           </div>
 
           <div className="project-title-input">

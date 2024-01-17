@@ -105,7 +105,7 @@ export const ProjectReport = () => {
             <TextField
               multiline
               name="resources"
-              placeholder="Place resources that contain your work heres."
+              placeholder="Place resources that contain your work heres. Please paste your link to resources here."
               sx={{ backgroundColor: '#EBE8E8' }}
               minRows={5}
               onChange={handleInputChange}

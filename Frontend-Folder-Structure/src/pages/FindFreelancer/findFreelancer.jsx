@@ -99,16 +99,15 @@ const FindFreelancer = () => {
 
   const filteredPosts = posts.filter(
     (post) =>
-      // post.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
+      post.title.toLowerCase().includes(searchTitle.toLowerCase()) &&
       // if selectedTags is empty, ignore the tag filter
+      post.lowset_price >= selectedRange[0] &&
+      post.lowset_price <= selectedRange[1] &&
       (selectedTags.length == 0 && selectedCategory == null ) ||
-
       (  ( selectedTags.includes(post.subcategory.id) ) ||
-        ( post.subcategory.category.name == selectedCategory) ) &&
+        ( post.subcategory.category.name == selectedCategory) ) 
         // (categoryId == null || post.subcategory.categoryId == categoryId) && 
       // (categoryId == null || true) &&
-      post.lowset_price >= selectedRange[0] &&
-      post.lowset_price <= selectedRange[1] 
   
   );
   // console.log('selectedRange', selectedRange);
@@ -130,7 +129,8 @@ const FindFreelancer = () => {
     }
   };
   console.log('filteredPosts', filteredPosts); 
-
+  console.log('selectedRange[0]', selectedRange[0]);
+  console.log('selectedRange[1]', selectedRange[1]);
   return (
     <>
       {(userId != null) && isOpen && <NewPost isOpen={isOpen} onClose={() => setIsOpen(false)} onUpdate={() => { setIsChange(true) }} />}

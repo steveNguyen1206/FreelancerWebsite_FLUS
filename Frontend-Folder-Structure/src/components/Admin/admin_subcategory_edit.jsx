@@ -111,7 +111,7 @@ const EditSubcategory = ({
                 className="delete-category-button"
                 onClick={handleDeleteSubcategory}
               >
-                <div className="div-wrapper">Delete</div>
+                <div className="div-wrapper-delete">Delete</div>
               </div>
 
               <div
