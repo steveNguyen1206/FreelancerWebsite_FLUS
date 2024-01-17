@@ -52,6 +52,11 @@ const isValidNationaity = (nationality) => {
 const convertPhone = (phone) => {
   return '+84' + phone.substring(1);
 };
+const isValidPaymentAccount = (payment_account) => {
+  const payment_accountRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return payment_accountRegex.test(payment_account);
+}
+
 
 const SignUpTabSecond = ({ setTab, signUpPayload, setSignUpPayload }) => {
   const handleChange = (event) => {
@@ -67,6 +72,7 @@ const SignUpTabSecond = ({ setTab, signUpPayload, setSignUpPayload }) => {
     phone: '',
     realName: '',
     nationality: '',
+    payment_account: '',
   });
 
   const isValidForm = async () => {
@@ -82,6 +88,7 @@ const SignUpTabSecond = ({ setTab, signUpPayload, setSignUpPayload }) => {
         nationality: isValidNationaity(signUpPayload.nationality)
           ? ''
           : 'Invalid nationality.',
+      payment_account: isValidPaymentAccount(signUpPayload.payment_account) ? '' : 'Invalid payment account.',
       };
       console.log(errors);
       setError(errors);
@@ -186,6 +193,22 @@ const SignUpTabSecond = ({ setTab, signUpPayload, setSignUpPayload }) => {
           onChange={handleChange}
         />
         <div className="error-message">{error.nationality}</div>
+      </div>
+
+      <div className="input-container">
+        <label htmlFor="inputName" className="form-label">
+          Payment Account
+        </label>
+        <input
+          type="text"
+          id="inputName"
+          className="form-control"
+          name="payment_account"
+          aria-describedby="passwordHelpBlock"
+          value={signUpPayload.payment_account}
+          onChange={handleChange}
+        />
+        <div className="error-message">{error.payment_account}</div>
       </div>
 
       <div className="error-message">{OTPError}</div>
