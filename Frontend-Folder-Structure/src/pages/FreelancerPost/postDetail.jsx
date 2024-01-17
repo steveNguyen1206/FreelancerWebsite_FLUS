@@ -144,7 +144,7 @@ const PostDetail = () => {
 
   useEffect(() => {
     fetchBids();
-  }, [isChangeBid]);
+  }, [isChangeBid, isChange]);
 
   useEffect(() => {
     if (isChangeBid) {

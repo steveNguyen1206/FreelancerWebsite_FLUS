@@ -63,7 +63,10 @@ const isValidStartEndDate = (start_date, end_date) => {
 }
 
 const HireFreelancer = ({ isOpen, onClose, onUpdate, setShowHirePopup }) => {
+    // setShowHirePopup(true/false): set show hire popup in FreelancerPost.jsx
+    // onUpdate: update FreelancerPost.jsx when submit form
     const [showOverlay, setShowOverlay] = useState(isOpen);
+    const [uploadError, setUploadError] = useState('');
     const [error, setError] = useState({
         client_name: '',
         client_company: '',
@@ -191,12 +194,14 @@ const HireFreelancer = ({ isOpen, onClose, onUpdate, setShowHirePopup }) => {
                     console.log('Form is valid. Post submitted successfully.');
                     // varCreate = 1
                     setShowOverlay(false);
+                    setShowHirePopup(false);
                     onUpdate();
                     if (onClose) {
                         onClose();
                     }
                 })
                 .catch((error) => {
+                    setUploadError(error.message);
                     console.error('Error submitting post:', error.message);
                 });
         } else {
@@ -316,6 +321,8 @@ const HireFreelancer = ({ isOpen, onClose, onUpdate, setShowHirePopup }) => {
                         <div className="error-message">{error.end_date}</div>
                     </div>
 
+                    <div className="error-message">{uploadError}</div>
+                    
                     <WhiteButton text="Send" onClick={handleDoneClick} />
                     {/* <button onClick={handleDoneClick}>Send</button> */}
                 </div>
