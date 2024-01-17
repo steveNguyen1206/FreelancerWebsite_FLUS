@@ -428,6 +428,10 @@ exports.showContactByContactId = (req, res) => {
         model: Freelancer_post,
         attributes: ['freelancer_id', 'skill_tag'],
       },
+      {
+        model: User,
+        attributes: ['id', 'email'],
+      }
     ],
 
   })
