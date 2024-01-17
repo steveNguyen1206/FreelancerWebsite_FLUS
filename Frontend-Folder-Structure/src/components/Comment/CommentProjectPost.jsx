@@ -26,7 +26,6 @@ const CommentProject = ({ project_post_id }) => {
       const sortedComments = commentData.data.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
-
       setCommentList(sortedComments);
     } catch (error) {
       console.error('Error fetching comment:', error);
@@ -78,7 +77,6 @@ const CommentProject = ({ project_post_id }) => {
         .then((res) => {
           fetchComment();
         });
-      setCommentList(commentData.data);
     } catch (error) {
       console.error('Error creating comment:', error);
     }
@@ -119,7 +117,6 @@ const CommentProject = ({ project_post_id }) => {
           <div key={commentElement.comment_id}>
             <Commentator
               user={commentElement.user}
-              userRating={commentElement.userRating}
               commentContent={commentElement.comment}
               dateCreated={commentElement.createdAt}
               comment_id={commentElement.id}
@@ -133,7 +130,6 @@ const CommentProject = ({ project_post_id }) => {
                 <Responder
                   key={childComment.comment_id}
                   user={childComment.user}
-                  userRating={childComment.userRating}
                   commentContent={childComment.comment}
                   dateCreated={childComment.createdAt}
                 />

@@ -131,18 +131,18 @@ const signUpTabFirst = ({ setTab, signUpPayload, setSignUpPayload }) => {
       }
     },
   });
-
   return (
+    
     <div className="info-field">
       <div className="input-container">
-        <label for="inputUsername" class="form-label">
+        <label htmlFor="inputUsername" class="form-label">
           Username
         </label>
         <input
           id="inputUsername"
           type="text"
           name="userName"
-          class="form-control"
+          className="form-control"
           placeholder="Username"
           aria-label="Username"
           value={signUpPayload.userName}

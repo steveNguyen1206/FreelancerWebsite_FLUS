@@ -90,20 +90,13 @@ const ProjectPostRow = ({
   };
 
   const [review, setReview] = useState([]);
-  console.log('userID: ', userID);
 
   useEffect(() => {
-    reviewService
-      .getRatingClient(userID)
-      .then((response) => {
-        setReview(response.data);
-        console.log('review: ', response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    reviewService.getRating(userID).then((response) => {
+      console.log('response: ', response);
+      setReview(response.data);
+    });
   }, []);
-
 
   return (
     <div className="proj-post-container">
@@ -138,10 +131,9 @@ const ProjectPostRow = ({
       <div className="right-post">
         <div className="post-reviews">
           <div className="post-rating">
-            <p>{review.averageStar}</p>
+            <p>{review.average}</p>
             <StarRating
-              // rating={parseFloat(ownerRating)}
-              rating={review.averageStar}
+              rating={review.average}
               width={100}
               className="pstars"
             />

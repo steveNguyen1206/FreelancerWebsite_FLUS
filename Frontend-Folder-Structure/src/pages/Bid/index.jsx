@@ -17,6 +17,11 @@ const isValidEmail = (email) => {
   return emailRegex.test(email);
 };
 
+const checkLength = (str, num) => {
+  return str.length >= num;
+};
+
+
 const isValidMessage = (message) => {
   if (message === '') return false;
   // message is not empty and contains at least 10 Unicode letters, numbers, spaces, or punctuation
@@ -106,6 +111,7 @@ const BidPopup = ({ isOpen, isClose, projectPostId, onChange, budgetMin, budgetM
         'Invalid message. Message must have at least 10 letters.';
     }
 
+
     if (!isValidPrice(bid.price)) {
       isValid = false;
       errors.price =
@@ -139,7 +145,7 @@ const BidPopup = ({ isOpen, isClose, projectPostId, onChange, budgetMin, budgetM
           onChange();
         })
         .catch((error) => {
-          setErrorMessage(error.message);
+          setErrorMessage(error.response.data.message);
           console.error('Error submitting project:', error.message);
         });
     } else {

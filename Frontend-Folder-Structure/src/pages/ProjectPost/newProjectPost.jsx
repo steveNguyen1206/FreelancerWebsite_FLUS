@@ -90,8 +90,7 @@ const NewProjectPost = ({ isOpen, onClose, onUpdate }) => {
       if (newProject.title.length > 50) {
         newErrors.title = 'The project title must not exceed 50 characters.';
         isValid = false;
-      }else
-        newErrors.title = '';
+      } else newErrors.title = '';
     }
 
     // Validate image
@@ -100,13 +99,18 @@ const NewProjectPost = ({ isOpen, onClose, onUpdate }) => {
       isValid = false;
     } else {
       const file = newProject.image;
-      const allowedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webg'];
+      const allowedFormats = [
+        'image/jpeg',
+        'image/png',
+        'image/gif',
+        'image/jpg',
+        'image/webg',
+      ];
 
       if (file && !allowedFormats.includes(file.type)) {
         newErrors.image = 'Image file not in supported format!';
         isValid = false;
-      }else
-        newErrors.image = '';
+      } else newErrors.image = '';
     }
 
     // Validate tag
@@ -159,8 +163,6 @@ const NewProjectPost = ({ isOpen, onClose, onUpdate }) => {
   const [newProject, setNewProject] = useState(initState);
   const [errorMessage, setErrorMessage] = useState('');
 
-  console.log(newProject)
-
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setNewProject({ ...newProject, [name]: value });
@@ -185,14 +187,7 @@ const NewProjectPost = ({ isOpen, onClose, onUpdate }) => {
           }
         })
         .catch((error) => {
-          // if status code is 401 or 403, display error message
-          if (error.response.status === 401 || error.response.status === 403) {
-            setErrorMessage("Please login to create a project post");
-          } else {
-            setErrorMessage(
-              'Error submitting project. Please try again later.'
-            );
-          }
+          console.log(error);
         });
     } else {
       console.log('Form has errors. Please fix them.');

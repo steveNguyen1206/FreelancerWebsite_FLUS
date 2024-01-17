@@ -1,6 +1,5 @@
 import React from 'react';
 import './signup_tab_second.css';
-import googleIcon from '../../assets/SocialIcon/google.png';
 import { useState } from 'react';
 import smsAuthenService from '@/services/smsAuthen';
 
@@ -10,25 +9,25 @@ const isValidEmail = (email) => {
 };
 
 const isValidPhone = (phone) => {
-  // the phone number must has 10 exactly digits
-  const phoneRegex = /^\d{10}$/;
+  // check the phone has 0 at the beginning + length = 10 + all digits
+
+  const phoneRegex = /^0[0-9]{9}$/;
   return phoneRegex.test(phone);
 };
 
 const isValidName = (name) => {
-  const nameRegex = /^[a-zA-Z\s]*$/;
+  const nameRegex = /^\p{L}+\s*\p{L}*$/u;
   return nameRegex.test(name);
 };
 
-const isValidNationaity = (nationality) => {
-  const nationalityRegex = /^[a-zA-Z\s]*$/;
+const isValidNationality = (nationality) => {
+  const nationalityRegex = /^\p{L}+\s*\p{L}*$/u;
   return nationalityRegex.test(nationality);
-}
+};
 
 const convertPhone = (phone) => {
   return '+84' + phone.substring(1);
-}
-
+};
 
 const SignUpTabSecond = ({ setTab, signUpPayload, setSignUpPayload }) => {
   const handleChange = (event) => {
@@ -47,11 +46,18 @@ const SignUpTabSecond = ({ setTab, signUpPayload, setSignUpPayload }) => {
 
   const isValidForm = () => {
     const errors = {
-      email: isValidEmail(signUpPayload.email) ? '' : 'Invalid email address.',
-      phone: isValidPhone(signUpPayload.phone) ? '' : 'Invalid phone number.',
-      realName: isValidName(signUpPayload.realName) ? '' : 'Invalid name.',
-      nationality: isValidNationaity(signUpPayload.nationality) ? '' : 'Invalid nationality.',
+      email: isValidEmail(signUpPayload.email)
+        ? ''
+        : 'Invalid email address. Please enter a valid email address.',
+      phone: isValidPhone(signUpPayload.phone)
+        ? ''
+        : 'Invalid phone number. Please enter a 10-digit phone number starting with 0.',
+      realName: isValidName(signUpPayload.realName) ? '' : 'Invalid name. Please enter a valid name.',
+      nationality: isValidNationality(signUpPayload.nationality)
+        ? ''
+        : 'Invalid nationality. ',
     };
+
     setError(errors);
     return !Object.values(errors).some((error) => error !== '');
   };
@@ -62,6 +68,7 @@ const SignUpTabSecond = ({ setTab, signUpPayload, setSignUpPayload }) => {
       var phoneNum = {
         phone_number: convertPhone(signUpPayload.phone),
       };
+
       setTab(3);
       smsAuthenService
         .sendCode(phoneNum)

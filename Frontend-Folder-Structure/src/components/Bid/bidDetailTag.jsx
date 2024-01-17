@@ -4,6 +4,7 @@ import flag from '../../assets/vietnam.png';
 import { StarRating } from '@/components';
 import bidServices from '@/services/bidServices';
 import gmailService from '@/services/gmailServices';
+import reviewService from '@/services/reviewServices';
 
 const convertStartDate = (date1) => {
   let date = new Date(date1);
@@ -18,13 +19,17 @@ const calEndDate = (startDate, duration) => {
   return formattedDate;
 };
 
-const BidDetailTag = ({ project, bid, onChangeBid, isOwnerProjectPost ,onChangeProjectId}) => {
+const BidDetailTag = ({
+  project,
+  bid,
+  onChangeBid,
+  isOwnerProjectPost,
+  onChangeProjectId,
+}) => {
+  console.log("bid: ", bid);
   const [expanded, setExpanded] = useState(false);
   const [showSeeMore, setShowSeeMore] = useState(false);
   const textContainerRef = useRef(null);
-
-  console.log('bid: ', bid);
-  console.log('project: ', project);
 
   useEffect(() => {
     const textContainer = textContainerRef.current;
@@ -77,6 +82,15 @@ const BidDetailTag = ({ project, bid, onChangeBid, isOwnerProjectPost ,onChangeP
       });
   };
 
+  const [review, setReview] = useState('');
+
+  useEffect(() => {
+    reviewService.getRating(bid.user.id).then((response) => {
+      console.log('response: ', response);
+      setReview(response.data);
+    });
+  }, []);
+
   return (
     <div className="bid-contain">
       <div className="overlap">
@@ -114,11 +128,10 @@ const BidDetailTag = ({ project, bid, onChangeBid, isOwnerProjectPost ,onChangeP
                     <img className="rectangle-2" alt="Rectangle" src={flag} />
                   </div>
                 </div>
-                
 
                 <div className="group-2">
-                  <StarRating rating={bid.user.avg_rating} width={140} />
-                  <div className="rating-number">{bid.user.avg_rating}</div>
+                  <StarRating rating={review.average} width={140} />
+                  <div className="rating-number">{review.average}</div>
                 </div>
               </div>
             </div>
