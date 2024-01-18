@@ -276,9 +276,10 @@ exports.update = async (req, res) => {
     return;
   }
 
-  const id = req.params.project_post_id;
 
-  console.log("req.file: ", req.file);
+  const id = req.params.project_post_id;
+  console.log("id: ", id)
+
 
   try {
     if (!req.file) {

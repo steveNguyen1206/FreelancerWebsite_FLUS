@@ -5,11 +5,12 @@ import './bidOffer.css'
 // import profileImage from '../../assets/profile_image.png';
 import contactService from '@/services/contactServices';
 import projectService from '@/services/projectServices';
+import gmailService from '@/services/gmailServices';
 //name, skill, message, price, duration, accept, reject
 
-const BidOffer = ({ bidOne, checkOwner }) => {
+const BidOffer = ({ bidOne, checkOwner, onChangeBid }) => {
   const navigate = useNavigate();
-  const skill = 'React, NodeJS';
+  const skill = '';
   const initProject = {
     name: '',
     description: '',
@@ -27,7 +28,7 @@ const BidOffer = ({ bidOne, checkOwner }) => {
     console.log('bidOne.id: ', bidOne.id);
     await contactService.changeContactStatus(bidOne.id, 1).then((response) => {
       console.log('response: ', response);
-      // onChangeBid();
+      onChangeBid();
     });
 
     await contactService.showContactByContactId(bidOne.id).then((response) => {
@@ -48,18 +49,26 @@ const BidOffer = ({ bidOne, checkOwner }) => {
       project.contact_id = contact.id;
       project.owner = contact.client_id;
       project.member = contact.freelancer_post.freelancer_id;
+
       console.log('project: ', project);
       projectService.createProject(project).then((response) => {
         console.log('response: ', response);
         console.log('project: ', project);
         navigate(`/project-manage/${response.data.id}`)
+        const emailData = {
+          email: contact.user.email,
+          url: `http://localhost:8081/my-project-manage/${response.data.id}`,
+        };
 
+        gmailService.sendEmail(emailData).then((response) => {
+          console.log('response: ', response);
+        });
       });
 
       // <Route path="/project-manage/:id" element={<ProjectManagement own={false}/>} />
       // copilot :3 code navigate to project-manage/response.data.id
       // window.location.href = `/project-manage/${response.data.id}`;
-      
+
     });
 
   };
@@ -69,7 +78,7 @@ const BidOffer = ({ bidOne, checkOwner }) => {
     console.log('bidOne.id: ', bidOne.id);
     contactService.changeContactStatus(bidOne.id, -1).then((response) => {
       console.log('response: ', response);
-      // onChangeBid();
+      onChangeBid();
     });
   };
 
@@ -85,10 +94,10 @@ const BidOffer = ({ bidOne, checkOwner }) => {
           <h5>{bidOne.user.profile_name}</h5>
           <p style={{ color: 'green' }}>{skill}</p>
         </div>
-        <div style={{outerHeight: '8px'}}>
-            <div className="offer-rating">
+        <div style={{ outerHeight: '8px' }}>
+          <div className="offer-rating">
             <p>4.5</p>
-            </div>
+          </div>
         </div>
 
       </div>
@@ -98,14 +107,14 @@ const BidOffer = ({ bidOne, checkOwner }) => {
         </div>
       </div>
       {checkOwner === 2 && (
-      <div className="offer-button">
-        <button className="reject" onClick={handleReject}>
-          Reject
-        </button>
-        <button className="accept" onClick={handleAccept}>
-          Accept
-        </button>
-      </div>
+        <div className="offer-button">
+          <button className="reject" onClick={handleReject}>
+            Reject
+          </button>
+          <button className="accept" onClick={handleAccept}>
+            Accept
+          </button>
+        </div>
       )}
     </div>
   );

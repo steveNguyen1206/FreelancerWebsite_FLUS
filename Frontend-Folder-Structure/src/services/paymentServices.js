@@ -42,8 +42,19 @@ const resolveComplaint = (issueId, data, accessToken) => {
   }});
 }
 
-const createPaymentAccount = (data, access_token) => {
-  return http.post(`/payment_account`, data, {headers: {
+const updatePaymentAccount = (data, access_token) => {
+  return http.post(`/payment_account/update`, data, {headers: {
+    "Content-type": "application/json",
+    "x-access-token": access_token,
+  }});
+}
+
+const createPaymentAccount = (data) => {
+  return http.post(`/payment_account/create`, data);
+}
+
+const getPaymentAccount = (access_token) => {
+  return http.get(`/payment_account`, {headers: {
     "Content-type": "application/json",
     "x-access-token": access_token,
   }});
@@ -58,7 +69,9 @@ const paymentServices = {
  acceptProject,
  rejectProject,
  resolveComplaint,
- createPaymentAccount
+ createPaymentAccount,
+ getPaymentAccount,
+ updatePaymentAccount
  
 };
 

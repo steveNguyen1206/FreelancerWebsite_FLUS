@@ -26,7 +26,7 @@ const update = async (data, access_token) => {
   formData.append('budget_min', data.budgetMin);
   formData.append('budget_max', data.budgetMax);
   formData.append('image_file', data.image);
-  formData.append('tag', data.tag_id);
+  formData.append('tag_id', data.tag_id);
   formData.append('start_date', data.startDate);
 
   console.log('formData: ', formData);

@@ -42,6 +42,7 @@ const IssueRow = ({ issue, refreshIssues, setRefreshIssues }) => {
             accept: isAccept,
             userId: issue.userId,
             amount: issue.amount,
+            assignTo: issue.assignedUserId,
             currency: "USD",
             sender_item_ids: [issue.id  + getCurrentDateTime()],
         }

@@ -11,14 +11,11 @@ const isValidSkill = (skill) => {
 };
 
 const isValidEmail = (email) => {
+  if (email.length > 255) return false;
   if (email === '') return false;
   // email has valid format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
-};
-
-const checkLength = (str, num) => {
-  return str.length >= num;
 };
 
 
@@ -110,6 +107,13 @@ const BidPopup = ({ isOpen, isClose, projectPostId, onChange, budgetMin, budgetM
       errors.message =
         'Invalid message. Message must have at least 10 letters.';
     }
+
+    // if message > 512 characters, return error
+    if (bid.message.length > 512) {
+      isValid = false;
+      errors.message = 'Invalid message. Message must have at most 512 letters.';
+    }
+
 
 
     if (!isValidPrice(bid.price)) {

@@ -133,11 +133,14 @@ const profile = () => {
               <div className="cover-avatar-section">
                 <img className="rectangle" alt="Rectangle" src={profileCover} />
                 <div className="avatar-container">
-                  <img
-                    className="ellipse"
-                    alt="Avatar"
-                    src={userProfile.avt_url}
-                  />
+                  {/* <div className='image-inside-ava'> */}
+                    <img
+                      className="ellipse"
+                      alt="Avatar"
+                      src={userProfile.avt_url}
+                    />
+                  {/* </div> */}
+                  
                 </div>
               </div>
               <div className="information-section">

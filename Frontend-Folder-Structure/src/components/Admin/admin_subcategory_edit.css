@@ -95,6 +95,19 @@
     line-height: normal;
     text-align: center;
     }
+    .pop-up-edit-category .div-wrapper-delete {
+    
+      height: auto;
+      position: relative;
+      width: 135px;
+      color: white;
+      font-family: "Inter-Bold", Helvetica;
+      font-size: 16.4px;
+      font-weight: 700;
+      letter-spacing: 0;
+      line-height: normal;
+      text-align: center;
+      }
     
 
     

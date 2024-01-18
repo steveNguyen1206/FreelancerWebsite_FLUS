@@ -13,14 +13,14 @@ const isValidTitle = (title) => {
 };
 
 const isValidDetail = (detail) => {
-  const detailRegex = /^[\p{P}\p{L}\s]{10,}$/gu;
+  const detailRegex = /^[A-Za-z0-9\s.,?!]{10,}$/g;
   return detailRegex.test(detail);
 };
 
 const isValidBudget = (budget) => {
   if (budget === '') return false;
   const budgetRegex = /^[0-9]*$/;
-  return budgetRegex.test(budget) && budget > 0;
+  return budgetRegex.test(budget) && budget > 0 && budget < 10000;
 };
 
 const isValidTag = (tag) => {
@@ -144,11 +144,11 @@ const NewProjectPost = ({ isOpen, onClose, onUpdate }) => {
       isValid = false;
     } else if (!isValidBudget(newProject.budgetMin)) {
       newErrors.budgetMin =
-        'Invalid budget. Please enter a valid number greater than 0.';
+        'Invalid budget. Please enter a valid number greater than 0 and smaller 10000.';
       isValid = false;
     } else if (!isValidBudget(newProject.budgetMax)) {
       newErrors.budgetMax =
-        'Invalid budget. Please enter a valid number greater than 0.';
+        'Invalid budget. Please enter a valid number greater than 0 and smaller 10000.';
       isValid = false;
     } else {
       newErrors.budgetMin = '';

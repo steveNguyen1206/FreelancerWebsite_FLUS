@@ -4,10 +4,11 @@ module.exports = app => {
     var router = require("express").Router();
   
     // Create a new Tutorial
-    router.post("/", [verifyToken], payment_account.create);
+    router.post("/update", [verifyToken], payment_account.upsert);
+    router.post("/create",  payment_account.create);
   
-    // Retrieve all Tutorials
-
+    // Retrieve one by user id
+    router.get("/", [verifyToken], payment_account.getOne);
   
     app.use('/api/payment_account', router);
   };

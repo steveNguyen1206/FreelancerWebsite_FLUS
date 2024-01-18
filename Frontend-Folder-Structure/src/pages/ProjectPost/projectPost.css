@@ -156,8 +156,9 @@
 }
 
 .right-profile img{
-    height: 80px!important;
-    width: 90px!important;
+    height: 50px!important;
+    object-fit: cover;
+    /* width: 90px!important; */
 }
 
 .job-profile{
@@ -184,7 +185,7 @@
 .project-name-wrapper-right{
     display: flex;
     flex-direction: column;
-    max-width: 160px;
+    /* max-width: 160px; */
 }
 
 .right-profile{

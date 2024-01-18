@@ -15,7 +15,7 @@ exports.create = (req, res) => {
   // Create a Tutorial
   const payment_account = {
     account_address: req.body.account_address,
-    user_id: req.userId,
+    user_id: req.body.userId,
   };
 
   // Save Tutorial in the database
@@ -30,6 +30,60 @@ exports.create = (req, res) => {
       });
     });
 };
+
+
+exports.upsert = (req, res) => {
+  // Validate request
+  if (!req.body.account_address) {
+    res.status(400).send({
+      message: "Content can not be empty!"
+    });
+    return;
+  }
+  PaymentAccount.upsert({
+    account_address: req.body.account_address,
+    user_id: req.userId,
+  }, {
+    user_id: req.userId,
+  })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+        err.message || "Some error occurred while creating the Tutorial."
+      });
+    });
+}
+
+
+
+exports.getOne = (req, res) => {
+  PaymentAccount.findOne({
+    where: {
+      user_id: req.userId,
+    }
+  })
+    .then(data => {
+      if (data) {
+        res.send(data);
+      }
+      else {
+        res.status(404).send({
+          message: `Cannot find PaymentAccount with user_id=${req.userId}.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving PaymentAccount with user_id=" + req.userId
+      });
+    }
+    );
+};
+
+
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {

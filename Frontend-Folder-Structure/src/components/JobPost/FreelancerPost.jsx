@@ -73,10 +73,10 @@ const FreelancerPost = ({ post }) => {
         <div className="pbid">
           <div className="pprice">From ${post.lowset_price}</div>
           <div className="btn-row">
-            <div className="btn-bid">
-              <button>Hire me</button>
+            <div className="btn-bid" onClick={() => handleClickPost(post.id)} >
+              <button>View</button>
             </div>
-            <img src={eyeLight} onClick={() => handleClickPost(post.id)} />
+            {/* <img src={eyeLight} /> */}
           </div>
         </div>
       </div>
