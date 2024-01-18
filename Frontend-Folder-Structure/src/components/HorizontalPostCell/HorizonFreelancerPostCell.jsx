@@ -30,7 +30,7 @@ const HorizonFreelancerPostCell = ({post}) => {
     <div className="post-cell-tag">{post.subcategory.subcategory_name}</div>
     <div className="details">
         <div className="detail-content">
-        Hello everyone, my name is Duy Khang Ho. This job is hard... Detail
+        {/* Hello everyone, my name is Duy Khang Ho. This job is hard... Detail
         text here everyone text here everyone Hello everyone, my name is Duy
         Khang Ho. This job is hard... Detail text here ever... Detail text
         here everyone text here everyone Hello everyone, my name is Duy Khang
@@ -38,8 +38,8 @@ const HorizonFreelancerPostCell = ({post}) => {
         text here everyone text here everyone Hello everyone, my name is Duy
         Khang Ho. This job is hard... Detail text here ever... Detail text
         here everyone text here everyone Hello everyone, my name is Duy Khang
-        Ho.
-        {/* {post.skill_description} */}
+        Ho. */}
+        {post.skill_description}
         </div>
     </div>
     </div>
