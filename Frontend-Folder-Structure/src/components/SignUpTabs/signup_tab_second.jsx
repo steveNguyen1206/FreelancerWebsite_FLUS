@@ -39,12 +39,12 @@ const isValidPhone = async (phone) => {
 };
 
 const isValidName = (name) => {
-  const nameRegex = /^\p{L}+\s*\p{L}*$/u;
+  const nameRegex = /^[a-zA-Z\s]*$/;
   return nameRegex.test(name);
 };
 
 const isValidNationality = (nationality) => {
-  const nationalityRegex = /^\p{L}+\s*\p{L}*$/u;
+  const nationalityRegex = /^[a-zA-Z\s]*$/;
   return nationalityRegex.test(nationality);
 };
 
