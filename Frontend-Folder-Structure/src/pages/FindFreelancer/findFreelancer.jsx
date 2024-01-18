@@ -173,11 +173,9 @@ const FindFreelancer = () => {
             />
           </div>
           <div className="right-job">
-            {/* <FreelancerPost post = {post}/>
-            <FreelancerPost post = {post}/>
-            <FreelancerPost post = {post}/>
-            <FreelancerPost post = {post}/>
-            <FreelancerPost post = {post}/> */}
+            {filteredPosts.length == 0 && (
+              <div className="no-post">No posts found!!!</div>
+            )}
             {sortPosts(filteredPosts).map(post => (
               <FreelancerPost
                 key={post.id} post={post}
