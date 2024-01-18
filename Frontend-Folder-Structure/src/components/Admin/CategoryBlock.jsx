@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import "./CategoryBlock.css";
 import { EditCategory, AddSubcategory, EditSubcategory } from '..';
-import editIcon from '../../assets/editProfileIcon.png';
+import editIcon from '../../assets/green_plus.png';
 
 const CategoryBlock = ({category, m_function}) => {
     // {
