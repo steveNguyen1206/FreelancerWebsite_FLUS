@@ -69,9 +69,6 @@ const SignUpTabThird = ({
 
     // signin();
     // onSignUp();
-
-    
-// >>>>>>> 2d84f5e00b58bcfe84fcff8f6bb86f9c2c19944a
     smsAuthenService
       .verifyCode(smsMessage)
       .then((response) => {

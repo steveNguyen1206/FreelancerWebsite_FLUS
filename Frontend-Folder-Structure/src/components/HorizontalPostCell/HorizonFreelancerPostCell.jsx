@@ -44,13 +44,6 @@ const HorizonFreelancerPostCell = ({post}) => {
     </div>
     </div>
     
-
-    {/* <div className="previews">
-        <div className="rating-row">
-            <StarRating rating={4.5} width={160} className="pstars" />
-            <div style={{}}>{4.5}</div>
-        </div>
-    </div> */}
     <div className="pbid">
         <div className="pprice">From ${post.lowset_price}</div>
         <div className="btn-row">

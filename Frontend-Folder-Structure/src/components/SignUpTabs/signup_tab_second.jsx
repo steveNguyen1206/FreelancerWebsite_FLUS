@@ -1,6 +1,5 @@
 import React from 'react';
 import './signup_tab_second.css';
-import googleIcon from '../../assets/SocialIcon/google.png';
 import { useState } from 'react';
 import smsAuthenService from '@/services/smsAuthen';
 import userDataService from '@/services/userDataServices';
@@ -11,18 +10,18 @@ const isValidEmail = (email) => {
 };
 
 const isValidPhone = async (phone) => {
-  // the phone number must has 10 exactly digits
-  const phoneRegex = /^\d{10}$/;
+  // the phone number is valid if it has 10 digits and starts with 0
+  const phoneRegex = /^0[0-9]{9}$/;
 
   if (!phoneRegex.test(phone)) {
     console.log('1');
     return false;
   } else {
     // check if phone number is used by another account
-   return userDataService
+    return userDataService
       .checkPhoneExist(phone)
       .then((response) => {
-        console.log("chec phone exist");
+        console.log('chec phone exist');
         console.log(response.data.phoneExisted);
         if (response.data.phoneExisted == false) {
           console.log('2');
@@ -40,12 +39,12 @@ const isValidPhone = async (phone) => {
 };
 
 const isValidName = (name) => {
-  const nameRegex = /^[a-zA-Z\s]*$/;
+  const nameRegex = /^\p{L}+\s*\p{L}*$/u;
   return nameRegex.test(name);
 };
 
-const isValidNationaity = (nationality) => {
-  const nationalityRegex = /^[a-zA-Z\s]*$/;
+const isValidNationality = (nationality) => {
+  const nationalityRegex = /^\p{L}+\s*\p{L}*$/u;
   return nationalityRegex.test(nationality);
 };
 
@@ -55,8 +54,7 @@ const convertPhone = (phone) => {
 const isValidPaymentAccount = (payment_account) => {
   const payment_accountRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return payment_accountRegex.test(payment_account);
-}
-
+};
 
 const SignUpTabSecond = ({ setTab, signUpPayload, setSignUpPayload }) => {
   const handleChange = (event) => {
@@ -76,61 +74,65 @@ const SignUpTabSecond = ({ setTab, signUpPayload, setSignUpPayload }) => {
   });
 
   const isValidForm = async () => {
-    return isValidPhone(signUpPayload.phone).then(valid => {
-      console.log('Check valid phone: ', valid);
+    return isValidPhone(signUpPayload.phone)
+      .then((valid) => {
+        // console.log('Check valid phone: ', valid);
 
-      const errors = {
-        email: isValidEmail(signUpPayload.email)
-          ? ''
-          : 'Invalid email address.',
-        phone: valid ? '' : 'Invalid phone number.',
-        realName: isValidName(signUpPayload.realName) ? '' : 'Invalid name.',
-        nationality: isValidNationaity(signUpPayload.nationality)
-          ? ''
-          : 'Invalid nationality.',
-      payment_account: isValidPaymentAccount(signUpPayload.payment_account) ? '' : 'Invalid payment account.',
-      };
-      console.log(errors);
-      setError(errors);
-       return !Object.values(errors).some((error) => error !== '');
-
-    }).catch((e) => {
-      console.log("check phone error");
-      console.log(e);
-    });
+        const errors = {
+          email: isValidEmail(signUpPayload.email)
+            ? ''
+            : 'Invalid email address. Please enter a valid email address.',
+          phone: valid ? '' : 'This phone number is invalid or already used.',
+          realName: isValidName(signUpPayload.realName) ? '' : 'Invalid name.',
+          nationality: isValidNationality(signUpPayload.nationality)
+            ? ''
+            : 'Invalid nationality.',
+          payment_account: isValidPaymentAccount(signUpPayload.payment_account)
+            ? ''
+            : 'Invalid payment account.',
+        };
+        console.log(errors);
+        setError(errors);
+        return !Object.values(errors).some((error) => error !== '');
+      })
+      .catch((e) => {
+        // console.log("check phone error");
+        console.log(e);
+      });
   };
 
   const handleVerifyClick = () => {
     console.log('handleVerifyClick');
-    isValidForm().then(valid => {
-      console.log('valid: ', valid);
-      if (valid) {
-        console.log(signUpPayload.phone);
-        var phoneNum = {
-          phone_number: convertPhone(signUpPayload.phone),
-        };
-        setTab(3);
-        smsAuthenService
-          .sendCode(phoneNum)
-          .then((response) => {
-            if (response.status == 200) {
-              setTab(3);
-            }
-          })
-          .catch((e) => {
-            setOTPError(
-              'Error while sending code, please check your phone number.'
-            );
-            console.log('SmsAuthenService error (client): ', e);
-          });
-      } else {
-        console.log('Form is not valid. Please check the errors.');
-      }
-    })
-    .catch((e) => {
-      console.log("check form error");
-      console.log(e);
-    });
+    isValidForm()
+      .then((valid) => {
+        console.log('valid: ', valid);
+        if (valid) {
+          console.log(signUpPayload.phone);
+          var phoneNum = {
+            phone_number: convertPhone(signUpPayload.phone),
+          };
+          setTab(3);
+          smsAuthenService
+            .sendCode(phoneNum)
+            .then((response) => {
+              if (response.status == 200) {
+                setTab(3);
+              }
+            })
+            .catch((e) => {
+              setOTPError(
+                'Error while sending code, please check your phone number.'
+              );
+              console.log('SmsAuthenService error (client): ', e);
+            });
+        } else {
+          console.log('Form is not valid. Please check the errors.');
+        }
+      })
+      .catch((e) => {
+        console.log('check form error');
+        console.log(e);
+      });
   };
 
   return (

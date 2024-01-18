@@ -1,13 +1,8 @@
 import http from "./http-common";
 
-const getRatingClient = (id) => {
-    return http.get(`/review/get_rating_client/${id}`);
+const getRating = (id) => {
+    return http.get(`/review/get_rating/${id}`);
     };
-
-const getRatingFreelancer = (id) => {
-    return http.get(`/review/get_rating_freelancer/${id}`);
-    }
-
 
 const createReview = (projectId, data, access_token) => {
     return http.post(`project/review/${projectId}`, data, {headers: {
@@ -17,9 +12,8 @@ const createReview = (projectId, data, access_token) => {
     }
 
 const reviewService = {
-    getRatingClient,
-    getRatingFreelancer,
     createReview,
+    getRating,
 };
 
 export default reviewService;

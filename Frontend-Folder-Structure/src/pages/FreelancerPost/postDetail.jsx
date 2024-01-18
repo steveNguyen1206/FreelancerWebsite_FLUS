@@ -36,7 +36,10 @@ const PostDetail = () => {
     try {
       const userIdData = await freelancer_post_Service.findOnebyId(id);
       setUserId(userIdData.data.freelancer_id);
-      console.log('userIdData.data.freelancer_id: ', userIdData.data.freelancer_id);
+      console.log(
+        'userIdData.data.freelancer_id: ',
+        userIdData.data.freelancer_id
+      );
 
       // Gọi hàm để lấy thông tin user sau khi setUserId hoàn thành
       fetchUserById(userIdData.data.freelancer_id);
@@ -56,7 +59,7 @@ const PostDetail = () => {
       return 2; // login as owner
     }
     return 3; // login as other
-  }
+  };
 
   const fetchUserById = async (userId) => {
     try {
@@ -86,8 +89,6 @@ const PostDetail = () => {
     fetchProjectTags();
   }, [project.tag_id]);
 
-
-
   const fetchProjectTags = async () => {
     const projectTagsData = await categoryServices.getNamefromId(
       project.tag_id
@@ -104,11 +105,8 @@ const PostDetail = () => {
 
   const fetchOwnerRating = async () => {
     try {
-      const ownerRatingData = await reviewServices.getRatingClient(
-        project.user_id
-      );
+      const ownerRatingData = await reviewServices.getRating(project.user_id);
       setOwner(ownerRatingData.data);
-      // console.log(ownerRatingData.data);
     } catch (error) {
       console.error('Error fetching projects:', error);
     }
@@ -119,7 +117,6 @@ const PostDetail = () => {
   const handleEditProject = () => {
     setIsEditPopupOpen(true);
   };
-
 
   const [isChange, setIsChange] = useState(false);
 
@@ -172,7 +169,9 @@ const PostDetail = () => {
           isOpen={isEditPopupOpen}
           onClose={() => setIsEditPopupOpen(false)}
           projectId={id}
-          onUpdate={() => { setIsChange(!isChange) }}
+          onUpdate={() => {
+            setIsChange(!isChange);
+          }}
         />
       )}
       {showHirePopup && <HireFreelancer setShowHirePopup={setShowHirePopup}  onUpdate={() => { setIsChange(!isChange) }}/>}
@@ -216,17 +215,17 @@ const PostDetail = () => {
                   </div>
 
                   <div className="proj-rating-left">
-                    <StarRating rating={owner.averageStar} width={160} />
-                    <div className="proj-stars-user">
-                      {owner.averageStar}
-                    </div>
+                    <StarRating rating={owner.average} width={160} />
+                    <div className="proj-stars-user">{owner.average}</div>
                   </div>
                 </div>
               </div>
 
-              <div className="proj-detail" style={{ textAlign: "left" }}>{project.skill_description}</div>
+              <div className="proj-detail" style={{ textAlign: 'left' }}>
+                {project.skill_description}
+              </div>
               <div className="proj-body">
-                <div >
+                <div>
                   <div className="wrapper-project-image">
                     <img
                       id="post-img"
@@ -241,21 +240,14 @@ const PostDetail = () => {
             <div className="proj-line">
               <img src={line} alt="line" />
             </div>
-            <div className='about-me-section'>
-              <div className='section-title'>
-                About the seller
-              </div>
-              <div className='about-me-content'>
-                {project.about_me}
-              </div>
-
+            <div className="about-me-section">
+              <div className="section-title">About the seller</div>
+              <div className="about-me-content">{project.about_me}</div>
             </div>
             <div className="proj-line">
               <img src={line} alt="line" />
             </div>
           </div>
-
-
 
           {/* <div className="comments">
             <div className="comment-title">
@@ -270,9 +262,11 @@ const PostDetail = () => {
           </div> */}
         </div>
         <div className="right-project">
-          {check_type(userId, login_id) == 2 && <button onClick={handleEditProject} className="button-edit">
-            Edit
-          </button>}
+          {check_type(userId, login_id) == 2 && (
+            <button onClick={handleEditProject} className="button-edit">
+              Edit
+            </button>
+          )}
           <div className="project-info">
             <h4>More about my job</h4>
             <div className="project-detail-wrapper">
@@ -284,7 +278,6 @@ const PostDetail = () => {
                 <img src={revision} alt="revision" />
                 <p>{project.revision_number} Revision</p>
               </div>
-
             </div>
             <div className="detail-img">
               {/* <ul>
@@ -297,15 +290,17 @@ const PostDetail = () => {
             </div>
 
             <div className="btn-hire">
-              {check_type(userId, login_id) == 3 && <button
-                className="button-hire-project"
-                onClick={handleHireProject}>
-                Hire me
-              </button>}
+              {check_type(userId, login_id) == 3 && (
+                <button
+                  className="button-hire-project"
+                  onClick={handleHireProject}
+                >
+                  Hire me
+                </button>
+              )}
 
               <div className="budget-wrapper">
-                {/* {`$${100}`} */}
-                ${project.lowset_price}
+                {/* {`$${100}`} */}${project.lowset_price}
               </div>
             </div>
           </div>
@@ -315,7 +310,6 @@ const PostDetail = () => {
             </div>
             <p>{numberOffer} Offers</p>
             <div className="proj-bid-list">
-
               {bidOnes.map((bidOne) => (
                 <BidOffer bidOne={bidOne} checkOwner={check_type(userId, login_id)} onChangeBid={onChangeBid}/>
               ))}

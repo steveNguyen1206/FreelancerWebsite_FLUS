@@ -3,11 +3,11 @@ const config = require("../config/auth.config");
 const Op = db.Sequelize.Op;
 const Bid = db.bid;
 const projectPost = db.project_post;
-const review = db.reviews;
 const Project = db.projects;
 
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
   console.log("req.body: ", req.body);
+  console.log("req.userId: ", req.userId);
 
   // check if req.body is empty
   if (!req.body) {
@@ -28,6 +28,27 @@ exports.create = (req, res) => {
     skill_tag: req.body.skill_id,
   };
 
+  // Check if a bid with the same properties already exists
+  const existingBid = await Bid.findOne({ where: bid });
+  if (existingBid) {
+    // If a bid with the same properties exists, send an error response
+    res
+      .status(400)
+      .send({ message: "A bid with the same properties already exists." });
+    return;
+  }
+
+  // check the status of project post is 1 or 0, if 0, send this project post is closed
+  const projectPostData = await projectPost.findOne({
+    where: { id: req.body.proj_post_id },
+  });
+  if (projectPostData.status === 0) {
+    res.status(400).send({
+      message: "This project post is closed.",
+    });
+    return;
+  }
+
   Bid.create(bid)
     .then((data) => {
       res.status(200).send(data);
@@ -38,52 +59,36 @@ exports.create = (req, res) => {
       });
     });
 };
-
-exports.findBidByProjectId = (req, res) => {
+exports.findBidByProjectId = async (req, res) => {
   const project_id = req.params.project_id;
-  Bid.findAll({
-    where: { proj_post_id: project_id, status: 0 },
-    include: [
-      {
-        model: db.user,
-        attributes: ["id", "account_name", "email", "avt_url", "profile_name"],
-      },
 
-      {
-        model: db.subcategories,
-        attributes: ["id", "subcategory_name"],
-      },
-    ],
-  })
-    .then((data) => {
-      return Promise.all(
-        data.map((bid) => {
-          return review
-            .findAll({
-              where: { user_reviewed: bid.user_id, type: 0 },
-            })
-            .then((reviews) => {
-              let sum = 0;
-              reviews.forEach((review) => {
-                sum += review.star;
-              });
-              if (bid.user) {
-                bid.user.dataValues.avg_rating =
-                  reviews.length > 0 ? sum / reviews.length : 0;
-              }
-              return bid;
-            });
-        })
-      );
-    })
-    .then((bids) => {
-      res.status(200).send(bids);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving bid.",
-      });
+  try {
+    const bids = await Bid.findAll({
+      where: { proj_post_id: project_id, status: 0 },
+      include: [
+        {
+          model: db.user,
+          attributes: [
+            "id",
+            "account_name",
+            "email",
+            "avt_url",
+            "profile_name",
+          ],
+        },
+        {
+          model: db.subcategories,
+          attributes: ["id", "subcategory_name"],
+        },
+      ],
     });
+
+    res.status(200).send(bids);
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || "Some error occurred while retrieving bid.",
+    });
+  }
 };
 
 exports.changeOtherBidStatus = (req, res) => {
@@ -215,17 +220,20 @@ exports.rejectBid = (req, res) => {
 exports.getDistinctUserIdsByStatus = (req, res) => {
   const status = req.params.bid_status;
   Bid.findAll({
-      attributes: [[db.Sequelize.fn('DISTINCT', db.Sequelize.col('user_id')), 'user_id']],
-      where: { status: status }
+    attributes: [
+      [db.Sequelize.fn("DISTINCT", db.Sequelize.col("user_id")), "user_id"],
+    ],
+    where: { status: status },
   })
-      .then(data => {
-          res.status(200).send(data);
-      })
-      .catch(err => {
-          console.log("err: ", err);
-          res.status(500).send({
-              message:
-              err.message || "Some error occurred while retrieving distinct user ids."
-          });
+    .then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      console.log("err: ", err);
+      res.status(500).send({
+        message:
+          err.message ||
+          "Some error occurred while retrieving distinct user ids.",
       });
-}
+    });
+};

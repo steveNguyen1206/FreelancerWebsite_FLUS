@@ -13,14 +13,14 @@ const isValidTitle = (title) => {
 };
 
 const isValidDetail = (detail) => {
-  const detailRegex =/^[\p{P}\p{L}\p{N}\s]{10,}$/gu;
+  const detailRegex = /^[A-Za-z0-9\s.,?!]{10,}$/g;
   return detailRegex.test(detail);
 };
 
 const isValidBudget = (budget) => {
   if (budget === '') return false;
   const budgetRegex = /^[0-9]*$/;
-  return budgetRegex.test(budget) && budget > 0;
+  return budgetRegex.test(budget) && budget > 0 && budget < 10000;
 };
 
 const isValidTag = (tag) => {
@@ -90,8 +90,7 @@ const NewProjectPost = ({ isOpen, onClose, onUpdate }) => {
       if (newProject.title.length > 50) {
         newErrors.title = 'The project title must not exceed 50 characters.';
         isValid = false;
-      }else
-        newErrors.title = '';
+      } else newErrors.title = '';
     }
 
     // Validate image
@@ -100,13 +99,18 @@ const NewProjectPost = ({ isOpen, onClose, onUpdate }) => {
       isValid = false;
     } else {
       const file = newProject.image;
-      const allowedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webg'];
+      const allowedFormats = [
+        'image/jpeg',
+        'image/png',
+        'image/gif',
+        'image/jpg',
+        'image/webg',
+      ];
 
       if (file && !allowedFormats.includes(file.type)) {
         newErrors.image = 'Image file not in supported format!';
         isValid = false;
-      }else
-        newErrors.image = '';
+      } else newErrors.image = '';
     }
 
     // Validate tag
@@ -140,11 +144,11 @@ const NewProjectPost = ({ isOpen, onClose, onUpdate }) => {
       isValid = false;
     } else if (!isValidBudget(newProject.budgetMin)) {
       newErrors.budgetMin =
-        'Invalid budget. Please enter a valid number greater than 0.';
+        'Invalid budget. Please enter a valid number greater than 0 and smaller 10000.';
       isValid = false;
     } else if (!isValidBudget(newProject.budgetMax)) {
       newErrors.budgetMax =
-        'Invalid budget. Please enter a valid number greater than 0.';
+        'Invalid budget. Please enter a valid number greater than 0 and smaller 10000.';
       isValid = false;
     } else {
       newErrors.budgetMin = '';
@@ -158,8 +162,6 @@ const NewProjectPost = ({ isOpen, onClose, onUpdate }) => {
   const [fileName, setFileName] = useState('');
   const [newProject, setNewProject] = useState(initState);
   const [errorMessage, setErrorMessage] = useState('');
-
-  console.log(newProject)
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -185,14 +187,7 @@ const NewProjectPost = ({ isOpen, onClose, onUpdate }) => {
           }
         })
         .catch((error) => {
-          // if status code is 401 or 403, display error message
-          if (error.response.status === 401 || error.response.status === 403) {
-            setErrorMessage("Please login to create a project post");
-          } else {
-            setErrorMessage(
-              'Error submitting project. Please try again later.'
-            );
-          }
+          console.log(error);
         });
     } else {
       console.log('Form has errors. Please fix them.');

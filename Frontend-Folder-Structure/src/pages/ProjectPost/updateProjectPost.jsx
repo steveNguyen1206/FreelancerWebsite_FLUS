@@ -22,17 +22,15 @@ const isValidDate = (date) => {
 };
 
 const isValidDetail = (detail) => {
-  if (!detail) return true;
-  if (!detail) return true;
-  const detailRegex = /^.{10,}$/;
-  return detailRegex.test(detail);
+  const detailRegex = /^[A-Za-z0-9\s.,?!]{10,}$/g;
+  return detailRegex.test(detail) || !detail;
 };
 
 const isValidBudget = (budget) => {
   if (!budget) return true;
   if (!budget) return true;
   const budgetRegex = /^[0-9]*$/;
-  return budgetRegex.test(budget) && budget > 0;
+  return budgetRegex.test(budget) && budget > 0 && budget < 10000;
 };
 
 const isValidTag = (tag) => {
@@ -118,20 +116,25 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
       newErrors.title =
         'Invalid title. Title must be alphanumeric and not empty.';
       isValid = false;
-    }else {
-      if ((updateProject.title).length > 50) {
+    } else {
+      if (updateProject.title.length > 50) {
         newErrors.title = 'The project title must not exceed 50 characters.';
         isValid = false;
-      }else
-        newErrors.title = '';
+      } else newErrors.title = '';
     }
 
     if (!isValidImage(updateProject.image)) {
       newErrors.image = 'Please select an image.';
       isValid = false;
-    }else{
+    } else {
       const file = updateProject.image;
-      const allowedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webg'];
+      const allowedFormats = [
+        'image/jpeg',
+        'image/png',
+        'image/gif',
+        'image/jpg',
+        'image/webg',
+      ];
 
       if (file && !allowedFormats.includes(file.type)) {
         newErrors.image = 'Image file not in supported format!';
@@ -162,11 +165,11 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
       isValid = false;
     } else if (!isValidBudget(updateProject.budgetMin)) {
       newErrors.budgetMin =
-        'Invalid budget. Please enter a valid number greater than 0.';
+        'Invalid budget. Please enter a valid number greater than 0 and smaller than 10000.';
       isValid = false;
     } else if (!isValidBudget(updateProject.budgetMax)) {
       newErrors.budgetMax =
-        'Invalid budget. Please enter a valid number greater than 0.';
+        'Invalid budget. Please enter a valid number greater than 0 and smaller than 10000.';
       isValid = false;
     } else {
       newErrors.budgetMin = '';
@@ -184,7 +187,6 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
       isValid = false;
     }
 
-    // if all fields are valid, isValid will be false
     let allFieldsEmpty = true;
     Object.keys(updateProject).forEach((key) => {
       if (updateProject[key]) allFieldsEmpty = false;
@@ -194,6 +196,12 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
       newErrors.title = 'Please fill in at least one field.';
       isValid = false;
     }
+
+    // reset error when user enter at least one field
+    if (!allFieldsEmpty) {
+      newErrors.title = '';
+    }
+
     setError(newErrors);
     return isValid;
   };
@@ -211,7 +219,6 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
 
   const handleUpdateClick = async () => {
     if (validateForm()) {
-      console.log(data);
       try {
         await projectPostServices.update(
           data,
@@ -292,7 +299,7 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
 
           <div id="project-tag-and-date">
             <div className="project-tag-input-1">
-              <label htmlFor="projectTag">Project Tag *</label>
+              <label htmlFor="projectTag">Project Tag</label>
               <select
                 id="projectTag"
                 name="tag_id"
@@ -310,7 +317,7 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
             </div>
 
             <div id="start-date-project">
-              <label htmlFor="startDate">Start Date *</label>
+              <label htmlFor="startDate">Start Date</label>
               <input
                 type="text"
                 id="startDate"

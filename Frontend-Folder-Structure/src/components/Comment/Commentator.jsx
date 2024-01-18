@@ -2,6 +2,7 @@ import './CommentProjectPost.css';
 import vietnam from '../../assets/vietnam.png';
 import { StarRating } from '..';
 import { useEffect, useState } from 'react';
+import reviewService from '@/services/reviewServices';
 const calculateTimeDifference = (dateCreated) => {
   const now = new Date();
   const createdDate = new Date(dateCreated);
@@ -20,7 +21,6 @@ const calculateTimeDifference = (dateCreated) => {
 
 const Commentator = ({
   user,
-  userRating,
   commentContent,
   dateCreated,
   comment_id,
@@ -30,6 +30,13 @@ const Commentator = ({
 }) => {
   const [isReplyOpen, setIsReplyOpen] = useState(false);
   const [replyText, setReplyText] = useState('');
+  const [userRating, setUserRating] = useState(0);
+
+  useEffect(() => {
+    reviewService.getRating(user.id).then((response) => {
+      setUserRating(response.data);
+    });
+  }, []);
 
   const handleReplyClick = () => {
     setIsReplyOpen(true);
@@ -41,7 +48,6 @@ const Commentator = ({
   };
 
   const handleSendClick = () => {
-    
     handleResponderSubmit(replyText, project_post_id, comment_id);
     setIsReplyOpen(false);
     setReplyText('');
@@ -94,10 +100,8 @@ const Commentator = ({
           </div>
         </div>
         <div className="comment-star">
-          <StarRating
-            rating={userRating}
-          />
-          <p>{userRating}</p>
+          <StarRating rating={userRating.average} />
+          <p>{userRating.average}</p>
         </div>
         <div className="comment-content">
           <p>{commentContent}</p>
