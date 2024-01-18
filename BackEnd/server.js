@@ -568,9 +568,9 @@ function initial() {
   // create_freelancer_post();
   // create_project_post();
   // create_bid();
-  create_contact();
+  // create_contact();
 
   
 }
 
-initial();
+// initial();
