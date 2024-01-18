@@ -55,12 +55,12 @@ function WishlistPost({
               <img src={vietnam} alt="vietnam" />
             </div>
           </div>
-
-          <div className="wishlist-title">{projectTitle}</div>
-
-          <div className="wishlist-tag">{projectTags}</div>
         </div>
-        <div className="wishlist-detail">{projectDetail}</div>
+        <div className="content-container">
+          <div className="wishlist-title">{projectTitle}</div>
+          <div className="wishlist-tag">{projectTags}</div>
+          <div className="wishlist-detail">{projectDetail}</div>
+        </div>
       </div>
 
       <div className="wishlist-right">

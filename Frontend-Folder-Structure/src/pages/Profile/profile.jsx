@@ -174,12 +174,18 @@ const profile = () => {
                 <div className="navigate-container">
                   <div className="social-link">
                     <img className="img" alt="Ellipse" src={linkedinicon} />
-                    <Link
+                    {userProfile.social_link && (<Link
                       className="text-wrapper-3"
                       to={userProfile.social_link}
                     >
                       {userProfile.profile_name}
-                    </Link>
+                    </Link>)}
+                    {!userProfile.social_link && (<span
+                      className="text-wrapper-3"
+                    >
+                      Not given
+                    </span>)}
+                    
                   </div>
 
                   {isOwnProfile && (

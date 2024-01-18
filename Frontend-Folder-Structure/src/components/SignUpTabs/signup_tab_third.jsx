@@ -25,7 +25,7 @@ const SignUpTabThird = ({
       user_type: 1,
       email: signUpPayload.email,
       avt_url: "https://res.cloudinary.com/dunbnutmw/image/upload/v1705132053/avatar_green_kunsk3.png",
-      social_link: 'https://imgur.com/gallery/ApNKGxs',
+      social_link: '',
     };
 
     authServices
