@@ -10,7 +10,7 @@ const PaymentAccountTab = ({ userId }) => {
 
   useEffect(() => {
     setSended(false);
-    paymentServices.getPaymentAccount(localStorage.getItem('AUTH_TOKEN')).then((res) => {
+    paymentServices.updatePaymentAccount(localStorage.getItem('AUTH_TOKEN')).then((res) => {
       if (res.status == 200) {
         setPaymentAccount(res.data.account_address);
       }

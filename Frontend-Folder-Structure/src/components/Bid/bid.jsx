@@ -10,18 +10,18 @@ const Bid = ({ bid, onChangeBid, onChangeProjectId, isOwnerProjectPost }) => {
       .acceptBid(bid.id, localStorage.getItem('AUTH_TOKEN'))
       .then((response) => {
         console.log('response: ', response);
+        onChangeBid();
+        const emailData = {
+          email: bid.email,
+          url: 'http://localhost:8081/project-manage/' + response.data.projectId,
+        };
+        console.log('emailData: ', emailData);
+        gmailService.sendEmail(emailData).then((response) => {
+          console.log('response: ', response);
+        });
         onChangeProjectId(response.data.projectId);
         projectId = response.data.projectId;
       });
-
-    onChangeBid();
-    const emailData = {
-      email: bid.email,
-      url: 'http://localhost:8081/project-manage/',
-    };
-    gmailService.sendEmail(emailData).then((response) => {
-      console.log('response: ', response);
-    });
   };
 
   const handleReject = () => {

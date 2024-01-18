@@ -7,7 +7,7 @@ import eyeLight from '../../assets/eyeLight.png';
 import { useNavigate } from 'react-router';
 import reviewService from '@/services/reviewServices';
 
-const FreelancerPost = ({post}) => {
+const FreelancerPost = ({ post }) => {
   console.log('post: ', post);
   const navigate = useNavigate();
 
@@ -19,17 +19,11 @@ const FreelancerPost = ({post}) => {
   const [review, setReview] = useState('');
 
   useEffect(() => {
-    reviewService
-      .getRatingFreelancer(post.user.id)
-      .then((res) => {
-        setReview(res.data);
-        console.log('review: ', res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    reviewService.getRating(post.user.id).then((response) => {
+      console.log('response: ', response);
+      setReview(response.data);
+    });
   }, []);
-
 
   return (
     <div className="post-container">
@@ -67,10 +61,14 @@ const FreelancerPost = ({post}) => {
       <div className="right-post">
         <div className="previews">
           <div className="rating-row">
-            <StarRating rating={review.averageStar} width={130} className="pstars" />
-            <div style={{}}>{review.averageStar}</div>
+            <StarRating
+              rating={review.average}
+              width={160}
+              className="pstars"
+            />
+            <div style={{}}>{review.average}</div>
           </div>
-          <div className="num-reviews-wrapper">{review.count + " reviews"}</div>
+          <div className="num-reviews-wrapper">{review.count + ' reviews'}</div>
         </div>
         <div className="pbid">
           <div className="pprice">From ${post.lowset_price}</div>

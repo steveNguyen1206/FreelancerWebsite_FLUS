@@ -9,6 +9,7 @@ import CommentProject from '../../components/Comment/CommentProjectPost';
 import projectPostServices from '@/services/projectPostServices';
 import bidServices from '@/services/bidServices';
 import projectPostWishlistServices from '@/services/projectPostWishlistServices';
+import reviewService from '@/services/reviewServices';
 
 import vietnam from '../../assets/vietnam.png';
 import heart from '../../assets/heart-active.png';
@@ -30,6 +31,7 @@ const Project = () => {
   const [projectId, setProjectId] = useState();
   const [loading, setLoading] = useState(false);
   const [isOwnerProjectPost, setIsOwnerProjectPost] = useState(false);
+  const [review, setReview] = useState('');
 
   const navigate = useNavigate();
 
@@ -47,13 +49,25 @@ const Project = () => {
     projectPostServices.getOnebyId(id).then((response) => {
       setProject(response.data);
       setLoading(true);
+      // console.log('response: ', response.data);
     });
   }, [id]);
 
   useEffect(() => {
+    if (project && project.user) {
+      const fetchRating = async () => {
+        const response = await reviewService.getRating(project.user.id);
+        setReview(response.data);
+        // console.log('response: ', response);
+      };
+      fetchRating();
+    }
+  }, [project]);
+
+  useEffect(() => {
     if (isChange) {
       projectPostServices.getOnebyId(id).then((response) => {
-        console.log('response: ', response.data);
+        // console.log('response: ', response.data);
         setProject(response.data);
       });
       setIsChange(false);
@@ -85,14 +99,13 @@ const Project = () => {
         localStorage.getItem('AUTH_TOKEN')
       );
       setBidProject(bidProjectData.data);
-      console.log('bidProjectData: ', bidProjectData.data);
+      // console.log('bidProjectData: ', bidProjectData.data);
     } catch (error) {
       console.error('Error fetching projects:', error);
     }
   };
   const bidNum = bidProject.length;
 
-  // check if user liked this project
   useEffect(() => {
     projectPostWishlistServices
       .isExisted(id, localStorage.getItem('AUTH_TOKEN'))
@@ -169,6 +182,7 @@ const Project = () => {
             }}
             budgetMin={project.budget_min}
             budgetMax={project.budget_max}
+            ownerEmail={project.user.email}
           />
         )}
         <div className="pproject">
@@ -200,12 +214,9 @@ const Project = () => {
                       </div>
                     </div>
                     <div className="proj-rating-left">
-                      <StarRating
-                        rating={project.user.avg_rating}
-                        width={150}
-                      />
+                      <StarRating rating={review.average} width={150} />
                       <div className="proj-stars-left">
-                        <p>{project.user.avg_rating}</p>
+                        <p>{review.average}</p>
                       </div>
                     </div>
                   </div>
@@ -257,11 +268,11 @@ const Project = () => {
                   <div className="project-username-right">
                     <p>({project.user.profile_name})</p>
                   </div>
-                  {/* <div className="project-right-stars">
-                    <StarRating rating={project.user.avg_rating} width={100} />
-                    <p>{project.user.avg_rating}</p>
+                  <div className="project-right-stars">
+                    <StarRating rating={review.average} width={100} />
+                    <p>{review.average}</p>
                     <div className="project-right-nstars"></div>
-                  </div> */}
+                  </div>
                 </div>
                 <div className="project-location-right">
                   <img src={vietnam} alt="vietnam" />
@@ -324,7 +335,6 @@ const Project = () => {
               </div>
               <p>{`${bidNum} Bids`}</p>
               <div className="proj-bid-list">
-                {console.log('bidProject: ', bidProject)}
                 {bidProject.map((bid) => (
                   <Bid
                     key={bid.id}

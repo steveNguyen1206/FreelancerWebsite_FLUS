@@ -3,8 +3,8 @@ const cloudinary = require("../config/cloudinary.config");
 const project_post = db.project_post;
 const user = db.user;
 const subcategories = db.subcategories;
-const review = db.reviews;
 const comment_proj = db.comment_proj;
+const Op = db.Sequelize.Op;
 
 // Create and Save a new Project_post
 async function handleUpload(file) {
@@ -35,7 +35,6 @@ exports.create = async (req, res) => {
     });
     return;
   }
-
   // check the title is already exist, if yes, return error
   const existingProject = await project_post.findOne({
     where: { title: req.body.title },
@@ -62,7 +61,11 @@ exports.create = async (req, res) => {
       imgage_post_urls: img_url,
       user_id: req.userId,
       tag_id: req.body.tag_id,
-      start_date: new Date(new Date(req.body.start_date).setHours(new Date(req.body.start_date).getHours() + 7)).toISOString(),
+      start_date: new Date(
+        new Date(req.body.start_date).setHours(
+          new Date(req.body.start_date).getHours() + 7
+        )
+      ).toISOString(),
       status: 1,
     };
 
@@ -136,26 +139,7 @@ exports.findAll = (req, res) => {
       ],
     })
     .then((data) => {
-      return Promise.all(
-        data.map((project_post) => {
-          return review
-            .findAll({
-              where: { user_reviewed: project_post.user_id, type: 1 },
-            })
-            .then((reviews) => {
-              let sum = 0;
-              reviews.forEach((review) => {
-                sum += review.star;
-              });
-              project_post.user.dataValues.avg_rating =
-                sum / reviews.length || 0;
-              return project_post;
-            });
-        })
-      );
-    })
-    .then((projectPosts) => {
-      res.send(projectPosts);
+      res.send(data);
     })
     .catch((err) => {
       console.log(err);
@@ -165,26 +149,9 @@ exports.findAll = (req, res) => {
     });
 };
 
-
 // Retrieve all Project_posts of a user.
 exports.findAllProjectPostsbyUserID = (req, res) => {
   const user_id = req.params.user_id;
-  // for each project post, check expired startDate, if expired, set status = 0
-  project_post
-    .findAll({ where: { status: 1, user_id: user_id} })
-    .then((data) => {
-      data.forEach((projectPost) => {
-        const startDate = new Date(projectPost.start_date);
-        const currentDate = new Date();
-        if (startDate < currentDate) {
-          project_post.update({ status: 0 }, { where: { id: projectPost.id } });
-        }
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
   project_post
     .findAll({
       where: { status: 1, user_id: user_id },
@@ -207,26 +174,7 @@ exports.findAllProjectPostsbyUserID = (req, res) => {
       ],
     })
     .then((data) => {
-      return Promise.all(
-        data.map((project_post) => {
-          return review
-            .findAll({
-              where: { user_reviewed: project_post.user_id, type: 1 },
-            })
-            .then((reviews) => {
-              let sum = 0;
-              reviews.forEach((review) => {
-                sum += review.star;
-              });
-              project_post.user.dataValues.avg_rating =
-                sum / reviews.length || 0;
-              return project_post;
-            });
-        })
-      );
-    })
-    .then((projectPosts) => {
-      res.send(projectPosts);
+      res.send(data);
     })
     .catch((err) => {
       console.log(err);
@@ -236,7 +184,6 @@ exports.findAllProjectPostsbyUserID = (req, res) => {
     });
 };
 
-// change status of many project_posts by list of project_post_id
 exports.changeStatus = (req, res) => {
   const { status, project_post_id } = req.body;
   project_post
@@ -260,11 +207,11 @@ exports.changeStatus = (req, res) => {
 };
 
 // get all project post with status = 1
-exports.findOne = (req, res) => {
+exports.findOne = async (req, res) => {
   const id = req.params.id;
 
-  project_post
-    .findByPk(id, {
+  try {
+    let data = await project_post.findByPk(id, {
       include: [
         {
           model: user,
@@ -282,58 +229,40 @@ exports.findOne = (req, res) => {
           attributes: ["id", "subcategory_name"],
         },
       ],
-    })
-    .then((data) => {
-      console.log(data)
-      if (!data) {
-        res.status(404).send({
-          message: "Not found project_post with id " + id,
-        });
-      } else {
-        return review
-          .findAll({
-            where: { user_reviewed: data.user_id, type: 1 },
-          })
-          .then((reviews) => {
-            let sum = 0;
-            reviews.forEach((review) => {
-              sum += parseFloat(review.star);
-            });
-            data.user.dataValues.avg_rating = sum / reviews.length || 0;
-            return data;
-          });
-      }
-    })
-    .then((data) => {
-      // find comments of project post
-      return comment_proj
-        .findAll({
-          where: { proj_post_id: id, parent_id: null },
-        })
-        .then((comments) => {
-          const promises = comments.map((comment) => {
-            return comment_proj.findAll({
-              where: { parent_id: comment.id },
-            });
-          });
-          return Promise.all(promises).then((childComments) => {
-            for (let i = 0; i < comments.length; i++) {
-              comments[i].dataValues.childComments = childComments[i];
-            }
-            data.dataValues.comments = comments;
-            return data;
-          });
-        });
-    })
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).send({
-        message: "Error retrieving project_post with id=" + id,
-      });
     });
+
+    if (!data) {
+      res.status(404).send({
+        message: "Not found project_post with id " + id,
+      });
+      return;
+    }
+
+    // find comments of project post
+    const comments = await comment_proj.findAll({
+      where: { proj_post_id: id, parent_id: null },
+    });
+
+    const childComments = await Promise.all(
+      comments.map((comment) =>
+        comment_proj.findAll({
+          where: { parent_id: comment.id },
+        })
+      )
+    );
+
+    for (let i = 0; i < comments.length; i++) {
+      comments[i].dataValues.childComments = childComments[i];
+    }
+    data.dataValues.comments = comments;
+
+    res.send(data);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      message: "Error retrieving project_post with id=" + id,
+    });
+  }
 };
 
 exports.update = async (req, res) => {
@@ -347,9 +276,10 @@ exports.update = async (req, res) => {
     return;
   }
 
-  const id = req.params.project_post_id;
 
-  console.log("req.file: ", req.file);
+  const id = req.params.project_post_id;
+  console.log("id: ", id)
+
 
   try {
     if (!req.file) {
@@ -429,158 +359,161 @@ exports.update = async (req, res) => {
   }
 };
 
-
 // Define the getPagination function
 function getPagination(page, size) {
-    // page > 0, size > 0
-    const limit = size;
-    const offset = (page - 1) * size;
-    return { limit, offset };
-  }
-  
-  exports.findProjPostsByPage = (req, res) => {
-    console.log("\nMY PARAMS:", req.params);
-    const { page, size, searchKey } = req.params; // page: 1..n, size: 1..m
-    console.log(
-      "FFFFFFFFFFFFFFFFFFFF",
-      "page: " + page + ", size: " + size + ", searchKey: " + searchKey
-    );
-  
-    // condition to check searchKey in account_name or profile_name
-    var condition =
-      searchKey && searchKey !== "undefined" && searchKey !== ""
-        ? {
-            [Op.or]: [
-              { title: { [Op.like]: `%${searchKey}%` } },
-              { detail: { [Op.like]: `%${searchKey}%` } },
-            ],
-          }
-        : null;
-  
-    const { limit, offset } = getPagination(parseInt(page), parseInt(size));
-  
-    // Find all users with condition by page
-    project_post.findAndCountAll({ where: condition, limit, offset })
-      .then((data) => {
-        const { rows: proj_posts, count: totalItems } = data;
-  
-        // // Extract only the necessary information from each user
-        // const simplifiedProjPosts = proj_posts.map((proj_post) => ({
-        //   id: proj_post.id,
-        //   title: proj_post.title,
-        //   detail: proj_post.detail,
-        //   budget_min: proj_post.budget_min,
-        //   budget_max: proj_post.budget_max,
-        //   status: proj_post.status,
-        // }));
-  
-        const response = {
-          totalItems,
-          proj_posts: proj_posts,
-          currentPage: parseInt(page),
-          totalPages: Math.ceil(totalItems / limit),
-        };
-  
-        res.send(response);
-      })
-      .catch((err) => {
-        res.status(500).send({
-          message: err.message || "Some error occurred while retrieving users.",
-        });
+  // page > 0, size > 0
+  const limit = size;
+  const offset = (page - 1) * size;
+  return { limit, offset };
+}
+
+exports.findProjPostsByPage = (req, res) => {
+  console.log("\nMY PARAMS:", req.params);
+  const { page, size, searchKey } = req.params; // page: 1..n, size: 1..m
+  console.log(
+    "FFFFFFFFFFFFFFFFFFFF",
+    "page: " + page + ", size: " + size + ", searchKey: " + searchKey
+  );
+
+  // condition to check searchKey in account_name or profile_name
+  var condition =
+    searchKey && searchKey !== "undefined" && searchKey !== ""
+      ? {
+          [Op.or]: [
+            { title: { [Op.like]: `%${searchKey}%` } },
+            { detail: { [Op.like]: `%${searchKey}%` } },
+          ],
+        }
+      : null;
+
+  const { limit, offset } = getPagination(parseInt(page), parseInt(size));
+
+  // Find all users with condition by page
+  project_post
+    .findAndCountAll({ where: condition, limit, offset })
+    .then((data) => {
+      const { rows: proj_posts, count: totalItems } = data;
+
+      // // Extract only the necessary information from each user
+      // const simplifiedProjPosts = proj_posts.map((proj_post) => ({
+      //   id: proj_post.id,
+      //   title: proj_post.title,
+      //   detail: proj_post.detail,
+      //   budget_min: proj_post.budget_min,
+      //   budget_max: proj_post.budget_max,
+      //   status: proj_post.status,
+      // }));
+
+      const response = {
+        totalItems,
+        proj_posts: proj_posts,
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(totalItems / limit),
+      };
+
+      res.send(response);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving users.",
       });
-  };
-  
+    });
+};
 
 // Change user status by user id and status param
 exports.changeStatusByID = (req, res) => {
-    const { id, status } = req.params;
-  
-    if (!id || parseInt(status) < 0 || parseInt(status) > 2) {
-      res.status(400).send({
-        message: "Invalid projpost id or status!",
-      });
-      return;
-    }
-  
-    project_post.update({ status }, { where: { id } })
-      .then((num) => {
-        if (num[0] === 1) {
-          res.send({
-            message: "Proj Post status updated successfully!",
-          });
-        } else {
-          res.send({
-            message: `Cannot update Post with id=${id}. Maybe Post was not found!`,
-          });
-        }
-      })
-      .catch((err) => {
-        console.error("Sequelize Error:", err);
-        res.status(500).send({
-          message: "Could not update Post with id=" + id,
+  const { id, status } = req.params;
+
+  if (!id || parseInt(status) < 0 || parseInt(status) > 2) {
+    res.status(400).send({
+      message: "Invalid projpost id or status!",
+    });
+    return;
+  }
+
+  project_post
+    .update({ status }, { where: { id } })
+    .then((num) => {
+      if (num[0] === 1) {
+        res.send({
+          message: "Proj Post status updated successfully!",
         });
+      } else {
+        res.send({
+          message: `Cannot update Post with id=${id}. Maybe Post was not found!`,
+        });
+      }
+    })
+    .catch((err) => {
+      console.error("Sequelize Error:", err);
+      res.status(500).send({
+        message: "Could not update Post with id=" + id,
       });
-  };
+    });
+};
 
 exports.deleteById = (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    project_post.findByPk(id)
-        .then((project) => {
-            if (!project) {
-                res.status(404).send({
-                    message: `Project with id=${id} not found.`,
-                });
-                return;
-            }
+  project_post
+    .findByPk(id)
+    .then((project) => {
+      if (!project) {
+        res.status(404).send({
+          message: `Project with id=${id} not found.`,
+        });
+        return;
+      }
 
-            const imageUrls = project.imgage_post_urls;
+      const imageUrls = project.imgage_post_urls;
 
-            project_post.destroy({ where: { id } })
-                .then((num) => {
-                    if (num === 1) {
-                        // Handle delete the file using imageUrls
-                        handleDelete(imageUrls);
-                        res.send({
-                            message: "Post was deleted successfully!",
-                        });
-                    } else {
-                        res.send({
-                            message: `Cannot delete Post with id=${id}. Maybe Post was not found!`,
-                        });
-                    }
-                })
-                .catch((err) => {
-                    console.error("Sequelize Error:", err);
-                    res.status(500).send({
-                        message: "Could not delete Post with id=" + id,
-                    });
-                });
+      project_post
+        .destroy({ where: { id } })
+        .then((num) => {
+          if (num === 1) {
+            // Handle delete the file using imageUrls
+            handleDelete(imageUrls);
+            res.send({
+              message: "Post was deleted successfully!",
+            });
+          } else {
+            res.send({
+              message: `Cannot delete Post with id=${id}. Maybe Post was not found!`,
+            });
+          }
         })
         .catch((err) => {
-            console.error("Sequelize Error:", err);
-            res.status(500).send({
-                message: "Could not find Project with id=" + id,
-            });
+          console.error("Sequelize Error:", err);
+          res.status(500).send({
+            message: "Could not delete Post with id=" + id,
+          });
         });
+    })
+    .catch((err) => {
+      console.error("Sequelize Error:", err);
+      res.status(500).send({
+        message: "Could not find Project with id=" + id,
+      });
+    });
 };
 
 exports.findOwnerProject = (req, res) => {
   const project_post_id = req.params.id;
 
-  project_post.findByPk(project_post_id)
-    .then(data => {
+  project_post
+    .findByPk(project_post_id)
+    .then((data) => {
       if (data) {
         res.send(data);
       } else {
         res.status(404).send({
-          message: `Cannot find Project Post with id=${project_post_id}.`
+          message: `Cannot find Project Post with id=${project_post_id}.`,
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).send({
-        message: `Error retrieving Project Post with id=${project_post_id}.`
+        message: `Error retrieving Project Post with id=${project_post_id}.`,
       });
     });
 };

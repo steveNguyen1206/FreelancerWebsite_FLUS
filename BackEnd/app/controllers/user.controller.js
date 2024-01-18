@@ -434,6 +434,41 @@ exports.updateNameAndSocialLink = (req, res) => {
     });
 };
 
+exports.checkPhoneExist = (req, res) => {
+  const { phone } = req.params;
+  console.log("############phone: ", phone);
+  if (!phone) {
+    res.status(400).send({
+      message: "Invalid phone!",
+    });
+    return;
+  }
+
+  User.findOne({ where: { phone_number: phone } })
+    .then((user) => {
+      if (!user) {
+        console.log("phone is available");
+        res.send({
+          phoneExisted: false,
+          message: "Phone is available!",
+        });
+      } else {
+        console.log("phone is already in use");
+        res.send({
+          phoneExisted: true,
+          message: `Phone is already in use!`,
+        });
+      }
+    })
+    .catch((err) => {
+      console.error("Sequelize Error:", err);
+      res.status(500).send({
+        message: "Error retrieving User with phone=" + phone,
+      });
+    });
+}
+
+
 // Kiểm tra 1 account có bị ban hay không
 // exports.findOnebyAccountNameNotActive = (req, res) => {
 //   const account_name = req.params.account_name;

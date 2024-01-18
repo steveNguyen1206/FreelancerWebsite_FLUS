@@ -1,7 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import './CommentProjectPost.css';
 import reviewService from '@/services/reviewServices';
-import userDataService from '@/services/userDataServices';
 import vietnam from '../../assets/vietnam.png';
 import { StarRating } from '..';
 
@@ -21,7 +20,7 @@ const calculateTimeDifference = (dateCreated) => {
   return { days, hours, minutes, seconds };
 };
 
-const Responder = ({ user, userRating, commentContent, dateCreated }) => {
+const Responder = ({ user, commentContent, dateCreated }) => {
   const timeDifference = calculateTimeDifference(dateCreated);
   const timeDifferenceArray = Object.values(timeDifference);
   const timeDifferenceArrayLength = timeDifferenceArray.length;
@@ -51,6 +50,15 @@ const Responder = ({ user, userRating, commentContent, dateCreated }) => {
     }
   }
 
+  const [review, setReview] = useState('');
+
+  useEffect(() => {
+    reviewService.getRating(user.id).then((response) => {
+      console.log('response: ', response);
+      setReview(response.data);
+    });
+  }, []);
+
   return (
     <>
       <div className="responder">
@@ -68,8 +76,8 @@ const Responder = ({ user, userRating, commentContent, dateCreated }) => {
           </div>
         </div>
         <div className="comment-star">
-          <StarRating rating={userRating} />
-          <p>{userRating}</p>
+          <StarRating rating={review.average} />
+          <p>{review.average}</p>
         </div>
 
         <div className="comment-content">

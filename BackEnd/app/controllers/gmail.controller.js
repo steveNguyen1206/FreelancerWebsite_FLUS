@@ -1,4 +1,4 @@
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 const db = require("../models");
 const User = db.user;
 
@@ -8,44 +8,47 @@ const sendEmailToFreelancer = (req, res) => {
   // const freelancer_post_id = req.body.freelancer_post_id;
   const url = req.body.url;
 
-  console.log("Email from sendEmail: ",email);
+  console.log("Email from sendEmail: ", email);
   // console.log("freelancer_post_id from sendEmail: ",freelancer_post_id)
-  console.log("url from sendEmail: ",url);
+  console.log("url from sendEmail: ", url);
 
-  let message = "Someone is asking to join a project with you! Check your FLUS account to see more";
+  let message = "";
 
-  if (url.includes("my-project-manage")){
+  if (url.includes("/project/")) {
+    // freelancer send request to join project
+    message = "Freelancer have sent a request to join your project! Click the link below to see more";
+  }
+
+  else if (url.includes("project-manage")){
+    // client accept freelancer request
+    message = "You have been accepted the invitation to join the project! Click the link below to see more";
+  }
+
+  else if (url.includes("my-project-manage")){
+    // freelancer accept client request
     message = "Freelancer have accepted the invitation to join your project! Click the link below to see more";
   }
-  else if (url.includes("project-manage")) {
-    message = "You have accepted the invitation to join a project! Check your FLUS account to see the BIDs.";
+  else if (url.includes("findFreelancer")){
+    // client send request to freelancer
+    message = "You have been invited to join the project! Click the link below to see more";
   }
 
   // return  {
-    try {
-      // Find the user by id
-      // const user = await User.findByPk(id);
+  try {
 
-      // if (!user) {
-      //   return reject({ message: `Cannot find User with id=${id}.` });
-      // }
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "vohoang2023.01@gmail.com",
+        pass: "zvnd elqi faii hwuh",
+      },
+    });
 
-      // const email = user.email; // Lấy email từ đối tượng user
-
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: 'vohoang2023.01@gmail.com',
-          pass: "zvnd elqi faii hwuh"
-        }
-      });
-
-      const mailConfigs = {
-        from: 'vohoang2023.01@gmail.com',
-        to: email,
-        subject: 'Sending Email using Node.js',
-        html: 
-        `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    const mailConfigs = {
+      from: "vohoang2023.01@gmail.com",
+      to: email,
+      subject: "Sending Email using Node.js",
+      html: `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
         <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
         <head>
         <!--[if gte mso 9]>
@@ -276,21 +279,21 @@ const sendEmailToFreelancer = (req, res) => {
         
         </html>
     
-        `
-      };
+        `,
+    };
 
-      // Send the email
-      transporter.sendMail(mailConfigs);
+    // Send the email
+    transporter.sendMail(mailConfigs);
 
-      return res.status(200).json({ message: "Email sent successfully" });
-    } catch (error) {
-      console.error(error);
-      return res.status(517).json({ message: "Failed to send email" });
-    }
+    return res.status(200).json({ message: "Email sent successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(517).json({ message: "Failed to send email" });
+  }
   // }
   // );
-}
+};
 
 module.exports = {
-  sendEmailToFreelancer
+  sendEmailToFreelancer,
 };

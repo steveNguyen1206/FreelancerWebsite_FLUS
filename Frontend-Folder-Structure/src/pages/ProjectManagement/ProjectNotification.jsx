@@ -16,8 +16,9 @@ export const ProjectNotification = () => {
 
 
   const handleViewReport = (id) => {
-    setProjectTab('report');
     setReportId(id);
+    console.log("noti set id", id);
+    setProjectTab('report');
   }
 
 
