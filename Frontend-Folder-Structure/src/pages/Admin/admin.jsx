@@ -112,10 +112,10 @@ const Admin = () => {
                         </div>
                     </div>
                 </div>
-                <div className="group-13 row" onClick={handleSignOut}>
+                {/* <div className="group-13 row" onClick={handleSignOut}>
                     <img className="sign-out-squre col-md-auto" src={signout} />
                     <div className="text-wrapper-30 col">Log out</div>
-                </div>
+                </div> */}
             </div>
             <div className='spare-space'>
                 {activeGroup === 'users' && <UserTab />}
