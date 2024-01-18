@@ -31,7 +31,7 @@ const Navbar = () => {
           <div className="nav_text" onClick={handleAbout}>About</div>
         </div>
         <div className="col" style={{display:"flex", justifyContent: "center"}}>
-          <div className="nav_text" onClick={handleFindJobs}>Find Jobs</div>
+          <div className="nav_text" onClick={handleFindJobs}>Find Projects</div>
         </div>
         <div className="col" style={{display:"flex", justifyContent: "center"}}>
           <div className="nav_text" onClick={handleFindFreelancers}>Find Freelancers</div>
