@@ -94,7 +94,7 @@ export const ProjectContent = () => {
 
             <div className="project-requirement-container">
               <h4 className="title-text --size-20">Requirements</h4>
-              <p>{project.project_description}</p>
+              <p style={{whiteSpace: 'pre-line'}}>{project.project_description}</p>
             </div>
 
             

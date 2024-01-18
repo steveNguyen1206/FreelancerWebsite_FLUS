@@ -144,6 +144,9 @@ const Job = () => {
             />
           </div>
           <div className="right-job">
+            {filteredProjects.length == 0 && (
+              <div className="no-post">No posts found!!!</div>
+            )}
             {sortProjects(filteredProjects).map((project) => (
               <Post
                 key={project.id}

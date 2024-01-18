@@ -5,29 +5,21 @@ import exitButton from '../../assets/exitButton.png';
 import UploadIcon from '../../assets/UploadIcon.png';
 import freelancer_post_Service from '@/services/freelancer_post_Service';
 import subcategoryService from '@/services/subcategoryService';
-import userDataService from '@/services/userDataServices';
 
 const isValidTitle = (title) => {
-  if (!title) return false;
-  const titleRegex = /^[a-zA-Z0-9\s\-]*$/;
-  return titleRegex.test(title);
+  return title.length >= 10 && title.length <= 100;
 };
 
 const isValidAboutMe = (about_me) => {
-  // const detailRegex = /^.{10,}$/;
-  // return detailRegex.test(detail);
-  const aboutMeRegex = /^[a-zA-Z0-9\s\-\.\,\!\?]*$/;  
-  return aboutMeRegex.test(about_me);
+  return about_me.length <= 512 && about_me.length > 10;
 };
 
 const isValidDeliveryDescription = (delivery_description) => {
-  const descriptionRegex = /^[a-zA-Z0-9\s]{1,511}$/;
-  return descriptionRegex.test(delivery_description);
+  return delivery_description.length <= 512 && delivery_description.length > 10;
 };
 
 const isValidSkillDescription = (skill_description) => {
-  const skillRegex = /^[a-zA-Z0-9\s\-\.\,\!\?]{1,511}$/;
-  return skillRegex.test(skill_description);
+  return skill_description.length <= 512 && skill_description.length > 10;
 };
 
 const isValidLowestPrice = (lowset_price) => {
@@ -47,8 +39,6 @@ const isValidRevisionNumber = (revision_number) => {
   const revisionNumberRegex = /^[0-9]*$/;
   return revisionNumberRegex.test(revision_number) && revision_number >= 0;
 };
-
-
 
 const NewPost = ({ isOpen, onClose, onUpdate }) => {
   const userId = localStorage.getItem('LOGINID');
@@ -76,23 +66,22 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
     revision_number: '',
     imgage_post_urls: '',
     skill_tag: '',
-    image_file: '' // Lấy file ảnh luôn
+    image_file: '', // Lấy file ảnh luôn
   };
   const [fileName, setFileName] = useState('');
   const [newPost, setNewPost] = useState(initState);
 
   const validateForm = () => {
     let isValid = true;
-    const newErrors = {...errors};
+    const newErrors = { ...errors };
 
     if (!newPost.title) {
-      newErrors.title = 'Please write your post title.';
+      newErrors.title = 'Please enter a title.';
       isValid = false;
-    } else  if (newPost.title.length > 70) {
-      newErrors.title = 'The title must not exceed 70 characters.';
-      isValid = false;
-    }else if (!isValidTitle(newPost.title)) {
-      newErrors.title = 'Title is invalid. Title must be alphanumeric and not empty.';
+    } else if (!isValidTitle(newPost.title)) {
+      // display error: title is invalid adn must be between 10 and 100 characters
+      newErrors.title =
+        'Title is invalid. Title must be between 10 and 100 characters.';
       isValid = false;
     } else {
       newErrors.title = '';
@@ -103,77 +92,85 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
       isValid = false;
     } else {
       const file = newPost.image_file;
-      const allowedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webg'];
+      const allowedFormats = [
+        'image/jpeg',
+        'image/png',
+        'image/gif',
+        'image/jpg',
+        'image/webg',
+      ];
 
       if (file && !allowedFormats.includes(file.type)) {
         newErrors.image = 'Image file not in supported format!';
         isValid = false;
-      }else
-        newErrors.image = '';
+      } else newErrors.image = '';
     }
 
     if (!newPost.about_me) {
       newErrors.about_me = 'Please write about yourself.';
       isValid = false;
     } else if (!isValidAboutMe(newPost.about_me)) {
-      newErrors.about_me = 'About me is invalid. About me must be alphanumeric and not empty.';
+      newErrors.about_me =
+        "About me is invalid. About me must between 10 and 512 characters and can't be empty.";
       isValid = false;
     } else {
-        newErrors.about_me = '';
+      newErrors.about_me = '';
     }
 
     if (!newPost.delivery_description) {
-      newErrors.delivery_description = 'Please write about your delivery.';
+      newErrors.delivery_description =
+        'Please write about how your products come to the client.';
       isValid = false;
     } else if (!isValidDeliveryDescription(newPost.delivery_description)) {
-      newErrors.delivery_description = 'Delivery description is invalid. Delivery description must be alphanumeric and not empty.';
+      newErrors.delivery_description =
+        'Delivery description is invalid. Delivery description must be between 10 and 512 characters';
       isValid = false;
     } else {
-      
-        newErrors.delivery_description = '';
+      newErrors.delivery_description = '';
     }
 
     if (!newPost.skill_description) {
       newErrors.skill_description = 'Please write about your skill.';
       isValid = false;
     } else if (!isValidSkillDescription(newPost.skill_description)) {
-      newErrors.skill_description = 'Skill description is invalid. Skill description must be alphanumeric and not empty.';
+      newErrors.skill_description =
+        'Skill description is invalid. Skill description must be between 10 and 512 characters';
       isValid = false;
     } else {
-      
-        newErrors.skill_description = '';
+      newErrors.skill_description = '';
     }
 
     if (!newPost.lowset_price) {
       newErrors.lowset_price = 'Please specify your lowest price.';
       isValid = false;
     } else if (!isValidLowestPrice(newPost.lowset_price)) {
-      newErrors.lowset_price = 'Lowest price is invalid. Lowest price must be numeric and greater than 0.';
+      newErrors.lowset_price =
+        'Lowest price is invalid. Lowest price must be numeric and greater than 0.';
       isValid = false;
     } else {
-        newErrors.lowset_price = '';
+      newErrors.lowset_price = '';
     }
 
     if (!newPost.delivery_due) {
       newErrors.delivery_due = 'Please specify your delivery due.';
       isValid = false;
     } else if (!isValidDeliveryDue(newPost.delivery_due)) {
-      newErrors.delivery_due = 'Delivery due is invalid. Delivery due must be numeric and greater than or equal to 0.';
+      newErrors.delivery_due =
+        'Delivery due is invalid. Delivery due must be numeric and greater than or equal to 0.';
       isValid = false;
-    }
-    else {
-      
-        newErrors.delivery_due = '';
+    } else {
+      newErrors.delivery_due = '';
     }
 
     if (!newPost.revision_number) {
       newErrors.revision_number = 'Please specify your revision number.';
       isValid = false;
     } else if (!isValidRevisionNumber(newPost.revision_number)) {
-      newErrors.revision_number = 'Revision number is invalid. Revision number must be numeric and greater than or equal to 0.';
+      newErrors.revision_number =
+        'Revision number is invalid. Revision number must be numeric and greater than or equal to 0.';
       isValid = false;
     } else {
-        newErrors.revision_number = '';
+      newErrors.revision_number = '';
     }
 
     setErrors(newErrors);
@@ -181,9 +178,9 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
   };
   const initialSkills = [
     {
-      'id': '',
-      'subcategory_name': ''
-    }
+      id: '',
+      subcategory_name: '',
+    },
   ];
   const [skills, setSkills] = useState(initialSkills);
   useEffect(() => {
@@ -200,9 +197,7 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
       .catch((e) => {
         console.log(e);
       });
-  }
-
-  
+  };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -224,10 +219,10 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
 
   const handleDoneClick = () => {
     console.log('Done clicked.');
-    newPost.skill_tag = document.getElementById("filter").value;
+    newPost.skill_tag = document.getElementById('filter').value;
     if (validateForm()) {
-      console.log("From validated successfully.")
-      console.log(newPost)
+      console.log('From validated successfully.');
+      console.log(newPost);
       freelancer_post_Service
         .sendPost(newPost)
         .then(() => {
@@ -262,10 +257,6 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
     //     }
   };
 
-
-
-
-
   return (
     <>
       {showOverlay && <div className="overlay" />}
@@ -284,14 +275,13 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
         </div>
 
         <div className="new-post-body">
-
           <div className="project-title-input">
             <label htmlFor="skillTag">Skill tag *</label>
             <select className="filter" id="filter" style={{ width: '650px' }}>
               <option value="" disabled defaultValue>
                 Add skills
               </option>
-              {skills.map(skill => (
+              {skills.map((skill) => (
                 <option key={skill.id} value={skill.id}>
                   {skill.subcategory_name}
                 </option>
@@ -350,7 +340,7 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
 
           <div className="project-title-input">
             <label htmlFor="projectAboutMe">About Me *</label>
-            <input
+            <textarea
               type="text"
               id="projectAboutMe"
               name="about_me"
@@ -437,7 +427,9 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
             />
             <div className="error-message">{errors.delivery_description}</div>
           </div>
-          <button className='done-button' onClick={handleDoneClick}>Done</button>
+          <button className="done-button" onClick={handleDoneClick}>
+            Done
+          </button>
         </div>
       </div>
     </>

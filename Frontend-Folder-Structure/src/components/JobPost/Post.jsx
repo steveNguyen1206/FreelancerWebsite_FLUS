@@ -76,7 +76,9 @@ const Post = ({ project, handleBidClick }) => {
         <div className="project-post-container">
           <div className="post-title">{project.title}</div>
           <div className="post-tag">{project.subcategory.subcategory_name}</div>
-          <div className="post-detail">{project.detail}</div>
+          <div className="post-detail">
+            <p style={{whiteSpace: 'pre-line'}}>{project.detail}</p>
+            </div>
         </div>
       </div>
 

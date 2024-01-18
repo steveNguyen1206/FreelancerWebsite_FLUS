@@ -85,13 +85,14 @@
 }
 
 .wishlist-detail{
-    max-width: 600px;
+    max-width: 400px;
+    max-height: 120px;
     text-align: left;
     display: -webkit-box;
     -webkit-line-clamp: 5; /* number of lines to show */
     -webkit-box-orient: vertical;
     height: 100%;
-    overflow: hidden;
+    overflow-y: hidden;
 }
 
 .wishlist-right{

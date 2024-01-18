@@ -30,8 +30,6 @@ const PostDetail = () => {
   const [user, setUser] = useState([]);
   const [isChangeBid, setIsChangeBid] = useState(false);
 
-
-
   const fetchUserId = async () => {
     try {
       const userIdData = await freelancer_post_Service.findOnebyId(id);
@@ -174,18 +172,24 @@ const PostDetail = () => {
           }}
         />
       )}
-      {showHirePopup && <HireFreelancer setShowHirePopup={setShowHirePopup}  onUpdate={() => { setIsChange(!isChange) }}/>}
-      {showOfferPopup && 
-        <OfferDetailPopup 
-          setPopUpAppear={setShowOfferPopup} 
+      {showHirePopup && (
+        <HireFreelancer
+          setShowHirePopup={setShowHirePopup}
+          onUpdate={() => {
+            setIsChange(!isChange);
+          }}
+        />
+      )}
+      {showOfferPopup && (
+        <OfferDetailPopup
+          setPopUpAppear={setShowOfferPopup}
           checkOwner={check_type(userId, login_id)}
-          onChange={
-            () => {
-              // setIsChange(!isChange);
-              setIsChangeBid(!isChangeBid);
-            }
-          }
-      />}
+          onChange={() => {
+            // setIsChange(!isChange);
+            setIsChangeBid(!isChangeBid);
+          }}
+        />
+      )}
       <div className="pproject">
         <div className="left-project">
           <div className="main-post">
@@ -222,7 +226,9 @@ const PostDetail = () => {
               </div>
 
               <div className="proj-detail" style={{ textAlign: 'left' }}>
-                {project.skill_description}
+                <p style={{ whiteSpace: 'pre-wrap' }}>
+                  {project.skill_description}
+                </p>
               </div>
               <div className="proj-body">
                 <div>
@@ -242,7 +248,9 @@ const PostDetail = () => {
             </div>
             <div className="about-me-section">
               <div className="section-title">About the seller</div>
-              <div className="about-me-content">{project.about_me}</div>
+              <div className="about-me-content">
+                <p style={{ whiteSpace: 'pre-line' }}>{project.about_me}</p>
+              </div>
             </div>
             <div className="proj-line">
               <img src={line} alt="line" />
@@ -280,13 +288,9 @@ const PostDetail = () => {
               </div>
             </div>
             <div className="detail-img">
-              {/* <ul>
-                  <li>1 concept included</li>
-                  <li> Logo transparency</li>
-                  <li>Vector file</li>
-                  <li>Include social media kit</li>
-                </ul> */}
-              {project.delivery_description}
+              <p style={{ whiteSpace: 'pre-line' }}>
+                {project.delivery_description}
+              </p>
             </div>
 
             <div className="btn-hire">
@@ -311,7 +315,11 @@ const PostDetail = () => {
             <p>{numberOffer} Offers</p>
             <div className="proj-bid-list">
               {bidOnes.map((bidOne) => (
-                <BidOffer bidOne={bidOne} checkOwner={check_type(userId, login_id)} onChangeBid={onChangeBid}/>
+                <BidOffer
+                  bidOne={bidOne}
+                  checkOwner={check_type(userId, login_id)}
+                  onChangeBid={onChangeBid}
+                />
               ))}
 
               {/* <Bid />

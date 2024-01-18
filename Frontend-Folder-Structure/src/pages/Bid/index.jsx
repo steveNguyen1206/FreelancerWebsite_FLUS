@@ -22,10 +22,7 @@ const isValidEmail = (email) => {
 
 
 const isValidMessage = (message) => {
-  if (message === '') return false;
-  // message is not empty and contains at least 10 Unicode letters, numbers, spaces, or punctuation
-  const messageRegex = /^[\p{L}\p{N}\p{Z}\p{P}]{10,}$/u;
-  return messageRegex.test(message);
+  return message.length >= 10 && message.length <= 512;
 };
 
 const isValidPrice = (price) => {
@@ -107,17 +104,8 @@ const BidPopup = ({ isOpen, isClose, projectPostId, onChange, budgetMin, budgetM
     if (!isValidMessage(bid.message)) {
       isValid = false;
       errors.message =
-        'Invalid message. Message must have at least 10 letters.';
+        'Invalid message. Message must be not empty and have length between 10 and 512.';
     }
-
-    // if message > 512 characters, return error
-    if (bid.message.length > 512) {
-      isValid = false;
-      errors.message = 'Invalid message. Message must have at most 512 letters.';
-    }
-
-
-
     if (!isValidPrice(bid.price)) {
       isValid = false;
       errors.price =

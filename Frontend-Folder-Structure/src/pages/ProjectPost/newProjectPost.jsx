@@ -7,14 +7,15 @@ import projectPostServices from '@/services/projectPostServices';
 import subcategoryService from '@/services/subcategoryService';
 
 const isValidTitle = (title) => {
-  if (!title) return false;
-  const titleRegex = /^[a-zA-Z0-9\s\-]*$/;
-  return titleRegex.test(title);
+  return title.length >= 10 && title.length <= 100;
 };
 
 const isValidDetail = (detail) => {
-  const detailRegex = /^[A-Za-z0-9\s.,?!]{10,}$/g;
-  return detailRegex.test(detail);
+  // const detailRegex = /^[A-Za-z0-9\s.,?!]{10,}$/g;
+  // return detailRegex.test(detail);
+  const len = detail.length;
+  console.log('len: ', len);
+  return len >= 10 && len <= 512;
 };
 
 const isValidBudget = (budget) => {
@@ -130,7 +131,8 @@ const NewProjectPost = ({ isOpen, onClose, onUpdate }) => {
 
     // Validate detail
     if (!isValidDetail(newProject.detail)) {
-      newErrors.detail = 'Project detail must have at least 10 characters.';
+      newErrors.detail =
+        'Project detail must have at least 10 characters and at most 512 characters.';
       isValid = false;
     } else {
       newErrors.detail = '';

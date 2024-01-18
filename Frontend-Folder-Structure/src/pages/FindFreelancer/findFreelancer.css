@@ -32,6 +32,10 @@
     border-radius: 8px;
     height: 55px;
     width: 200px;
+    color: #FFF;
+    font-style: bold;
+    font-weight: 700;
+    font-family: "Inter";
 }
 
 .sort {
@@ -79,4 +83,11 @@
 
 .left-job{
     /* margin-left: 20px; */
+}
+
+.no-post{
+    color: gray;
+    font-size: 20px;
+    font-weight: bold;
+    align-self: center;
 }

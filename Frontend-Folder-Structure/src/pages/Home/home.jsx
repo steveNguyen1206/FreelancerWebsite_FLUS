@@ -90,13 +90,11 @@ const index = () => {
       <div className="BannerSection">
         <img className="magnificent-view" alt="Magnificent view" src={banner} />
         <div className="rectangle" />
-        <p className="text-wrapper">
-          {' '}
-          Unleash your freelance superpowers and conquer the world of
-          opportunities – where talent meets opportunity, success follows.
-          Elevate your career with limitless possibilities!{' '}
-        </p>
-
+        <p className="text-wrapper" style={{whiteSpace:"pre-line"}}> 
+        Discover a world of elite freelancers, streamline collaboration, and witness unparalleled success. 
+        Elevate your vision, connect effortlessly, and experience the future of freelance excellence. 
+        <br/>FLUS - where projects meet perfection! </p>
+        
         <div className="text-wrapper-2">FLUS</div>
         <img className="img" alt="Rectangle" src={human} />
         <div className="ButtonInBanner">

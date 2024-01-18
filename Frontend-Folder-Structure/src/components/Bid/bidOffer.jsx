@@ -95,9 +95,9 @@ const BidOffer = ({ bidOne, checkOwner, onChangeBid }) => {
           <p style={{ color: 'green' }}>{skill}</p>
         </div>
         <div style={{ outerHeight: '8px' }}>
-          <div className="offer-rating">
+          {/* <div className="offer-rating">
             <p>4.5</p>
-          </div>
+          </div> */}
         </div>
 
       </div>
