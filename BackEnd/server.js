@@ -616,4 +616,4 @@ function initial() {
   
 }
 
-initial();
+// initial();
