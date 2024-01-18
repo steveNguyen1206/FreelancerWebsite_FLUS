@@ -48,9 +48,9 @@ const HorizonFreelancerPostCell = ({post}) => {
         <div className="pprice">From ${post.lowset_price}</div>
         <div className="btn-row">
             <div className="btn-bid">
-            <button>Hire me</button>
+            <button onClick={() => handleClickPost(post.id)}>View</button>
             </div>
-            <img  src={eyeLight} onClick={() => handleClickPost(post.id)}/>
+            {/* <img  src={eyeLight} onClick={() => handleClickPost(post.id)}/> */}
 
         </div>
     </div>
