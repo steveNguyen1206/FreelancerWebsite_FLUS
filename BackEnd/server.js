@@ -599,7 +599,7 @@ function initial() {
       // create_freelancer_post(subcategories);
       // create_project_post(subcategories);
       // create_bid(subcategories);
-      // create_contact(subcategories);
+      create_contact(subcategories);
 
       // create_project_post(subcategories);
       return subcategories;
