@@ -49,7 +49,7 @@
     margin-right:auto;
     text-align: center;
     width: 100%;
-
+    cursor: pointer;
   }
   
   .pop-up-sign-up .or-sign-up-using-wrapper {
