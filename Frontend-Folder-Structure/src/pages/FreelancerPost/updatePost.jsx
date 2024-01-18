@@ -10,29 +10,27 @@ import freelancer_post_Service from '@/services/freelancer_post_Service';
 import { useParams } from 'react-router';
 
 const isValidTitle = (title) => {
-  if (!title) return true;
-  const titleRegex = /^[a-zA-Z0-9\s\-]*$/;
-  return titleRegex.test(title);
+  return (title.length >= 10 && title.length <= 100) || title.length === 0;
 };
 
 const isValidAboutMe = (about_me) => {
-  // const detailRegex = /^.{10,}$/;
-  // return detailRegex.test(detail);
-  if (!about_me) return true;
-  const aboutMeRegex = /^[a-zA-Z0-9\s]*$/;  
-  return aboutMeRegex.test(about_me);
+  return (
+    (about_me.length >= 10 && about_me.length <= 512) || about_me.length === 0
+  );
 };
 
 const isValidDeliveryDescription = (delivery_description) => {
-  if (!delivery_description) return true;
-  const descriptionRegex = /^[a-zA-Z0-9\s]{1,511}$/;
-  return descriptionRegex.test(delivery_description);
+  return (
+    (delivery_description.length >= 10 && delivery_description.length <= 512) ||
+    delivery_description.length === 0
+  );
 };
 
 const isValidSkillDescription = (skill_description) => {
-  if (!skill_description) return true;
-  const skillRegex = /^[a-zA-Z0-9\s]{1,511}$/;
-  return skillRegex.test(skill_description);
+  return (
+    (skill_description.length >= 10 && skill_description.length <= 512) ||
+    skill_description.length === 0
+  );
 };
 
 const isValidLowestPrice = (lowset_price) => {
@@ -53,11 +51,10 @@ const isValidRevisionNumber = (revision_number) => {
   return revisionNumberRegex.test(revision_number) && revision_number >= 0;
 };
 
-
 const UpdatePost = ({ isOpen, onClose, onUpdate }) => {
   const userId = localStorage.getItem('LOGINID');
   const currentURL = window.location.href;
-  const postId = currentURL.split("/").pop();
+  const postId = currentURL.split('/').pop();
   const initState = {
     freelancer_id: userId,
     title: '',
@@ -70,7 +67,7 @@ const UpdatePost = ({ isOpen, onClose, onUpdate }) => {
     skill_tag: '',
     revision_number: '',
     image_file: null, // Lấy file ảnh luôn
-    id: postId
+    id: postId,
   };
   const [updatePost, setUpdatePost] = useState(initState);
 
@@ -85,78 +82,81 @@ const UpdatePost = ({ isOpen, onClose, onUpdate }) => {
     delivery_due: '',
     revision_number: '',
   });
-  
-
-  
 
   // console.log("initState: ", initState);
 
   const validateForm = () => {
     let isValid = true;
-    const newErrors = {...error};
+    const newErrors = { ...error };
 
-    if (updatePost.title.length > 50) {
-      newErrors.title = 'The title must not exceed 50 characters.';
-      isValid = false;
-    }else if (!isValidTitle(updatePost.title)) {
-      newErrors.title = 'Title is invalid. Title must be alphanumeric and not empty.';
+    if (!isValidTitle(updatePost.title)) {
+      newErrors.title =
+        'Title is invalid. Title must be between 10 and 100 characters.';
       isValid = false;
     } else {
       newErrors.title = '';
     }
 
-    
     const file = updatePost.image_file;
-    const allowedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webg'];
+    const allowedFormats = [
+      'image/jpeg',
+      'image/png',
+      'image/gif',
+      'image/jpg',
+      'image/webg',
+    ];
 
     if (file && !allowedFormats.includes(file.type)) {
       newErrors.image = 'Image file not in supported format!';
       isValid = false;
-    }else
-      newErrors.image = '';
+    } else newErrors.image = '';
 
     if (!isValidAboutMe(updatePost.about_me)) {
-      newErrors.about_me = 'About me is invalid. About me must be alphanumeric and not empty.';
+      newErrors.about_me =
+        'About me is invalid. About me must be between 10 and 512 characters.';
       isValid = false;
     } else {
-        newErrors.about_me = '';
+      newErrors.about_me = '';
     }
 
     if (!isValidDeliveryDescription(updatePost.delivery_description)) {
-      newErrors.delivery_description = 'Delivery description is invalid. Delivery description must be alphanumeric and not empty.';
+      newErrors.delivery_description =
+        'Delivery description is invalid. Delivery description must be between 10 and 512 characters.';
       isValid = false;
     } else {
       newErrors.delivery_description = '';
     }
 
     if (!isValidSkillDescription(updatePost.skill_description)) {
-      newErrors.skill_description = 'Skill description is invalid. Skill description must be alphanumeric and not empty.';
+      newErrors.skill_description =
+        'Skill description is invalid. Skill description must be between 10 and 512 characters.';
       isValid = false;
     } else {
-      
-        newErrors.skill_description = '';
+      newErrors.skill_description = '';
     }
 
     if (!isValidLowestPrice(updatePost.lowset_price)) {
-      newErrors.lowset_price = 'Lowest price is invalid. Lowest price must be numeric and greater than 0.';
+      newErrors.lowset_price =
+        'Lowest price is invalid. Lowest price must be numeric and greater than 0.';
       isValid = false;
     } else {
-        newErrors.lowset_price = '';
+      newErrors.lowset_price = '';
     }
 
     if (!isValidDeliveryDue(updatePost.delivery_due)) {
-      newErrors.delivery_due = 'Delivery due is invalid. Delivery due must be numeric and greater than or equal to 0.';
+      newErrors.delivery_due =
+        'Delivery due is invalid. Delivery due must be numeric and greater than or equal to 0.';
       isValid = false;
-    }
-    else {
+    } else {
       newErrors.delivery_due = '';
     }
 
     if (!isValidRevisionNumber(updatePost.revision_number)) {
-      newErrors.revision_number = 'Revision number is invalid. Revision number must be numeric and greater than or equal to 0.';
+      newErrors.revision_number =
+        'Revision number is invalid. Revision number must be numeric and greater than or equal to 0.';
       isValid = false;
     } else {
-        newErrors.revision_number = '';
+      newErrors.revision_number = '';
     }
 
     setError(newErrors);
@@ -164,9 +164,9 @@ const UpdatePost = ({ isOpen, onClose, onUpdate }) => {
   };
   const initialSkills = [
     {
-      'id': '',
-      'subcategory_name': ''
-    }
+      id: '',
+      subcategory_name: '',
+    },
   ];
   const [skills, setSkills] = useState(initialSkills);
   useEffect(() => {
@@ -183,10 +183,9 @@ const UpdatePost = ({ isOpen, onClose, onUpdate }) => {
       .catch((e) => {
         console.log(e);
       });
-  }
+  };
 
   const [fileName, setFileName] = useState('');
-  
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -198,8 +197,6 @@ const UpdatePost = ({ isOpen, onClose, onUpdate }) => {
     setFileName(file.name);
     setUpdatePost({ ...updatePost, image_file: file });
   };
-
-  
 
   // const data = {
   //   title: updatePost.title,
@@ -214,17 +211,15 @@ const UpdatePost = ({ isOpen, onClose, onUpdate }) => {
   // };
   // console.log("postId ------------------->", postId);
   // console.log("data ------------------->", data);
-  
 
   const handleUpdateClick = async () => {
     if (validateForm()) {
       console.log('Done clicked.');
-      updatePost.skill_tag = document.getElementById("filter").value;
-      try {      
-        console.log("From validated successfully.")
-        console.log("Update Post: ", updatePost)
-        await freelancer_post_Service
-          .updatePost(updatePost)
+      updatePost.skill_tag = document.getElementById('filter').value;
+      try {
+        console.log('From validated successfully.');
+        console.log('Update Post: ', updatePost);
+        await freelancer_post_Service.updatePost(updatePost);
         // .then(() => {
         console.log('Form is valid. Post updated successfully.');
         setShowOverlay(false);
@@ -232,18 +227,15 @@ const UpdatePost = ({ isOpen, onClose, onUpdate }) => {
         if (onClose) {
           await onClose();
         }
-      }
-      // )
-      catch (error) {
+      } catch (error) {
+        // )
         console.error('Error submitting project:', error.message);
-      };
+      }
     } else {
       console.log('Form has errors. Please fix them.');
     }
-  }
+  };
   // };
-
-  
 
   return (
     <>
@@ -269,7 +261,7 @@ const UpdatePost = ({ isOpen, onClose, onUpdate }) => {
               <option value="" disabled defaultValue>
                 Add skills
               </option>
-              {skills.map(skill => (
+              {skills.map((skill) => (
                 <option key={skill.id} value={skill.id}>
                   {skill.subcategory_name}
                 </option>
@@ -327,7 +319,7 @@ const UpdatePost = ({ isOpen, onClose, onUpdate }) => {
 
           <div className="project-title-input">
             <label htmlFor="projectAboutMe">About Me *</label>
-            <input
+            <textarea
               type="text"
               id="projectAboutMe"
               name="about_me"

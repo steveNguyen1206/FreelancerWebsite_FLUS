@@ -8,7 +8,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { AuthProvider, useAuth } from '../../AuthContext';
 import userDataService from '@/services/userDataServices';
-
+import paymentServices from '@/services/paymentServices';
 
 
 const LogIn = () => {
@@ -58,6 +58,10 @@ const LogIn = () => {
           }
         }
       })
+      .catch((error) => {
+        // console.log(error);
+        setError(prevState => ({ ...prevState, password: 'Invalid username or password, or the user has been banned.' }));
+      });
 
     if (hasError) {
       return;
@@ -93,6 +97,7 @@ const LogIn = () => {
         // }
 
         // error.password = 'Invalid username or password, or the user has been banned.'
+        console.log(error);
         setError(prevState => ({ ...prevState, password: 'Invalid username or password, or the user has been banned.' }));
       });
   };
@@ -145,7 +150,35 @@ const LogIn = () => {
             // console.log('admin')
           }
           else{
-            navigate('/');
+            paymentServices
+            .getPaymentAccount(
+              // {userId: result.data.id,}
+              localStorage.getItem('AUTH_TOKEN')
+              )
+            .then((response) => {
+              console.log(response);
+              if (response.status == 200) {
+                console.log(response.data);
+                navigate('/');
+              }
+              else {
+                navigate(`/profile/${result.data.id}`, { state: { activeTab: 4 } });
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+              navigate(`/profile/${result.data.id}`, { state: { activeTab: 4 } });
+              // console.alert some thing
+              alert('Please add your payment account')
+            })
+            // console.log('paymentAccount -->',paymentAccount);
+            // if (paymentAccount && paymentAccount.status === 200) {
+            //   navigate('/home');
+            // }
+            // else{
+            //   navigate(`/profile/${result.data.id}`, { state: { activeTab: 4 } });
+
+            // }
           }
         } catch (error) {
           console.log('Error with GoogleLogin' + error);
@@ -181,7 +214,7 @@ const LogIn = () => {
                 onChange={handleInputChange}
               />
 
-              {/* <div className="error-message">{error.username}</div> */}
+              <div className="error-message">{error.username}</div>
             </div>
             <div className="input-container">
               <label for="inputPassword5" class="form-label">

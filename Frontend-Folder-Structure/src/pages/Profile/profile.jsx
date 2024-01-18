@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import './profile.css';
 import profileCover from '../../assets/profile_cover.jpg';
 import linkedinicon from '../../assets/SocialIcon/linkedin.png';
@@ -25,6 +26,7 @@ const calAverage = (num1, count1, num2, count2) => {
 };
 
 const profile = () => {
+  const location = useLocation();
   const this_id = localStorage.getItem('LOGINID');
   const { id } = useParams();
 
@@ -34,6 +36,12 @@ const profile = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [refresh, setRefresh] = useState(0);
   const [review, setReview] = useState([]);
+
+  useEffect(() => {
+    if (location.state && location.state.activeTab === 4) {
+      setActiveTab(4);
+    }
+  }, [location]);
 
   const initialProfileState = {
     id: '',
@@ -149,7 +157,7 @@ const profile = () => {
                     <span className="text-wrapper">
                       {userProfile.profile_name}{' '}
                     </span>
-                    <span className="span">({userProfile.account_name})</span>
+                    {/* <span className="span">({userProfile.account_name})</span> */}
 
                     {isOwnProfile && (
                       <div
@@ -162,12 +170,13 @@ const profile = () => {
                           alt="edit profile"
                           src={editIcon}
                           onClick={handleUpdateProfile}
+                          style={{cursor:"pointer"}}
                         />
                       </div>
                     )}
                   </p>
                   <div className="text-wrapper-2">
-                    Junior FullStack Developer
+                  {userProfile.account_name}
                   </div>
                 </div>
 

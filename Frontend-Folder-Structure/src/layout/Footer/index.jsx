@@ -1,12 +1,28 @@
-import React from 'react'
-import styles from './footer.module.css'
+import React from 'react';
+import styles from './footer.module.css';
 
 const Footer = () => {
   return (
     <div className={styles.footer}>
       <div className={styles.overlapgroup}>
-        <div className='row' style={{ margin:"0", display: "flex", height:"100%", width:"100%"}}>
-          <div className='col' style={{display: "flex",alignItems:'center', justifyContent:"center"}}>
+        <div
+          className="row"
+          style={{
+            margin: '0',
+            display: 'flex',
+            height: '100%',
+            width: '100%',
+          }}
+        >
+          <div
+            className="col"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              
+            }}
+          >
             <p className={styles.FLUS}>
               <span className={styles.text_wrapper}>
                 FLUS
@@ -14,11 +30,18 @@ const Footer = () => {
               </span>
               <span className={styles.span}>
                 <br />
-                aaaaaaaaaaaaaa
+                Welcome to FLUS - the platform where freelancers thrive and opportunities abound. Explore our diverse range of projects and unleash your potential. Join FLUS and turn your skills into success! 
               </span>
             </p>
           </div>
-          <div className='col'  style={{display: "flex",alignItems:'center', justifyContent:"center"}}>
+          <div
+            className="col"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
             <p className={styles.EXPLOREDocsPlugin}>
               <span className={styles.text_wrapper}>
                 EXPLORE
@@ -71,7 +94,14 @@ const Footer = () => {
               </a>
             </p>
           </div>
-          <div className='col'  style={{display: "flex",alignItems:'center', justifyContent:"center"}}>
+          <div
+            className="col"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
             <p className={styles.LETsCONNECT}>
               <span className={styles.text_wrapper}>
                 LET&#39;S CONNECT
@@ -93,7 +123,11 @@ const Footer = () => {
               <span className={styles.text_wrapper_2}>
                 <br />
               </span>
-              <a href="https://www.youtube.com/@juxtopposed" rel="noopener noreferrer" target="_blank">
+              <a
+                href="https://www.youtube.com/@juxtopposed"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
                 <span className={styles.text_wrapper_3}>
                   YouTube
                   <br />
@@ -102,7 +136,11 @@ const Footer = () => {
               <span className={styles.text_wrapper_2}>
                 <br />
               </span>
-              <a href="https://github.com/juxtopposed" rel="noopener noreferrer" target="_blank">
+              <a
+                href="https://github.com/juxtopposed"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
                 <span className={styles.text_wrapper_3}>
                   GitHub
                   <br />
@@ -111,7 +149,11 @@ const Footer = () => {
               <span className={styles.text_wrapper_2}>
                 <br />
               </span>
-              <a href="https://codepen.io/Juxtopposed" rel="noopener noreferrer" target="_blank">
+              <a
+                href="https://codepen.io/Juxtopposed"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
                 <span className={styles.text_wrapper_3}>CodePen</span>
               </a>
             </p>
@@ -120,6 +162,6 @@ const Footer = () => {
       </div>
     </div>
   );
-}
+};
 
-export default Footer
+export default Footer;

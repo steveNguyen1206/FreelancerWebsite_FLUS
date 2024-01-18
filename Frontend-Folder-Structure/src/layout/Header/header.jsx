@@ -48,7 +48,7 @@ const Header = () => {
       <div className='button-avatar' style={{display: "flex", flexWrap:"wrap" ,alignContent:"left", width:"400px", height:"100%" , marginRight:"3%", padding: "0.75%"}}>
         {signin && (
           <div className="sign-in-done" style={{height:"100%", width:"100%"}}>
-            <img onClick={() => navigate(`/myprofile/${localStorage.getItem("LOGINID")}`)} src={avatarSrc}  style={{position:"inline", objectFit:"cover",height:"40px", width: "40px", margin:"1%",border: "1px solid #000", borderRadius:"50.964px", boxSizing:"border-box"}}/>
+            <img onClick={() => navigate(`/myprofile/${localStorage.getItem("LOGINID")}`)} src={avatarSrc}  style={{position:"inline", objectFit:"cover",height:"40px", width: "40px", margin:"1%",border: "1px solid #000", borderRadius:"50.964px", boxSizing:"border-box", cursor:"pointer"}}/>
             {isAdmin && (<div id='login_button-201123' className='btn btn-light'  onClick={() => navigate('/admin')} style={{marginLeft:"8%"}}>Admin</div>)}
             <div id='login_button-201123' className='btn btn-light'  onClick={handleSignOut} style={{marginLeft:"8%"}}>Logout</div>
           </div>

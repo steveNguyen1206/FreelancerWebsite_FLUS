@@ -59,7 +59,11 @@ function WishlistPost({
         <div className="content-container">
           <div className="wishlist-title">{projectTitle}</div>
           <div className="wishlist-tag">{projectTags}</div>
-          <div className="wishlist-detail">{projectDetail}</div>
+          <div className="wishlist-detail">
+            <p style={{whiteSpace:"pre-line"}}>
+            {projectDetail}
+            </p>
+          </div>
         </div>
       </div>
 

@@ -50,7 +50,7 @@
     line-height: normal;
     position: absolute;
     top:40%; 
-    width: 568px;
+    width: 668px;
   }
   
   .BannerSection .text-wrapper-2 {
@@ -148,6 +148,7 @@
     align-items: center;
     justify-content: center;
     display: flex;
+    margin-top: 30px;
   }
   
   .homepage .home-category-wrapper {
@@ -235,7 +236,7 @@
   }
   .project-header{
     position: absolute;
-    top: 2%;
+    top: 6%;
     left: 7%;
     font-size: 30px;
     font-family: "Inter-Black";

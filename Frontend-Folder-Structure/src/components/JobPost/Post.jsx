@@ -11,6 +11,7 @@ import reviewService from '@/services/reviewServices';
 const Post = ({ project, handleBidClick }) => {
   console.log('project', project);
   const [isLiked, setIsLiked] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     projectPostWishlistServices
@@ -26,7 +27,6 @@ const Post = ({ project, handleBidClick }) => {
         console.log(error);
       });
   }, [project.user.id, project.id]);
-
 
   const handleLikeClick = () => {
     if (isLiked === unactiveHeart) {
@@ -45,6 +45,13 @@ const Post = ({ project, handleBidClick }) => {
     }
   };
 
+  useEffect(() => {
+    const token = localStorage.getItem('AUTH_TOKEN');
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
   const [review, setReview] = useState('');
 
   useEffect(() => {
@@ -52,8 +59,7 @@ const Post = ({ project, handleBidClick }) => {
       console.log('response: ', response);
       setReview(response.data);
     });
-  }, []
-  );
+  }, []);
 
   return (
     <div className="post-container">
@@ -76,7 +82,9 @@ const Post = ({ project, handleBidClick }) => {
         <div className="project-post-container">
           <div className="post-title">{project.title}</div>
           <div className="post-tag">{project.subcategory.subcategory_name}</div>
-          <div className="post-detail">{project.detail}</div>
+          <div className="post-detail">
+            <p style={{ whiteSpace: 'pre-line' }}>{project.detail}</p>
+          </div>
         </div>
       </div>
 
@@ -100,9 +108,11 @@ const Post = ({ project, handleBidClick }) => {
               <button onClick={handleBidClick}>View</button>
             </div>
             <div className="post-wish">
-              <button onClick={handleLikeClick}>
-                <img src={isLiked} alt="heart icon" />
-              </button>
+              {isLoggedIn && (
+                <button onClick={handleLikeClick}>
+                  <img src={isLiked} alt="heart icon" />
+                </button>
+              )}
             </div>
           </div>
         </div>
