@@ -8,9 +8,7 @@ import subcategoryService from '@/services/subcategoryService';
 import userDataService from '@/services/userDataServices';
 
 const isValidTitle = (title) => {
-  if (!title) return false;
-  const titleRegex = /^[a-zA-Z0-9\s\-]*$/;
-  return titleRegex.test(title);
+  return title.length >= 10 && title.length <= 100;
 };
 
 const isValidAboutMe = (about_me) => {
@@ -21,13 +19,11 @@ const isValidAboutMe = (about_me) => {
 };
 
 const isValidDeliveryDescription = (delivery_description) => {
-  const descriptionRegex = /^[a-zA-Z0-9\s]{1,511}$/;
-  return descriptionRegex.test(delivery_description);
+  return delivery_description.length <= 512 && delivery_description.length > 0;
 };
 
 const isValidSkillDescription = (skill_description) => {
-  const skillRegex = /^[a-zA-Z0-9\s\-\.\,\!\?]{1,511}$/;
-  return skillRegex.test(skill_description);
+  return skill_description.length <= 512 && skill_description.length > 0;
 };
 
 const isValidLowestPrice = (lowset_price) => {
@@ -88,8 +84,8 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
     if (!newPost.title) {
       newErrors.title = 'Please write your post title.';
       isValid = false;
-    } else  if (newPost.title.length > 70) {
-      newErrors.title = 'The title must not exceed 70 characters.';
+    } else  if (newPost.title.length > 100) {
+      newErrors.title = 'The title must not exceed 100 characters.';
       isValid = false;
     }else if (!isValidTitle(newPost.title)) {
       newErrors.title = 'Title is invalid. Title must be alphanumeric and not empty.';
@@ -350,7 +346,7 @@ const NewPost = ({ isOpen, onClose, onUpdate }) => {
 
           <div className="project-title-input">
             <label htmlFor="projectAboutMe">About Me *</label>
-            <input
+            <textarea
               type="text"
               id="projectAboutMe"
               name="about_me"
