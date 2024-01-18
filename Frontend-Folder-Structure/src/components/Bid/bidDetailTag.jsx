@@ -26,7 +26,7 @@ const BidDetailTag = ({
   isOwnerProjectPost,
   onChangeProjectId,
 }) => {
-  console.log("bid: ", bid);
+  console.log('bid: ', bid);
   const [expanded, setExpanded] = useState(false);
   const [showSeeMore, setShowSeeMore] = useState(false);
   const textContainerRef = useRef(null);
@@ -59,18 +59,20 @@ const BidDetailTag = ({
       .acceptBid(bid.id, localStorage.getItem('AUTH_TOKEN'))
       .then((response) => {
         console.log('response: ', response);
+        const emailData = {
+          email: bid.email,
+          url:
+            'http://localhost:8081/project-manage/' + response.data.projectId,
+        };
+        gmailService.sendEmail(emailData).then((response) => {
+          console.log('response: ', response);
+        });
+
         onChangeProjectId(response.data.projectId);
         projectId = response.data.projectId;
       });
 
     onChangeBid();
-    const emailData = {
-      email: bid.email,
-      url: 'http://localhost:8081/project-manage/',
-    };
-    gmailService.sendEmail(emailData).then((response) => {
-      console.log('response: ', response);
-    });
   };
 
   const handleReject = () => {

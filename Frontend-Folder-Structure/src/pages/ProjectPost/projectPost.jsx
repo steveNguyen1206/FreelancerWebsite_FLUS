@@ -182,6 +182,7 @@ const Project = () => {
             }}
             budgetMin={project.budget_min}
             budgetMax={project.budget_max}
+            ownerEmail={project.user.email}
           />
         )}
         <div className="pproject">

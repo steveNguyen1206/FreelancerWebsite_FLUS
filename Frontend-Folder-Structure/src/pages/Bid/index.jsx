@@ -4,6 +4,8 @@ import './bid.css';
 import exitButton from '../../assets/exitButton.png';
 import bidServices from '@/services/bidServices';
 import subcategoryService from '@/services/subcategoryService';
+import gmailService from '@/services/gmailServices';
+import userDataService from '@/services/userDataServices';
 
 const isValidSkill = (skill) => {
   if (skill === '') return false;
@@ -42,7 +44,7 @@ const isValidDuration = (duration) => {
   return durationRegex.test(duration);
 };
 
-const BidPopup = ({ isOpen, isClose, projectPostId, onChange, budgetMin, budgetMax }) => {
+const BidPopup = ({ isOpen, isClose, projectPostId, onChange, budgetMin, budgetMax, ownerEmail }) => {
   const [showOverlay, setShowOverlay] = useState(isOpen);
 
   const initError = {
@@ -138,6 +140,19 @@ const BidPopup = ({ isOpen, isClose, projectPostId, onChange, budgetMin, budgetM
     return isValid;
   };
 
+  // send email to project owner
+  const emailData = {
+    email: ownerEmail,
+    url: 'http://localhost:8081/project/' + projectPostId,
+  };
+
+  const sendEmail = () => {
+    gmailService.sendEmail(emailData).then((response) => {
+      console.log('response: ', response);
+    });
+  };
+
+
   const handleDoneClick = () => {
     if (validateForm()) {
       bidServices
@@ -145,6 +160,7 @@ const BidPopup = ({ isOpen, isClose, projectPostId, onChange, budgetMin, budgetM
         .then(() => {
           console.log('Form is valid. Project submitted successfully.');
           setShowOverlay(false);
+          sendEmail(); // send to project owner
           isClose();
           onChange();
         })

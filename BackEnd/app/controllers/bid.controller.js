@@ -38,6 +38,17 @@ exports.create = async (req, res) => {
     return;
   }
 
+  // check the status of project post is 1 or 0, if 0, send this project post is closed
+  const projectPostData = await projectPost.findOne({
+    where: { id: req.body.proj_post_id },
+  });
+  if (projectPostData.status === 0) {
+    res.status(400).send({
+      message: "This project post is closed.",
+    });
+    return;
+  }
+
   Bid.create(bid)
     .then((data) => {
       res.status(200).send(data);
