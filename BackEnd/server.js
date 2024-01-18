@@ -596,16 +596,25 @@ function initial() {
       }
       );
       console.log(subcategories);
+
+      // 2.1
       // create_freelancer_post(subcategories);
+
+      // 2.2
       // create_project_post(subcategories);
+
+      // 2.3
       // create_bid(subcategories);
+
+      // 2.4
       // create_contact(subcategories);
 
+      // 2.5
       // create_project_post(subcategories);
       return subcategories;
     });
   }
-// 1: 
+  // 1: 
   // create_category();
 
   // 2.
@@ -616,4 +625,5 @@ function initial() {
   
 }
 
+// Comment after create database successfully
 // initial();
