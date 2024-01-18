@@ -10,6 +10,11 @@ import human from "../../assets/Human.png";
 import { Carousel, CarouselItem } from "react-bootstrap";
 import userDataServices from "../../services/userDataServices";
 import bidService from "@/services/bidServices";
+import Vy from "../../assets/AdminMem/Vy.jpg"
+import Chan from "../../assets/AdminMem/Chan.jpg"
+import Khang from "../../assets/AdminMem/Khang.jpg"
+import Vien from "../../assets/AdminMem/Vien.jpg" 
+import Dat from "../../assets/AdminMem/Dat.jpg"
 
 const AboutUs = () => {
 
@@ -100,9 +105,7 @@ const AboutUs = () => {
           <div className="about-us-text-wrapper-12">About FLUS</div>
           <div className="rectangle-4" />
           <p className="about-us-text-wrapper-11">
-            Remember to keep your presentation focused and engaging while providing a comprehensive overview of
-            the topic. Water quality and pollution in the natural environment are critical issues, and your
-            presentation can help raise awareness and promote responsible environmental stewardship.
+          Transform your projects with FLUS! Discover a world of elite freelancers, streamline collaboration, and witness unparalleled success. Elevate your vision, connect effortlessly, and experience the future of freelance excellence. FLUS - where projects meet perfection!
           </p>
           <div className="to-instruction-txt">
             To Instruction
@@ -114,51 +117,51 @@ const AboutUs = () => {
         <Slider {...carousel_settings} >
           <div>
             <div className="frame-2">
-              <img className="about-avatar-wrapper" alt="Ellipse" src={avatar}/>
+              <img className="about-avatar-wrapper" alt="Ellipse" src={Khang}/>
               <div className="founder-name">Ho Duy Khang</div>
               <div className="text-wrapper-6">~ o ~</div>
               <p className="founder-instruction">
-                Nguyen Thi Truc is the founder of abc.She hsa xyv experience in baking. She is one of the Co-founder
+                Ho Duy Khang is the Project Manager and Backend Software Engineer of Freelancer US.
               </p>
             </div>
           </div>
           <div>
             <div className="frame-2">
-              <img className="about-avatar-wrapper" alt="Ellipse" src={avatar}/>
+              <img className="about-avatar-wrapper" alt="Ellipse" src={Chan}/>
               <div className="founder-name">Nguyen Hai Chan</div>
               <div className="text-wrapper-6">~ o ~</div>
               <p className="founder-instruction">
-                Nguyen Thi Truc is the founder of abc.She hsa xyv experience in baking. She is one of the Co-founder
+                Nguyen Hai Chan is the Backend Technical Leader of Freelancer US.
               </p>
             </div>
           </div>
           <div>
             <div className="frame-2">
-              <img className="about-avatar-wrapper" alt="Ellipse" src={avatar}/>
+              <img className="about-avatar-wrapper" alt="Ellipse" src={Vien}/>
               <div className="founder-name">Vo Hoang Hoa Vien</div>
               <div className="text-wrapper-6">~ o ~</div>
               <p className="founder-instruction">
-                Nguyen Thi Truc is the founder of abc.She hsa xyv experience in baking. She is one of the Co-founder
+                Vo Hoang Hoa Vien is the Frontend Software Engineer of Freelancer US.
               </p>
             </div>
           </div>
           <div>
             <div className="frame-2">
-              <img className="about-avatar-wrapper" alt="Ellipse" src={avatar}/>
+              <img className="about-avatar-wrapper" alt="Ellipse" src={Dat}/>
               <div className="founder-name">Le Thanh Dat</div>
               <div className="text-wrapper-6">~ o ~</div>
               <p className="founder-instruction">
-                Nguyen Thi Truc is the founder of abc.She hsa xyv experience in baking. She is one of the Co-founder
+              Le Thanh Dat is the Backend Software Engineer of Freelancer US.
               </p>
             </div>
           </div>
           <div>
             <div className="frame-2">
-              <img className="about-avatar-wrapper" alt="Ellipse" src={avatar}/>
+              <img className="about-avatar-wrapper" alt="Ellipse" src={Vy}/>
               <div className="founder-name">Nguyen Thi Truc Vy</div>
               <div className="text-wrapper-6">~ o ~</div>
               <p className="founder-instruction">
-                Nguyen Thi Truc is the founder of abc.She hsa xyv experience in baking. She is one of the Co-founder
+                Nguyen Thi Truc Vy is the Frontend Technical Leader of Freelancer US.
               </p>
             </div>
           </div>
@@ -175,9 +178,7 @@ const AboutUs = () => {
                 </div>
                 <div className="col" style={{flexDirection:"column"}}>
                   <p className="reviewer-quote">
-                    Remember to keep your presentation focused and engaging while providing a comprehensive overview of the
-                    topic. Water quality and pollution in the natural environment are critical issues, and your presentation can
-                    help raise awareness and promote responsible environmental stewardship.
+                  I recently experienced FLUS, and I'm thoroughly impressed! As an expert in the freelance industry, I can confidently say it's a game-changer. The user-friendly interface simplifies project posting, and the diverse pool of skilled freelancers is exceptional. Kudos to FLUS for transforming the freelance landscape!
                   </p>
                   <div className="star-rating-wrapper">
                     <StarRating rating={4} width={200}/>
@@ -194,9 +195,7 @@ const AboutUs = () => {
               </div>
               <div className="col" style={{flexDirection:"column"}}>
                 <p className="reviewer-quote">
-                  Remember to keep your presentation focused and engaging while providing a comprehensive overview of the
-                  topic. Water quality and pollution in the natural environment are critical issues, and your presentation can
-                  help raise awareness and promote responsible environmental stewardship.
+                FLUS is a game-changer! As a seasoned expert, I've found top-notch freelancers effortlessly. The platform's intuitive design, diverse talent pool, and seamless communication tools make it my go-to for project success. Highly recommended!
                 </p>
                 <div className="star-rating-wrapper">
                   <StarRating rating={4} width={200}/>
@@ -211,9 +210,7 @@ const AboutUs = () => {
               </div>
               <div className="col" style={{flexDirection:"column"}}>
                 <p className="reviewer-quote">
-                  Remember to keep your presentation focused and engaging while providing a comprehensive overview of the
-                  topic. Water quality and pollution in the natural environment are critical issues, and your presentation can
-                  help raise awareness and promote responsible environmental stewardship.
+                FLUS is a revelation in the freelance world! Having navigated numerous platforms, FLUS stands out for its remarkable simplicity and effectiveness. As an expert, I appreciate the seamless project posting process and the diverse array of highly skilled freelancers available. 
                 </p>
                 <div className="star-rating-wrapper">
                   <StarRating rating={4} width={200}/>
