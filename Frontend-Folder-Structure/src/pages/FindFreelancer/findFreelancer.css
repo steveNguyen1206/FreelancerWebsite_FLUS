@@ -33,9 +33,9 @@
     height: 55px;
     width: 200px;
     color: #FFF;
-    font-style: bold;
+    /* font-style: bold; */
     font-weight: 700;
-    font-family: "Inter";
+    font-family: "Inter-Bold";
 }
 
 .sort {

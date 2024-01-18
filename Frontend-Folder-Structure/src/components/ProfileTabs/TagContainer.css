@@ -11,6 +11,6 @@
     justify-content: flex-start;
     border: 2px solid var(--accent);
     border-radius: 5px;
-    overflow: scroll;
+    overflow-y: scroll;
     padding: 5p
 }

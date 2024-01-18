@@ -82,7 +82,7 @@
   margin-right:auto;
   text-align: center;
   width: 100%;
-  
+  cursor: pointer;
   }
   
   .pop-up-sign-in .or-sign-in-using-wrapper {
@@ -117,6 +117,7 @@
   left: 0;
   object-fit: cover;
   width: 59px;
+  cursor: pointer;
   }
   
   .pop-up-sign-in .img {

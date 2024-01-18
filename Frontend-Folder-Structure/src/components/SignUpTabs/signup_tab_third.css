@@ -66,7 +66,7 @@
     margin-right:auto;
     text-align: center;
     width: 100%;
-
+    cursor: pointer;
   }
   .pop-up-sign-up .text-wrapper-2-n {
     color: #ffffff;
@@ -79,7 +79,7 @@
     margin-right:auto;
     text-align: center;
     width: 100%;
-
+    cursor: pointer;
   }
   
   .pop-up-sign-up .or-sign-up-using-wrapper {

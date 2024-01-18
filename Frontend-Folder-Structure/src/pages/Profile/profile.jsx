@@ -170,6 +170,7 @@ const profile = () => {
                           alt="edit profile"
                           src={editIcon}
                           onClick={handleUpdateProfile}
+                          style={{cursor:"pointer"}}
                         />
                       </div>
                     )}
