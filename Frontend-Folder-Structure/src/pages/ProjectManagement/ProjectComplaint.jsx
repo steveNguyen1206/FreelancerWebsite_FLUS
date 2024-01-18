@@ -105,7 +105,7 @@ export const ProjectComplaint = () => {
             <TextField
               multiline
               name="resources"
-              placeholder="Place resources that make envidence for your complaint so that we can help you as much as we could."
+              placeholder="Place resources that make envidence for your complaint so that we can help you as much as we could. Only link are required."
               sx={{ backgroundColor: '#EBE8E8' }}
               minRows={5}
               onChange={handleInputChange}

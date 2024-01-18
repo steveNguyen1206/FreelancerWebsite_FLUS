@@ -52,6 +52,7 @@ export const ProjectReport = () => {
   };
 
   useEffect(() => {
+    console.log("report id", reportId)
     if(reportId)
     {
       projectService
@@ -65,7 +66,7 @@ export const ProjectReport = () => {
     }
     setError(null);
   
-  }, [project]);
+  }, [project, reportId]);
 
   return (
     <div className="project-content-container">
