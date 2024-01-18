@@ -49,15 +49,14 @@ const LogIn = () => {
       .then((response) => {
         if (response.status == 200) {
           console.log(response.data.status);
-          if (response.data.status == 0) {
-            // error.password = 'Invalid username or password, or the user has been banned.'
-            // setError(error);
-            setError(prevState => ({ ...prevState, password: 'Invalid username or password, or the user has been banned.' }));
-            // navigate('/home');
-            hasError = true;
-          }
+          
         }
       })
+      .catch((error) => {
+        console.log(error);
+        setError(prevState => ({ ...prevState, username: 'User Not found.' }));
+        hasError = true;
+      });
 
     if (hasError) {
       return;
@@ -93,6 +92,7 @@ const LogIn = () => {
         // }
 
         // error.password = 'Invalid username or password, or the user has been banned.'
+        console.log(error);
         setError(prevState => ({ ...prevState, password: 'Invalid username or password, or the user has been banned.' }));
       });
   };
@@ -181,7 +181,7 @@ const LogIn = () => {
                 onChange={handleInputChange}
               />
 
-              {/* <div className="error-message">{error.username}</div> */}
+              <div className="error-message">{error.username}</div>
             </div>
             <div className="input-container">
               <label for="inputPassword5" class="form-label">
