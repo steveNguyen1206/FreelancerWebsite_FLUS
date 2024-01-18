@@ -4,6 +4,8 @@ import './bid.css';
 import exitButton from '../../assets/exitButton.png';
 import bidServices from '@/services/bidServices';
 import subcategoryService from '@/services/subcategoryService';
+import gmailService from '@/services/gmailServices';
+import userDataService from '@/services/userDataServices';
 
 const isValidSkill = (skill) => {
   if (skill === '') return false;
@@ -11,11 +13,13 @@ const isValidSkill = (skill) => {
 };
 
 const isValidEmail = (email) => {
+  if (email.length > 255) return false;
   if (email === '') return false;
   // email has valid format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };
+
 
 const isValidMessage = (message) => {
   if (message === '') return false;
@@ -40,7 +44,7 @@ const isValidDuration = (duration) => {
   return durationRegex.test(duration);
 };
 
-const BidPopup = ({ isOpen, isClose, projectPostId, onChange, budgetMin, budgetMax }) => {
+const BidPopup = ({ isOpen, isClose, projectPostId, onChange, budgetMin, budgetMax, ownerEmail }) => {
   const [showOverlay, setShowOverlay] = useState(isOpen);
 
   const initError = {
@@ -106,6 +110,14 @@ const BidPopup = ({ isOpen, isClose, projectPostId, onChange, budgetMin, budgetM
         'Invalid message. Message must have at least 10 letters.';
     }
 
+    // if message > 512 characters, return error
+    if (bid.message.length > 512) {
+      isValid = false;
+      errors.message = 'Invalid message. Message must have at most 512 letters.';
+    }
+
+
+
     if (!isValidPrice(bid.price)) {
       isValid = false;
       errors.price =
@@ -128,6 +140,19 @@ const BidPopup = ({ isOpen, isClose, projectPostId, onChange, budgetMin, budgetM
     return isValid;
   };
 
+  // send email to project owner
+  const emailData = {
+    email: ownerEmail,
+    url: 'http://localhost:8081/project/' + projectPostId,
+  };
+
+  const sendEmail = () => {
+    gmailService.sendEmail(emailData).then((response) => {
+      console.log('response: ', response);
+    });
+  };
+
+
   const handleDoneClick = () => {
     if (validateForm()) {
       bidServices
@@ -135,11 +160,12 @@ const BidPopup = ({ isOpen, isClose, projectPostId, onChange, budgetMin, budgetM
         .then(() => {
           console.log('Form is valid. Project submitted successfully.');
           setShowOverlay(false);
+          sendEmail(); // send to project owner
           isClose();
           onChange();
         })
         .catch((error) => {
-          setErrorMessage(error.message);
+          setErrorMessage(error.response.data.message);
           console.error('Error submitting project:', error.message);
         });
     } else {

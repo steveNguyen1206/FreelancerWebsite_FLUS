@@ -95,13 +95,12 @@ const FreelancerPostRow = ({
   const [review, setReview] = useState({});
   useEffect(() => {
     reviewService
-      .getRatingFreelancer(userID)
+      .getRating(userID)
       .then((response) => {
+        console.log('response: ', response);
         setReview(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+      }
+      );
   }, []);
 
   return (
@@ -147,8 +146,8 @@ const FreelancerPostRow = ({
       <div className="right-post">
         <div className="previews">
           <div className="rating-row">
-            <StarRating rating={review.averageStar} width={160} className="pstars" />
-            <div style={{}}>{review.averageStar}</div>
+            <StarRating rating={review.average} width={160} className="pstars" />
+            <div style={{}}>{review.average}</div>
           </div>
           <div className="num-reviews-wrapper">{review.count + "  reviews"}</div>
         </div>

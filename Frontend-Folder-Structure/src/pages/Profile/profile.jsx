@@ -16,10 +16,7 @@ import userDataService from '@/services/userDataServices';
 import userSubcategoryService from '@/services/userSubcategoryServices';
 import reviewService from '@/services/reviewServices';
 import { Link } from 'react-router-dom';
-import {
-  ProjectPostsTab,
-  FreelancerPostsTab,
-} from '@/components';
+import { ProjectPostsTab, FreelancerPostsTab } from '@/components';
 import { WishlistTab } from '@/components/ProfileTabs/profile_tab';
 
 const calAverage = (num1, count1, num2, count2) => {
@@ -108,29 +105,14 @@ const profile = () => {
     navigate(`/project-manage`);
   };
 
-  let avg_rating = 0;
 
   useEffect(() => {
-    let obj = {};
-    reviewService
-      .getRatingFreelancer(id)
-      .then((res) => {
-        obj.freelancer = res.data;
-        reviewService.getRatingClient(id).then((res) => {
-          obj.client = res.data;
-          setReview(obj);
-          calAverage(
-            review.freelancer.rating,
-            review.freelancer.count,
-            review.client.rating,
-            review.client.count
-          );
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [id]);
+    reviewService.getRating(id).then((response) => {
+      setReview(response.data);
+    });
+  },[]);
+
+  console.log("adad", review);
 
   return (
     <div>
@@ -219,9 +201,9 @@ const profile = () => {
                 </div>
               </div>
               <div className="rating-bar">
-                <StarRating rating={avg_rating} width={160} />
+                <StarRating rating={review.average} width={160} />
 
-                <div className="text-wrapper-6">{avg_rating}</div>
+                <div className="text-wrapper-6">{review.average}</div>
               </div>
             </div>
           </div>

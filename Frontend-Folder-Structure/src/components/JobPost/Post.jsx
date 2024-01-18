@@ -6,6 +6,7 @@ import unactiveHeart from '../../assets/heart-unactive.png';
 import { StarRating } from '..';
 import { useEffect, useState } from 'react';
 import projectPostWishlistServices from '../../services/projectPostWishlistServices';
+import reviewService from '@/services/reviewServices';
 
 const Post = ({ project, handleBidClick }) => {
   console.log('project', project);
@@ -26,7 +27,6 @@ const Post = ({ project, handleBidClick }) => {
       });
   }, [project.user.id, project.id]);
 
-  console.log(project);
 
   const handleLikeClick = () => {
     if (isLiked === unactiveHeart) {
@@ -44,6 +44,16 @@ const Post = ({ project, handleBidClick }) => {
         });
     }
   };
+
+  const [review, setReview] = useState('');
+
+  useEffect(() => {
+    reviewService.getRating(project.user.id).then((response) => {
+      console.log('response: ', response);
+      setReview(response.data);
+    });
+  }, []
+  );
 
   return (
     <div className="post-container">
@@ -74,11 +84,11 @@ const Post = ({ project, handleBidClick }) => {
         <div className="post-reviews">
           <div className="post-rating">
             <StarRating
-              rating={parseFloat(project.user.avg_rating)}
+              rating={review.average}
               width={120}
               className="pstars"
             />
-            <p>{project.user.avg_rating}</p>
+            <p>{review.average}</p>
           </div>
         </div>
         <div className="post-bid">

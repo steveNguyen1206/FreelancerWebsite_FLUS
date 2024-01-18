@@ -1,63 +1,39 @@
 const db = require("../models");
 const reviews = db.reviews;
 const Op = db.Sequelize.Op;
+const users = db.user;
 
-exports.getRatingClient = (req, res) => {
+exports.getAverageRating = async (req, res) => {
   const { id } = req.params;
-  const condition = id
-    ? { user_reviewed: { [Op.eq]: `${id}` }, type: true }
-    : null;
 
-  reviews
-    .findAll({ where: condition })
-    .then((data) => {
-      const count = data.length;
-      if (count === 0) {
-        res.send({ averageStar: 0, count });
-      } else {
-        // Calculate the average star rating
-        const averageStar = parseFloat(
-          (
-            data.reduce((total, review) => total + parseFloat(review.star), 0) /
-            count
-          ).toFixed(1)
-        );
-        res.send({ averageStar, count });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving reviews.",
-      });
+  let data = await reviews.findAll({
+    where: {
+      user_reviewed: id,
+    },
+  });
+
+  // for each review, check the user_review has status = 0 or not, if yes, then remove it
+  for (let i = 0; i < data.length; i++) {
+    let user = await users.findOne({
+      where: {
+        id: data[i].user_review,
+      },
     });
-};
 
-exports.getRatingFreelancer = (req, res) => {
-  const { id } = req.params;
-  const condition = id
-    ? { user_reviewed: { [Op.eq]: `${id}` }, type: false }
-    : null;
+    if (user.status === 0) {
+      data.splice(i, 1);
+      i--;
+    }
+  }
 
-  reviews
-    .findAll({ where: condition })
-    .then((data) => {
-      const count = data.length;
-      if (count === 0) {
-        res.send({ averageStar: 0, count });
-      } else {
-        // Calculate the average star rating
-        const averageStar = parseFloat(
-          (
-            data.reduce((total, review) => total + parseFloat(review.star), 0) /
-            count
-          ).toFixed(1)
-        );
-        res.send({ averageStar, count });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving reviews.",
-      });
-    });
+  let total = 0;
+  let average = 0;
+  let count = 0;
+  data.forEach((review) => {
+    total += parseFloat(review.star);
+    count++;
+  });
+  if (count !== 0) average = total / count;
+  else average = 0;
+  res.send({ average: average.toFixed(1), count: count });
 };
