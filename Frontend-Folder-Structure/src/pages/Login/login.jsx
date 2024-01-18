@@ -97,6 +97,7 @@ const LogIn = () => {
         // }
 
         // error.password = 'Invalid username or password, or the user has been banned.'
+        console.log(error);
         setError(prevState => ({ ...prevState, password: 'Invalid username or password, or the user has been banned.' }));
       });
   };
@@ -213,7 +214,7 @@ const LogIn = () => {
                 onChange={handleInputChange}
               />
 
-              {/* <div className="error-message">{error.username}</div> */}
+              <div className="error-message">{error.username}</div>
             </div>
             <div className="input-container">
               <label for="inputPassword5" class="form-label">
