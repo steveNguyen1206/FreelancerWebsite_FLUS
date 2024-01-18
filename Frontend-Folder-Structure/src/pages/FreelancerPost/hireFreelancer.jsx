@@ -14,23 +14,23 @@ const isValidClientName = (client_name) => {
     // if client_name is empty return true
     // if client_name is not empty, make sure it's at least 2 characters long and maximum 50 characters long
     // client_name include a->z, A->Z, 0->9, space, dot, comma, dash, underscore
-    return (client_name.length >= 2 && client_name.length <= 50 && /^[a-zA-Z0-9 .,\\-_]+$/.test(client_name));
+    return (client_name.length >= 2 && client_name.length <= 50 );
 };
 
 const isValidClientCompany = (client_company) => {
     // if client_company is empty return true
     // if client_company is not empty, make sure it's at least 2 characters long and maximum 50 characters long
-    return (client_company.length >= 2 && client_company.length <= 50 && /^[a-zA-Z0-9 .,\\-_]+$/.test(client_company));
+    return (client_company.length >= 2 && client_company.length <= 50);
 };
 
 const isValidJobName = (job_name) => {
     // if job_name is empty return true
     // if job_name is not empty, make sure it's at least 2 characters long and maximum 50 characters long
-    return (job_name.length >= 2 && job_name.length <= 50 && /^[a-zA-Z0-9 .,\\-_]+$/.test(job_name));
+    return (job_name.length >= 2 && job_name.length <= 50 );
 };
 
 const isValidJobDescription = (job_description) => {
-    return (job_description.length >= 2 && job_description.length <= 512 && /^[a-zA-Z0-9 .,\\-_]+$/.test(job_description));
+    return (job_description.length >= 2 && job_description.length <= 512 );
 }
 
 const isValidBudget = (budget) => {
