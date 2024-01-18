@@ -211,33 +211,36 @@ function initial() {
   );
   });
   }
+  let subcategories = {};
 
-  const subcategories = {
-  "Woodwork"           :  1,
-  "Business Plans"     :  2,
-  "Business Consulting" :  3,
-   "Knitting"           :  4,
-   "Video Edit"         :  5,
-   "Filming"            :  6,
-   "Voice-over"         :  7,
-   "Music Producing"    :  8,
-   "Photo Edit"         :  9,
-   "Photograph"         : 10,
-   "Data Crawling"      : 11,
-   "Data Analytics"     : 12,
-   "CRM Marketing"      : 13,
-   "Java development"   : 14,
-   "HTML & CSS development" : 15,
-   "English translation": 16,
-   "Seeding"            : 17,
-   "Special Effect Design" : 18
-  }
+  // const subcategories = {
+  // "Woodwork"           :  1,
+  // "Business Plans"     :  2,
+  // "Business Consulting" :  3,
+  //  "Knitting"           :  4,
+  //  "Video Edit"         :  5,
+  //  "Filming"            :  6,
+  //  "Voice-over"         :  7,
+  //  "Music Producing"    :  8,
+  //  "Photo Edit"         :  9,
+  //  "Photograph"         : 10,
+  //  "Data Crawling"      : 11,
+  //  "Data Analytics"     : 12,
+  //  "CRM Marketing"      : 13,
+  //  "Java development"   : 14,
+  //  "HTML & CSS development" : 15,
+  //  "English translation": 16,
+  //  "Seeding"            : 17,
+  //  "Special Effect Design" : 18
+  // }
+
+
 
 
   const post1 =  { 
     id: 1,
     imgage_post_urls: "https://res.cloudinary.com/dunbnutmw/image/upload/v1705563786/tpnydwcpblelsstxajha.gif",	
-    skill_tag:  subcategories["Filming"],
+    skill_tag:  "Filming",
     title: "I will create a commercial video product for amazon, social media, website",
     about_me: "We are pleased to welcome you to our sunny island of Cyprus with its diverse natural landscape. \nIf you are in search of creating an elite brand video, such as Dior, Chanel, Valentino, Hugo Boss, Tom Ford, etc., but there are no opportunities yet. Then our team of professionals with many years of experience will help make your dreams come true and give a new impetus to growth for your business.",  
     skill_description: 
@@ -252,7 +255,7 @@ function initial() {
   const post2 =  { 
     id: 2,
     imgage_post_urls: "https://res.cloudinary.com/dunbnutmw/image/upload/v1705564820/zxv6ciusyigpnqccawrz.png", 	
-    skill_tag:  subcategories["Java development"],
+    skill_tag:  "Java development",
     title: "I will help in java and c programming projects",
     about_me: "Greetings, I'm Tuba—an accomplished developer with over 5 years of expertise in crafting desktop and web applications. My focus is on designing intuitive interfaces and constructing robust backend systems. With a proven track record of over 70 successfully completed projects, I've had the privilege of collaborating with foreign companies on cutting-edge initiatives. If you're grappling with any development challenges, I'm here to offer my seasoned experience and bring your ideas to life.",  
     skill_description: 
@@ -267,7 +270,7 @@ function initial() {
   const post3 =  { 
     id: 3,
     imgage_post_urls: "https://res.cloudinary.com/dunbnutmw/image/upload/v1705564850/vhkacwjimtkgrsy87xha.png",	
-    skill_tag:  subcategories["Woodwork"],
+    skill_tag:  "Woodwork",
     title: "I will design wood working furniture using blender	",
     about_me: "We are pleased to welcome you to our sunny island of Cyprus with its diverse natural landscape. \nIf you are in search of creating an elite brand video, such as Dior, Chanel, Valentino, Hugo Boss, Tom Ford, etc., but there are no opportunities yet. Then our team of professionals with many years of experience will help make your dreams come true and give a new impetus to growth for your business.",  
     skill_description: 
@@ -281,7 +284,10 @@ function initial() {
 
   const freelacer_posts = [post1, post2, post3]
 
-  const create_freelancer_post = () => {freelacer_posts.forEach((post) => {
+  const create_freelancer_post = async (mysubcategories) => {
+    console.log(mysubcategories);
+    freelacer_posts.forEach((post) => {
+    post.skill_tag = mysubcategories[post.skill_tag];
     db.freelancer_post.create(
       post,
       { include: [ db.subcategories ] }
@@ -294,7 +300,7 @@ function initial() {
     title: 	"Embedded Software Developer",
     imgage_post_urls: "https://res.cloudinary.com/dunbnutmw/image/upload/v1705567368/x7ybiq4fieolx0f347ne.jpg",
     detail: "MUST HAVE:\n- Bachelor’s Degree or above in Electronic Engineering, Telecommunication, Computer Science, Computer Engineering, Automation, Information Technology or equivalent.\n\nCOMPANY BENEFITS\n-13th Salary + Performance Bonus.\n-Pass probation Bonus.\n-Premium healthcare insurance benefits (PVI Insurance package) and family medical benefit (based on the level of experience).\n-Holiday celebrations and parties for team members and family.",
-    tag_id: subcategories["Java development"],
+    tag_id: "Java development",
     start_date:	'2024-12-02',
     budget_min:	1000,
     budget_max:	2000,
@@ -307,7 +313,7 @@ function initial() {
     title: 	"Business Analyst",
     imgage_post_urls: "https://res.cloudinary.com/dunbnutmw/image/upload/v1705567647/qcv80tjxggpaidjptbpd.jpg",
     detail: "1. Qualifications:\n- Bachelor’s degree in computer science or related business qualification\n\n2. Experience:\n- Minimum 3+ years’ experience in business analysis or related fields.\n\n3. Capabilities:\n- Strong English communication skills and ability to collaborate with team members.\n- Ability to work independently and raise questions, fill requirements.\n\n** BENEFITS:\n- Dynamic and professional working environment.\n- 13th&14th month salary.",
-    tag_id: subcategories["Data Analytics"],
+    tag_id: "Data Analytics",
     start_date:	'2024-05-15',
     budget_min:	1500,
     budget_max:	3000,
@@ -320,7 +326,7 @@ function initial() {
     title: 	"Fresher HTML - CSS Developer",
     imgage_post_urls: "https://res.cloudinary.com/dunbnutmw/image/upload/v1705567748/hqy57sdc1z3p04hdf85g.jpg",
     detail: "- Bachelor or Master degree within a relevant IT specialization\n- Good English skills both in writing and verbally\n- Basic understanding of and practical experience with object-oriented programming and data modelling\n- Familiar with various design, architectural patterns and modern system development\n- Open towards and able to quickly learn new technologies\n- Ability to work both independently and team\n- Professional pro-active attitude, taking responsibility and initiative",
-    tag_id: subcategories["HTML & CSS development"],
+    tag_id: "HTML & CSS development",
     start_date:	'2024-09-10',
     budget_min:	500,
     budget_max:	1000,
@@ -330,7 +336,9 @@ function initial() {
 
   const projPostsList = [projPost1, projPost2, projPost3]
 
-  const create_project_post = () => {projPostsList.forEach((post) => {
+  const create_project_post = (data) => {
+    projPostsList.forEach((post) => {
+      post.tag_id = data[post.tag_id];
     db.project_post.create(
       post,
       { include: [ db.subcategories ] }
@@ -345,7 +353,7 @@ function initial() {
     duration:	15,
     email:	"lethanhdat0246@gmail.com",
     status: 0,
-    skill_tag: subcategories["Java development"],
+    skill_tag: "Java development",
     user_id: 1,
     proj_post_id: 1
   }
@@ -356,7 +364,7 @@ function initial() {
     duration:	25,
     email:	"21120427@student.hcmus.edu.vn",
     status: 0,
-    skill_tag: subcategories["Java development"],
+    skill_tag: "Java development",
     user_id: 2,
     proj_post_id: 1
   }
@@ -366,7 +374,7 @@ function initial() {
     duration:	13,
     email:	"ledat161003@gmail.com",
     status: 0,
-    skill_tag: subcategories["Java development"],
+    skill_tag: "Java development",
     user_id: 3,
     proj_post_id: 1
   }
@@ -377,7 +385,7 @@ function initial() {
     duration:	16,
     email:	"lethanhdat0246@gmail.com",
     status: 0,
-    skill_tag: subcategories["Data Analytics"],
+    skill_tag: "Data Analytics",
     user_id: 1,
     proj_post_id: 2
   }
@@ -388,7 +396,7 @@ function initial() {
     duration:	15,
     email:	"21120427@student.hcmus.edu.vn",
     status: 0,
-    skill_tag: subcategories["Data Analytics"],
+    skill_tag: "Data Analytics",
     user_id: 2,
     proj_post_id: 2
   }
@@ -398,7 +406,7 @@ function initial() {
     duration:	25,
     email:	"ledat161003@gmail.com",
     status: 0,
-    skill_tag: subcategories["Data Analytics"],
+    skill_tag: "Data Analytics",
     user_id: 3,
     proj_post_id: 2
   }
@@ -409,7 +417,7 @@ function initial() {
     duration:	28,
     email:	"lethanhdat0246@gmail.com",
     status: 0,
-    skill_tag: subcategories["HTML & CSS development"],
+    skill_tag: "HTML & CSS development",
     user_id: 1,
     proj_post_id: 3
   }
@@ -420,7 +428,7 @@ function initial() {
     duration:	25,
     email:	"21120427@student.hcmus.edu.vn",
     status: 0,
-    skill_tag: subcategories["HTML & CSS development"],
+    skill_tag: "HTML & CSS development",
     user_id: 2,
     proj_post_id: 3
   }
@@ -430,13 +438,15 @@ function initial() {
     duration:	22,
     email:	"ledat161003@gmail.com",
     status: 0,
-    skill_tag: subcategories["HTML & CSS development"],
+    skill_tag: "HTML & CSS development",
     user_id: 3,
     proj_post_id: 3
   }
   
   const bidList = [bid1_1, bid1_2, bid1_3, bid2_1, bid2_2, bid2_3, bid3_1, bid3_2, bid3_3]
-  const create_bid = () => {bidList.forEach((bid) => {
+  const create_bid = (data) => {
+    bidList.forEach((bid) => {
+      bid.skill_tag = data[bid.skill_tag];
     db.bid.create(
       bid,
       { include: [ db.subcategories ] }
@@ -557,18 +567,51 @@ function initial() {
   }
 
   const contactList = [contact1_1, contact1_2, contact1_3, contact2_1, contact2_2, contact2_3, contact3_1, contact3_2, contact3_3]
-  const create_contact = () => {contactList.forEach((contact) => {
+  const create_contact = () => {
+    contactList.forEach((contact) => {
     db.contact.create(
       contact
     );
     });
   };
 
-  // create_category();
-  // create_freelancer_post();
+
+  // Getsubcategories().then((data) => {
+    // subcategories = data;
+    // create_freelancer_post(data);
+    // console.log(data);
   // create_project_post();
   // create_bid();
-  create_contact();
+  // create_contact();
+
+
+  const Getsubcategories = async () => {
+    db.subcategories.findAll({
+      attributes: ['subcategory_name', 'id']
+    }).then((subcategories_data) => {
+       const subcategories = {}
+
+      subcategories_data.forEach((subcategory) => {
+        subcategories[subcategory.subcategory_name] = subcategory.id;
+      }
+      );
+      console.log(subcategories);
+      // create_freelancer_post(subcategories);
+      // create_project_post(subcategories);
+      // create_bid(subcategories);
+      // create_contact(subcategories);
+
+      // create_project_post(subcategories);
+      return subcategories;
+    });
+  }
+// 1: 
+  // create_category();
+
+  // 2.
+  Getsubcategories();
+
+  // });
 
   
 }
