@@ -31,7 +31,27 @@ export const ProjectReportJudging = () => {
   const [error, setError] = useState(null);
   useEffect(() => {
     setUpdated(false);
-    console.log(project)
+    // console.log(project)
+
+    if(reportId)
+    {
+      projectService
+        .getProjectReport(project.id, reportId, localStorage.getItem('AUTH_TOKEN'))
+        .then((report_data) => {
+          console.log(report_data);
+          if (report_data.status == 200) {
+            setReport(report_data.data);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          setError(error.response.data.message);
+          console.log(error.response.data.message);
+        });
+    }
+    else
+    {
+
     projectService
       .getNewestProjectReport(project.id, localStorage.getItem('AUTH_TOKEN'))
       .then((report_data) => {
@@ -46,7 +66,9 @@ export const ProjectReportJudging = () => {
         setError(error.response.data.message);
         console.log(error.response.data.message);
       });
-  }, [project]);
+    }
+
+  }, [project, reportId]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
