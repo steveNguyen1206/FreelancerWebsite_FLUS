@@ -32,6 +32,7 @@ const Project = () => {
   const [loading, setLoading] = useState(false);
   const [isOwnerProjectPost, setIsOwnerProjectPost] = useState(false);
   const [review, setReview] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const navigate = useNavigate();
 
@@ -145,6 +146,12 @@ const Project = () => {
       }
     }
   }, [project]);
+
+  useEffect(() => {
+    if (localStorage.getItem('AUTH_TOKEN')) {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   if (loading)
     return (
@@ -298,7 +305,7 @@ const Project = () => {
               <div className="project-detail">
                 <div className="project-detail-price">
                   <img src={dollar} alt="dollar" />
-                  <p>${`${project.budget_min} - ${project.budget_max}`}</p>
+                  <p>${`${project.budget_min} - \$${project.budget_max}`}</p>
                 </div>
                 <div className="project-detail-time">
                   <p>
@@ -309,7 +316,7 @@ const Project = () => {
               </div>
 
               <div className="btn-bid-and-wish">
-                {!isOwnerProjectPost && (
+                {!isOwnerProjectPost && isLoggedIn && (
                   <button
                     onClick={() => {
                       setIsOpenBid(true);
