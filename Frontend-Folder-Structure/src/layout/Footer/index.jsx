@@ -14,7 +14,7 @@ const Footer = () => {
               </span>
               <span className={styles.span}>
                 <br />
-                aaaaaaaaaaaaaa
+                Discover a world of elite freelancers, streamline collaboration, and witness unparalleled success. Elevate your vision, connect effortlessly, and experience the future of freelance excellence. FLUS - where projects meet perfection!
               </span>
             </p>
           </div>

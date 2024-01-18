@@ -19,7 +19,7 @@
     height: 280px;
 }
   
-.box .FLUS {
+.FLUS {
     color: #000000;
     font-family: "Inter-Bold", Helvetica;
     font-size: 19.4px;
@@ -29,13 +29,14 @@
     position: absolute;
     top: 74px;
     width: 402px;
+    padding-left: 20px;
 }
   
-  .box .text_wrapper {
+.text_wrapper {
     font-weight: 700;
   }
   
-  .box .span {
+.span {
     font-family: "Inter-Light", Helvetica;
     font-size: 16.1px;
     font-weight: 300;
