@@ -80,6 +80,11 @@
   max-width: 600px;
   max-height: 140px;
   text-align: left;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  height: 100%;
 }
 
 .post-container .post-reviews{

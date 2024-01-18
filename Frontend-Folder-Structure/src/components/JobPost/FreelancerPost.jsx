@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './FreelancerPost.css';
 import vietnam from '../../assets/vietnam.png';
-import profileimage from '../../assets/profile_image.png';
 import { StarRating } from '..';
 import eyeLight from '../../assets/eyeLight.png';
 import { useNavigate } from 'react-router';
@@ -20,7 +19,7 @@ const FreelancerPost = ({ post }) => {
 
   useEffect(() => {
     reviewService.getRating(post.user.id).then((response) => {
-      console.log('response: ', response);
+      // console.log('response: ', response);
       setReview(response.data);
     });
   }, []);
@@ -43,16 +42,7 @@ const FreelancerPost = ({ post }) => {
           <div className="post-tag">{post.subcategory.subcategory_name}</div>
           <div className="details">
             <div className="detail-content">
-              {/* Hello everyone, my name is Duy Khang Ho. This job is hard... Detail
-            text here everyone text here everyone Hello everyone, my name is Duy
-            Khang Ho. This job is hard... Detail text here ever... Detail text
-            here everyone text here everyone Hello everyone, my name is Duy Khang
-            Ho.Hello everyone, my name is Duy Khang Ho. This job is hard... Detail
-            text here everyone text here everyone Hello everyone, my name is Duy
-            Khang Ho. This job is hard... Detail text here ever... Detail text
-            here everyone text here everyone Hello everyone, my name is Duy Khang
-            Ho. */}
-              {post.skill_description}
+              <p style={{whiteSpace: 'pre-line'}}>{post.skill_description}</p>
             </div>
           </div>
         </div>

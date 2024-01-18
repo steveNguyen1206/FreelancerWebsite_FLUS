@@ -39,13 +39,13 @@ const isValidPhone = async (phone) => {
 };
 
 const isValidName = (name) => {
-  const nameRegex = /^[a-zA-Z\s]*$/;
+  const nameRegex = /^[A-Za-z\s]*$/;
   return nameRegex.test(name);
 };
 
 const isValidNationality = (nationality) => {
-  const nationalityRegex = /^[a-zA-Z\s]*$/;
-  return nationalityRegex.test(nationality);
+  const nationalityRegex = /^[A-Za-z\s]*$/;
+  return nationalityRegex.test(nationality)
 };
 
 const convertPhone = (phone) => {
@@ -100,6 +100,9 @@ const SignUpTabSecond = ({ setTab, signUpPayload, setSignUpPayload }) => {
         console.log(e);
       });
   };
+
+  console.log(error)
+  console.log(signUpPayload)
 
   const handleVerifyClick = () => {
     console.log('handleVerifyClick');
