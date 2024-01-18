@@ -223,7 +223,8 @@ const Project = () => {
                 </div>
                 <div className="proj-body">
                   <div className="proj-detail">
-                    <p>{project.detail}</p>
+                    <p style={{ whiteSpace: 'pre-line' }}>{project.detail}</p>
+                    {console.log(project.detail)}
                     <div className="wrapper-project-image">
                       <img
                         id="post-img"

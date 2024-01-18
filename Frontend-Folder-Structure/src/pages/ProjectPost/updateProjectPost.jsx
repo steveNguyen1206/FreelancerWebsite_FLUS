@@ -7,9 +7,7 @@ import projectPostServices from '@/services/projectPostServices';
 import subcategoryService from '@/services/subcategoryService';
 
 const isValidTitle = (title) => {
-  if (!title) return true;
-  const titleRegex = /^[a-zA-Z0-9\s\-]*$/;
-  return titleRegex.test(title);
+  return title.length <= 100 && title.length > 10;
 };
 
 const isValidDate = (date) => {
@@ -22,8 +20,7 @@ const isValidDate = (date) => {
 };
 
 const isValidDetail = (detail) => {
-  const detailRegex = /^[A-Za-z0-9\s.,?!]{10,}$/g;
-  return detailRegex.test(detail) || !detail;
+  return detail.length >= 10 && detail.length <= 512;
 };
 
 const isValidBudget = (budget) => {
@@ -112,16 +109,11 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
 
     let isValid = true;
 
-    if (!isValidTitle(updateProject.title)) {
-      newErrors.title =
-        'Invalid title. Title must be alphanumeric and not empty.';
+    if(!isValidTitle(updateProject.title)) {
+      newErrors.title = 'Project title must have at least 10 characters and less than 100 characters.';
       isValid = false;
-    } else {
-      if (updateProject.title.length > 50) {
-        newErrors.title = 'The project title must not exceed 50 characters.';
-        isValid = false;
-      } else newErrors.title = '';
     }
+    
 
     if (!isValidImage(updateProject.image)) {
       newErrors.image = 'Please select an image.';
@@ -195,11 +187,6 @@ const UpdateProject = ({ isOpen, onClose, projectId, onUpdate }) => {
     if (allFieldsEmpty) {
       newErrors.title = 'Please fill in at least one field.';
       isValid = false;
-    }
-
-    // reset error when user enter at least one field
-    if (!allFieldsEmpty) {
-      newErrors.title = '';
     }
 
     setError(newErrors);
