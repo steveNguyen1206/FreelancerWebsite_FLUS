@@ -22,8 +22,11 @@ const isValidDate = (date) => {
 };
 
 const isValidDetail = (detail) => {
-  const detailRegex = /^[A-Za-z0-9\s.,?!]{10,}$/g;
-  return detailRegex.test(detail) || !detail;
+  // const detailRegex = /^[A-Za-z0-9\s.,?!]{10,}$/g;
+  // return detailRegex.test(detail) || !detail;
+  const len = detail.length;
+  console.log("len: ", len);
+  return len >= 10 && len <= 512;
 };
 
 const isValidBudget = (budget) => {
