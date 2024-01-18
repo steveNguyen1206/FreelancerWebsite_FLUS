@@ -86,7 +86,10 @@ const index = () => {
       <div className="BannerSection">
         <img className="magnificent-view" alt="Magnificent view" src={banner} />
         <div className="rectangle" />
-        <p className="text-wrapper"> Remember to keep your presentation focused and engaging while providing a comprehensive overview of the topic. Water quality and pollution in the natural environment are critical issues. </p>
+        <p className="text-wrapper" style={{whiteSpace:"pre-line"}}> 
+        Discover a world of elite freelancers, streamline collaboration, and witness unparalleled success. 
+        Elevate your vision, connect effortlessly, and experience the future of freelance excellence. 
+        <br/>FLUS - where projects meet perfection! </p>
         
         <div className="text-wrapper-2">FLUS</div>
         <img className="img" alt="Rectangle" src={human} />
