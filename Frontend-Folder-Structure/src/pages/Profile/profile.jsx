@@ -157,7 +157,7 @@ const profile = () => {
                     <span className="text-wrapper">
                       {userProfile.profile_name}{' '}
                     </span>
-                    <span className="span">({userProfile.account_name})</span>
+                    {/* <span className="span">({userProfile.account_name})</span> */}
 
                     {isOwnProfile && (
                       <div
@@ -175,7 +175,7 @@ const profile = () => {
                     )}
                   </p>
                   <div className="text-wrapper-2">
-                    Junior FullStack Developer
+                  {userProfile.account_name}
                   </div>
                 </div>
 
