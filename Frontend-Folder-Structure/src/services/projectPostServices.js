@@ -96,7 +96,7 @@ const removePostById = (id, access_token) => {
 
 const findAndChangeStatusByUserID = (user_id, status) => {
   return http.put(
-    '/project_post/findAndChangeStatus/' + user_id + '&' + status
+    '/project_post/findAndChangeStatus/' + user_id + '&' + status,
   );
 };
 

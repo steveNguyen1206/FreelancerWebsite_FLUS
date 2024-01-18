@@ -47,7 +47,7 @@ const UserRow = ({ user, refreshUsers, setRefreshUsers }) => {
                 setActive(newStatus);
                 setRefreshUsers((prev) => !prev);
                 //Change status of project post of user id
-                projectPostServices.findAndChangeStatusByUserID(id, newStatus)
+                projectPostServices.findAndChangeStatusByUserID(id, newStatus, localStorage.getItem("AUTH_TOKEN"))
                 .then((response) => {
                     console.log("Status changed project post: ", newStatus);
                 })

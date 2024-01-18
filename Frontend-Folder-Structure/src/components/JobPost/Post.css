@@ -183,7 +183,7 @@
   height: 100%;
 }
 
-.post-title{
+.post-container .post-title{
   display: flex;
   font-size: var(--medium-font-size);
   font-family: Inter-Bold, sans-serif;
