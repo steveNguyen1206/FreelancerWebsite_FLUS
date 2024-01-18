@@ -100,9 +100,14 @@ const AboutUs = () => {
           <div className="about-us-text-wrapper-12">About FLUS</div>
           <div className="rectangle-4" />
           <p className="about-us-text-wrapper-11">
-            Remember to keep your presentation focused and engaging while providing a comprehensive overview of
-            the topic. Water quality and pollution in the natural environment are critical issues, and your
-            presentation can help raise awareness and promote responsible environmental stewardship.
+          Welcome to FLUS, where passion meets opportunity, and freelancers find their perfect match. 
+
+At FLUS, we believe in the transformative power of freelancing, enabling professionals to take control of their destiny and businesses to discover top-tier talent. 
+
+Our journey is guided by transparency, integrity, and a passion for empowering freelancers to reach new heights. Join us at FLUS, where every project is an opportunity, every skill is valued, and every freelancer is a hero in their unique story.
+
+Discover, connect, and thrive with FLUS – your gateway to a world of freelance possibilities!
+
           </p>
           <div className="to-instruction-txt">
             To Instruction
@@ -118,7 +123,7 @@ const AboutUs = () => {
               <div className="founder-name">Ho Duy Khang</div>
               <div className="text-wrapper-6">~ o ~</div>
               <p className="founder-instruction">
-                Nguyen Thi Truc is the founder of abc.She hsa xyv experience in baking. She is one of the Co-founder
+               CEO, leads FLUS with a passion for empowering freelancers globally and redefining the future of freelancing.
               </p>
             </div>
           </div>
@@ -128,7 +133,7 @@ const AboutUs = () => {
               <div className="founder-name">Nguyen Hai Chan</div>
               <div className="text-wrapper-6">~ o ~</div>
               <p className="founder-instruction">
-                Nguyen Thi Truc is the founder of abc.She hsa xyv experience in baking. She is one of the Co-founder
+                COO, brings operational brilliance to FLUS, ensuring a seamless and efficient platform for freelancers and businesses alike.
               </p>
             </div>
           </div>
@@ -138,7 +143,7 @@ const AboutUs = () => {
               <div className="founder-name">Vo Hoang Hoa Vien</div>
               <div className="text-wrapper-6">~ o ~</div>
               <p className="founder-instruction">
-                Nguyen Thi Truc is the founder of abc.She hsa xyv experience in baking. She is one of the Co-founder
+              CTO, pioneers FLUS's technological landscape, employing innovation to provide freelancers with a cutting-edge and secure environment.
               </p>
             </div>
           </div>
@@ -148,7 +153,7 @@ const AboutUs = () => {
               <div className="founder-name">Le Thanh Dat</div>
               <div className="text-wrapper-6">~ o ~</div>
               <p className="founder-instruction">
-                Nguyen Thi Truc is the founder of abc.She hsa xyv experience in baking. She is one of the Co-founder
+                Creative Director, infuses FLUS with a visually compelling and user-centric design, creating an inspiring space for freelancers to thrive.
               </p>
             </div>
           </div>
@@ -158,7 +163,7 @@ const AboutUs = () => {
               <div className="founder-name">Nguyen Thi Truc Vy</div>
               <div className="text-wrapper-6">~ o ~</div>
               <p className="founder-instruction">
-                Nguyen Thi Truc is the founder of abc.She hsa xyv experience in baking. She is one of the Co-founder
+              Community Manager, is the heart of FLUS, fostering a sense of community and connection to empower freelancers on their journey to success.
               </p>
             </div>
           </div>
@@ -175,9 +180,7 @@ const AboutUs = () => {
                 </div>
                 <div className="col" style={{flexDirection:"column"}}>
                   <p className="reviewer-quote">
-                    Remember to keep your presentation focused and engaging while providing a comprehensive overview of the
-                    topic. Water quality and pollution in the natural environment are critical issues, and your presentation can
-                    help raise awareness and promote responsible environmental stewardship.
+                  Our mission is to create a dynamic platform that empowers individuals to unleash their talents and build successful freelance careers.  We understand that freelancers are not just contributors but integral partners in the success of our platform. We strive to provide a seamless experience, connecting freelancers with diverse projects while offering businesses access to a pool of skilled individuals.
                   </p>
                   <div className="star-rating-wrapper">
                     <StarRating rating={4} width={200}/>

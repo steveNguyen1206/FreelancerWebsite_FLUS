@@ -14,9 +14,9 @@ const Navbar = () => {
   const handleFindFreelancers = () => {
     navigate('/findfreelancer');
   }
-  const handleCommunity = () => {
-    // navigate('/community');
-  }
+  // const handleCommunity = () => {
+  //   // navigate('/community');
+  // }
   const handleAbout = () => {
     navigate('/aboutUs');
   }
@@ -36,9 +36,9 @@ const Navbar = () => {
         <div className="col" style={{display:"flex", justifyContent: "center"}}>
           <div className="nav_text" onClick={handleFindFreelancers}>Find Freelancers</div>
         </div>
-        <div className="col" style={{display:"flex", justifyContent: "center"}}>
+        {/* <div className="col" style={{display:"flex", justifyContent: "center"}}>
           <div className="nav_text" onClick={handleCommunity}>Community</div>
-        </div>
+        </div> */}
         
       </div>
     </div>
