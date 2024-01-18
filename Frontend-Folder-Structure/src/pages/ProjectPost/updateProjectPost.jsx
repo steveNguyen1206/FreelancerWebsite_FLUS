@@ -7,7 +7,7 @@ import projectPostServices from '@/services/projectPostServices';
 import subcategoryService from '@/services/subcategoryService';
 
 const isValidTitle = (title) => {
-  return title.length <= 100 && title.length > 10;
+  return title.length <= 100 && title.length > 10 || title === '';
 };
 
 const isValidDate = (date) => {
@@ -20,11 +20,10 @@ const isValidDate = (date) => {
 };
 
 const isValidDetail = (detail) => {
-  return detail.length >= 10 && detail.length <= 512;
+  return detail.length >= 10 && detail.length <= 512 || detail === '';
 };
 
 const isValidBudget = (budget) => {
-  if (!budget) return true;
   if (!budget) return true;
   const budgetRegex = /^[0-9]*$/;
   return budgetRegex.test(budget) && budget > 0 && budget < 10000;
