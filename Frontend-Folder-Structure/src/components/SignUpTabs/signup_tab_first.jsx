@@ -195,6 +195,7 @@ const signUpTabFirst = ({ setTab, signUpPayload, setSignUpPayload }) => {
           alt="Ellipse"
           src={googleIcon}
           onClick={() => googleSignup()}
+          
         />
         {/* <img className="img" alt="Ellipse" src={} /> */}
       </div>
