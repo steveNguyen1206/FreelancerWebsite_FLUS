@@ -186,6 +186,7 @@ const profile = () => {
                     {userProfile.social_link && (<Link
                       className="text-wrapper-3"
                       to={userProfile.social_link}
+                      style={{cursor:"pointer"}}
                     >
                       {userProfile.profile_name}
                     </Link>)}
